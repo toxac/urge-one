@@ -1,6 +1,6 @@
 import { createSignal, Show } from "solid-js";
 import { Icon } from "@iconify-icon/solid";
-import Modal from "@components/appFeedback/Modal";
+import Modal from "../../appFeedback/Modal";
 import { notify } from "../../../stores/notifications";
 import { manageQuestions } from "../../../stores/userAssets/questions";
 import { supabaseBrowserClient } from "../../../lib/supabase/client";

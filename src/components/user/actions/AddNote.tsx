@@ -1,6 +1,6 @@
 import { createSignal, Show } from "solid-js";
 import { Icon } from "@iconify-icon/solid";
-import Modal from "@components/appFeedback/Modal";
+import Modal from "../../appFeedback/Modal";
 import { notify } from "../../../stores/notifications";
 import { manageNotes } from "../../../stores/userAssets/notes";
 import type { Database } from "../../../../database.types";
