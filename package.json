@@ -28,6 +28,7 @@
   "devDependencies": {
     "@iconify-icon/solid": "^3.0.0",
     "@iconify-json/mdi": "^1.2.3",
+    "@tailwindcss/typography": "^0.5.16",
     "astro-icon": "^1.1.5",
     "daisyui": "^5.1.10"
   }
