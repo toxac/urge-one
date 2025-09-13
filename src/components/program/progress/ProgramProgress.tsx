@@ -3,7 +3,7 @@ import { createEffect, createMemo, createSignal, For, Show } from 'solid-js';
 import { useStore } from '@nanostores/solid';
 import { contentMetaStore, fetchContentMeta } from '../../../stores/contentMeta';
 import { progressStore } from '../../../stores/progress';
-import ContentProgressStatus from '@components/program/progress/ContentProgressStatus';
+import ContentProgressStatus from '../progress/ContentProgressStatus';
 
 
 export default function SequentialContentList() {

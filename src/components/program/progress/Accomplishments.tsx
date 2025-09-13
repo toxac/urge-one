@@ -1,7 +1,7 @@
 import { createSignal, createEffect, createMemo, Show } from "solid-js";
 import { useStore } from "@nanostores/solid";
 import { authStore } from "../../../stores/auth.ts";
-import { accomplishmentStore, manageAccomplishments } from "../../../stores/userAssets.ts";
+import { accomplishmentStore, manageAccomplishments } from "../../../stores/userAssets/accomplishments.ts";
 import { supabaseBrowserClient } from "../../../lib/supabase/client.ts";
 import { type Database } from "../../../../database.types.ts";
 
