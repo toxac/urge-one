@@ -1,5 +1,5 @@
 
-// components/InitializeStoreLog.tsx
+// components/dev/InitializeStoreLog.tsx
 import { onMount, onCleanup } from 'solid-js';
 import { initStoreLogger, destroyStoreLogger } from '../../stores/storeLogger';
 
