@@ -1,0 +1,31 @@
+---
+// src/components/Breadcrumb.astro
+interface Crumb {
+  name: string;
+  url?: string;
+}
+
+interface Props {
+  items: Crumb[] | null;
+}
+
+const { items } = Astro.props;
+---
+
+<div class="hidden lg:block breadcrumbs mb-6">
+  {
+    items ? (
+      <ul class="pl-0">
+        {items.map((item, index) => (
+          <li>
+            {item.url ? (
+              <a href={item.url}>{item.name}</a>
+            ) : (
+              <span>{item.name}</span>
+            )}
+          </li>
+        ))}
+      </ul>
+    ) : null
+  }
+</div>
