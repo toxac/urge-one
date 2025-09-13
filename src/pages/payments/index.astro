@@ -1,0 +1,18 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Payment from "@components/transactions/Payment";
+const { session } = Astro.locals;
+
+const url = new URL(Astro.request.url);
+const intent = url.searchParams.get("intent") as
+  | "event"
+  | "enroll"
+  | "subscribe";
+const details = url.searchParams.get("details") || "";
+---
+
+<BaseLayout title="urge register" description="log in to urge platform">
+  <main class="min-h-screen flex items-center justify-center bg-base-200 px-5">
+    <Payment intent={intent} details={details} client:load />
+  </main>
+</BaseLayout>

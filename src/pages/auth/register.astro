@@ -1,0 +1,30 @@
+---
+import Layout from "@layouts/Layout.astro";
+import RegisterForm from "@components/auth/RegisterForm";
+
+const { session } = Astro.locals;
+
+// redirect to dashboard if user exists
+if (session) {
+  return Astro.redirect("/dashboard");
+}
+
+const url = new URL(Astro.request.url);
+const intent = url.searchParams.get("intent") as
+  | "register"
+  | "enroll"
+  | "subscribe"
+  | "challenge"
+  | null;
+const details = url.searchParams.get("details") || "";
+---
+
+<Layout title="urge register" description="log in to urge platform">
+  <main class="min-h-screen flex items-center justify-center bg-base-200 px-5">
+    <RegisterForm
+      intent={intent || "register"}
+      details={details}
+      client:only="solid-js"
+    />
+  </main>
+</Layout>

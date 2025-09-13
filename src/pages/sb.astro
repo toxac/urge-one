@@ -1,0 +1,599 @@
+---
+import Layout from "@layouts/Layout.astro";
+import { getEntry, render } from "astro:content";
+import { Icon } from "astro-icon/components";
+
+const entry = await getEntry("concepts", "aligning-with-your-goals");
+if (!entry) {
+  // Handle Error, for example:
+  throw new Error("Could not find blog post 1");
+}
+const { Content } = await render(entry);
+---
+
+<Layout title="test" description="desc">
+  <header class="section bg-base-200">
+    <div class="max-w-6xl mx-auto">
+      <h1 class="text-center">Style Test Page</h1>
+      <p class="text-center max-w-3xl mx-auto">
+        This page showcases all custom styles, components, and design tokens
+        from your Astro project with Tailwind CSS v4 and DaisyUI v5.
+      </p>
+    </div>
+  </header>
+
+  <main class="section-full">
+    <!-- Typography Section -->
+    <section class="section">
+      <div class="max-w-6xl mx-auto">
+        <h2>Typography</h2>
+        <div class="grid md:grid-cols-2 gap-8">
+          <div>
+            <h3>Headings</h3>
+            <h1>Heading 1</h1>
+            <h2>Heading 2</h2>
+            <h3>Heading 3</h3>
+            <h4>Heading 4</h4>
+            <h5>Heading 5</h5>
+            <h6>Heading 6</h6>
+          </div>
+          <div>
+            <h3>Body Text & Utilities</h3>
+            <p class="font-variation-light">Light weight text (300)</p>
+            <p class="font-variation-normal">Normal weight text (400)</p>
+            <p class="font-variation-medium">Medium weight text (500)</p>
+            <p class="font-variation-semibold">Semibold weight text (600)</p>
+            <p class="font-variation-bold">Bold weight text (700)</p>
+            <p class="font-variation-extrabold">Extrabold weight text (800)</p>
+            <p class="font-variation-black">Black weight text (900)</p>
+
+            <div class="mt-6">
+              <p class="font-heading">This uses the heading font</p>
+              <p class="font-body">This uses the body font</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Colors Section -->
+    <section class="section bg-base-200">
+      <div class="max-w-6xl mx-auto">
+        <h2>Color Palette</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="p-4 bg-primary text-primary-content rounded-box">
+            <p>Primary</p>
+            <p class="text-sm">oklch(67.27% 0.2165 32.78)</p>
+          </div>
+          <div class="p-4 bg-secondary text-base-content rounded-box">
+            <p>Secondary</p>
+            <p class="text-sm">oklch(85% 0 0)</p>
+          </div>
+          <div class="p-4 bg-base-100 text-base-content rounded-box border">
+            <p>Base 100</p>
+            <p class="text-sm">oklch(100% 0 0)</p>
+          </div>
+          <div class="p-4 bg-base-200 text-base-content rounded-box border">
+            <p>Base 200</p>
+            <p class="text-sm">oklch(95% 0 0)</p>
+          </div>
+          <div class="p-4 bg-base-300 text-base-content rounded-box border">
+            <p>Base 300</p>
+            <p class="text-sm">oklch(85% 0 0)</p>
+          </div>
+          <div class="p-4 bg-info text-info-content rounded-box">
+            <p>Info</p>
+          </div>
+          <div class="p-4 bg-success text-success-content rounded-box">
+            <p>Success</p>
+          </div>
+          <div class="p-4 bg-warning text-warning-content rounded-box">
+            <p>Warning</p>
+          </div>
+          <div class="p-4 bg-error text-error-content rounded-box">
+            <p>Error</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Buttons Section -->
+    <section class="section">
+      <div class="max-w-6xl mx-auto">
+        <h2>Buttons</h2>
+        <div class="flex flex-wrap gap-4">
+          <button class="btn">Default Button</button>
+          <button class="btn btn-primary">Primary</button>
+          <button class="btn btn-secondary">Secondary</button>
+          <button class="btn btn-accent">Accent</button>
+          <button class="btn btn-info">Info</button>
+          <button class="btn btn-success">Success</button>
+          <button class="btn btn-warning">Warning</button>
+          <button class="btn btn-error">Error</button>
+          <button class="btn btn-ghost">Ghost</button>
+          <button class="btn btn-link">Link</button>
+          <button class="btn btn-outline">Outline</button>
+        </div>
+
+        <h3 class="mt-8">Button Sizes</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <button class="btn btn-xs">Extra Small</button>
+          <button class="btn btn-sm">Small</button>
+          <button class="btn btn-md">Medium</button>
+          <button class="btn btn-lg">Large</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cards Section -->
+    <section class="section bg-base-200">
+      <div class="max-w-6xl mx-auto">
+        <h2>Cards</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="card bg-base-100 shadow-md">
+            <div class="card-body">
+              <h3 class="card-title">Default Card</h3>
+              <p>
+                This is a basic card with some sample content to demonstrate the
+                styling.
+              </p>
+              <div class="card-actions justify-end">
+                <button class="btn btn-primary">Action</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card bg-primary text-primary-content shadow-md">
+            <div class="card-body">
+              <h3 class="card-title">Primary Card</h3>
+              <p>
+                This card uses the primary color scheme with contrasting text.
+              </p>
+              <div class="card-actions justify-end">
+                <button class="btn btn-secondary">Action</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card bg-base-100 image-full shadow-md">
+            <figure>
+              <img src="https://picsum.photos/400/250" alt="Placeholder" />
+            </figure>
+            <div class="card-body">
+              <h3 class="card-title">Image Card</h3>
+              <p>This card has a background image with content overlay.</p>
+              <div class="card-actions justify-end">
+                <button class="btn btn-primary">View</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Prose/Content Section -->
+    <section class="section">
+      <div class="max-w-6xl mx-auto">
+        <h2>Prose/Content Styling</h2>
+        <div class="prose">
+          <h1>Prose Heading 1</h1>
+          <p>
+            This is a demonstration of the prose class which provides nice
+            typography for long-form content. It includes properly styled
+            headings, paragraphs, lists, and other elements.
+          </p>
+
+          <h2>Prose Heading 2</h2>
+          <p>
+            You can use this for blog posts, articles, or any content-heavy
+            sections of your website. The spacing and typography are optimized
+            for readability.
+          </p>
+
+          <h3>Prose Heading 3</h3>
+          <p>Here's a list of features:</p>
+          <ul>
+            <li>Beautifully styled lists</li>
+            <li>Proper heading hierarchy</li>
+            <li>Comfortable line height</li>
+            <li>Responsive typography</li>
+          </ul>
+
+          <blockquote>
+            <p>
+              This is a blockquote that highlights important content or quotes
+              from external sources.
+            </p>
+          </blockquote>
+
+          <p>
+            You can also include <a href="#">links within your text</a> that are
+            styled appropriately.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Form Elements -->
+    <section class="section bg-base-200">
+      <div class="max-w-6xl mx-auto">
+        <h2>Form Elements</h2>
+        <div class="grid md:grid-cols-2 gap-8">
+          <div>
+            <h3>Input Fields</h3>
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Text Input</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Type here"
+                class="input input-bordered"
+              />
+            </div>
+
+            <div class="form-control mt-4">
+              <label class="label">
+                <span class="label-text">Email Input</span>
+              </label>
+              <input
+                type="email"
+                placeholder="email@example.com"
+                class="input input-bordered"
+              />
+            </div>
+
+            <div class="form-control mt-4">
+              <label class="label">
+                <span class="label-text">Textarea</span>
+              </label>
+              <textarea
+                class="textarea textarea-bordered"
+                placeholder="Your message"></textarea>
+            </div>
+          </div>
+
+          <div>
+            <h3>Select & Checkboxes</h3>
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Select</span>
+              </label>
+              <select class="select select-bordered">
+                <option disabled selected>Pick one</option>
+                <option>Option 1</option>
+                <option>Option 2</option>
+                <option>Option 3</option>
+              </select>
+            </div>
+
+            <div class="form-control mt-6">
+              <label class="cursor-pointer label justify-start">
+                <input type="checkbox" checked="checked" class="checkbox" />
+                <span class="label-text ml-4">Checkbox</span>
+              </label>
+            </div>
+
+            <div class="form-control mt-4">
+              <label class="cursor-pointer label justify-start">
+                <input type="radio" name="radio-1" class="radio" checked />
+                <span class="label-text ml-4">Radio 1</span>
+              </label>
+            </div>
+            <div class="form-control mt-2">
+              <label class="cursor-pointer label justify-start">
+                <input type="radio" name="radio-1" class="radio" />
+                <span class="label-text ml-4">Radio 2</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation Components -->
+    <section class="section">
+      <div class="max-w-6xl mx-auto">
+        <h2>Navigation Components</h2>
+
+        <h3>Navbar</h3>
+        <div class="navbar bg-base-100 rounded-box shadow mb-8">
+          <div class="flex-1">
+            <a class="btn btn-ghost text-xl">Brand</a>
+          </div>
+          <div class="flex-none">
+            <ul class="menu menu-horizontal px-1">
+              <li><a>Link 1</a></li>
+              <li><a>Link 2</a></li>
+              <li>
+                <details>
+                  <summary>Dropdown</summary>
+                  <ul class="p-2 bg-base-100 rounded-t-none">
+                    <li><a>Submenu 1</a></li>
+                    <li><a>Submenu 2</a></li>
+                  </ul>
+                </details>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Breadcrumbs</h3>
+        <div class="breadcrumbs">
+          <ul>
+            <li><a>Home</a></li>
+            <li><a>Documents</a></li>
+            <li>Add Document</li>
+          </ul>
+        </div>
+
+        <h3 class="mt-8">Menu</h3>
+        <ul class="menu bg-base-200 w-56 rounded-box">
+          <li><a>Item 1</a></li>
+          <li><a>Item 2</a></li>
+          <li>
+            <details open>
+              <summary>Parent</summary>
+              <ul>
+                <li><a>Submenu 1</a></li>
+                <li><a>Submenu 2</a></li>
+              </ul>
+            </details>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="section bg-primary text-primary-content">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2>Call to Action Section</h2>
+        <p class="text-xl mb-8">
+          This is a prominent CTA section that uses the primary color scheme to
+          draw attention.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <button class="btn btn-secondary btn-lg">Get Started</button>
+          <button class="btn btn-outline btn-lg">Learn More</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Alert & Feedback Section -->
+    <section class="section bg-base-200">
+      <div class="max-w-6xl mx-auto">
+        <h2>Alerts & Feedback</h2>
+        <div class="space-y-4">
+          <div class="alert">
+            <span>This is a neutral alert.</span>
+          </div>
+          <div class="alert alert-info">
+            <span>This is an info alert.</span>
+          </div>
+          <div class="alert alert-success">
+            <span>This is a success alert.</span>
+          </div>
+          <div class="alert alert-warning">
+            <span>This is a warning alert.</span>
+          </div>
+          <div class="alert alert-error">
+            <span>This is an error alert.</span>
+          </div>
+        </div>
+
+        <h3 class="mt-8">Progress Bars</h3>
+        <div class="space-y-4">
+          <progress class="progress" value="20" max="100"></progress>
+          <progress class="progress progress-primary" value="40" max="100"
+          ></progress>
+          <progress class="progress progress-success" value="60" max="100"
+          ></progress>
+          <progress class="progress progress-warning" value="80" max="100"
+          ></progress>
+          <progress class="progress progress-error" value="100" max="100"
+          ></progress>
+        </div>
+      </div>
+    </section>
+
+    <!-- Miscellaneous Components -->
+    <section class="section">
+      <div class="max-w-6xl mx-auto">
+        <h2>Miscellaneous Components</h2>
+
+        <h3>Avatars</h3>
+        <div class="flex flex-wrap gap-4 mb-8">
+          <div class="avatar">
+            <div class="w-24 rounded-full">
+              <img src="https://picsum.photos/100" alt="Avatar" />
+            </div>
+          </div>
+          <div class="avatar">
+            <div class="w-16 rounded-full">
+              <img src="https://picsum.photos/80" alt="Avatar" />
+            </div>
+          </div>
+          <div class="avatar">
+            <div class="w-12 rounded-full">
+              <img src="https://picsum.photos/60" alt="Avatar" />
+            </div>
+          </div>
+          <div class="avatar placeholder">
+            <div class="bg-neutral text-neutral-content w-16 rounded-full">
+              <span>AB</span>
+            </div>
+          </div>
+        </div>
+
+        <h3>Badges</h3>
+        <div class="flex flex-wrap gap-4 mb-8">
+          <span class="badge">Default</span>
+          <span class="badge badge-primary">Primary</span>
+          <span class="badge badge-secondary">Secondary</span>
+          <span class="badge badge-accent">Accent</span>
+          <span class="badge badge-ghost">Ghost</span>
+          <span class="badge badge-info">Info</span>
+          <span class="badge badge-success">Success</span>
+          <span class="badge badge-warning">Warning</span>
+          <span class="badge badge-error">Error</span>
+          <span class="badge badge-outline">Outline</span>
+        </div>
+
+        <h3>Loading Spinners</h3>
+        <div class="flex flex-wrap gap-4">
+          <span class="loading loading-spinner"></span>
+          <span class="loading loading-spinner loading-xs"></span>
+          <span class="loading loading-spinner loading-sm"></span>
+          <span class="loading loading-spinner loading-md"></span>
+          <span class="loading loading-spinner loading-lg"></span>
+        </div>
+      </div>
+    </section>
+
+    <section id="content-box">
+      <div class="w-full flex justify-end gap-2">
+        <button id="play" class="btn btn-circle"
+          ><Icon name="mdi:play-circle" width="24" height="24" /></button
+        >
+        <button id="pause" class="btn btn-circle"
+          ><Icon name="mdi:pause-circle" width="24" height="24" /></button
+        >
+      </div>
+      <article id="content">
+        <p>
+          As Michael Harvey writes, paragraphs are “in essence—a form of
+          punctuation, and like other forms of punctuation they are meant to
+          make written material easy to read.”[1] Effective paragraphs are the
+          fundamental units of academic writing; consequently, the thoughtful,
+          multifaceted arguments that your professors expect depend on them.
+          Without good paragraphs, you simply cannot clearly convey sequential
+          points and their relationships to one another.
+        </p>
+        <p>
+          Many novice writers tend to make a sharp distinction between content
+          and style, thinking that a paper can be strong in one and weak in the
+          other, but focusing on organization shows how content and style
+          converge in deliberative academic writing. Your professors will view
+          even the most elegant prose as rambling and tedious if there isn’t a
+          careful, coherent argument to give the text meaning. Paragraphs are
+          the “stuff ” of academic writing and, thus, worth our attention here.
+        </p>
+      </article>
+    </section>
+  </main>
+</Layout>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Get DOM elements
+    const playBtn = document.getElementById("play");
+    const pauseBtn = document.getElementById("pause");
+    const contentElement = document.getElementById("content");
+
+    // Initialize speech variables
+    let speechSynthesis = window.speechSynthesis;
+    let utterance = null;
+    let isPlaying = false;
+
+    // Function to extract text from content element
+    function getContentText() {
+      return contentElement.textContent;
+    }
+
+    // Function to initialize text-to-speech
+    function initTextToSpeech() {
+      // Create new utterance
+      utterance = new SpeechSynthesisUtterance(getContentText());
+
+      // Set utterance properties
+      utterance.rate = 1;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+
+      // Try to set a pleasant voice if available
+      const voices = speechSynthesis.getVoices();
+      const englishVoice = voices.find(
+        (voice) => voice.lang.includes("en") && voice.localService === true
+      );
+
+      if (englishVoice) {
+        utterance.voice = englishVoice;
+      }
+
+      // Event listeners for the utterance
+      utterance.onend = () => {
+        isPlaying = false;
+        updateButtonStates();
+      };
+
+      utterance.onerror = (event) => {
+        console.error("Speech synthesis error:", event.error);
+        isPlaying = false;
+        updateButtonStates();
+      };
+    }
+
+    // Function to update button states
+    function updateButtonStates() {
+      if (isPlaying) {
+        playBtn.style.display = "none";
+        pauseBtn.style.display = "block";
+      } else {
+        playBtn.style.display = "block";
+        pauseBtn.style.display = "none";
+      }
+    }
+
+    // Play function
+    function playSpeech() {
+      if (speechSynthesis.speaking && !speechSynthesis.paused) {
+        return; // Already speaking
+      }
+
+      if (speechSynthesis.paused) {
+        // Resume if paused
+        speechSynthesis.resume();
+        isPlaying = true;
+      } else {
+        // Start new speech
+        speechSynthesis.cancel(); // Stop any previous speech
+        initTextToSpeech();
+        speechSynthesis.speak(utterance);
+        isPlaying = true;
+      }
+
+      updateButtonStates();
+    }
+
+    // Pause function
+    function pauseSpeech() {
+      if (speechSynthesis.speaking && !speechSynthesis.paused) {
+        speechSynthesis.pause();
+        isPlaying = false;
+        updateButtonStates();
+      }
+    }
+
+    // Set up event listeners for voices (needed for some browsers)
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = initTextToSpeech;
+    }
+
+    // Initialize text-to-speech
+    initTextToSpeech();
+
+    // Add event listeners to buttons
+    playBtn.addEventListener("click", playSpeech);
+    pauseBtn.addEventListener("click", pauseSpeech);
+
+    // Initialize button states
+    updateButtonStates();
+
+    // Clean up when leaving the page
+    window.addEventListener("beforeunload", () => {
+      if (speechSynthesis.speaking) {
+        speechSynthesis.cancel();
+      }
+    });
+  });
+</script>

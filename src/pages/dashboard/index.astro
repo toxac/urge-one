@@ -1,0 +1,16 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Session from "@components/auth/SessionTest";
+
+const { session } = Astro.locals;
+
+// redirect to login if user does not exists
+if (!session) {
+  return Astro.redirect("/auth/login");
+}
+---
+
+<Layout title="urge Dashboard" description="Urge dashboard">
+  <Session client:load />
+  <h1>Dashboard</h1>
+</Layout>

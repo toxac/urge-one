@@ -1,0 +1,17 @@
+---
+import Layout from "@layouts/Layout.astro";
+import LoginForm from "@components/auth/LoginForm";
+
+const { session } = Astro.locals;
+
+// redirect to dashboard if user exists
+if (session) {
+  return Astro.redirect("/dashboard");
+}
+---
+
+<Layout title="urge login" description="log in to urge platform">
+  <main class="min-h-screen flex items-center justify-center bg-base-200">
+    <LoginForm client:load />
+  </main>
+</Layout>
