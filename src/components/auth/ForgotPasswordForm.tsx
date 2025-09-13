@@ -1,5 +1,5 @@
 import { createSignal } from 'solid-js'
-import { useAuth } from '../../hooks/useAuth'
+import { useAuth } from '../../lib/hooks/useAuth'
 
 export default function ForgotPasswordForm() {
     const { forgotPassword, auth, error } = useAuth()

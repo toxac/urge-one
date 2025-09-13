@@ -73,11 +73,6 @@ export default function RegisterForm(incomingProps: RegisterFormProps) {
                 const { data: authData, error: authError } = await supabase.auth.signUp({
                     email: values.email,
                     password: values.password,
-                    options: {
-                        data: {
-                            username: values.username
-                        }
-                    }
                 });
 
                 if (authError) throw authError;

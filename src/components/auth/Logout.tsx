@@ -1,4 +1,4 @@
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "../../lib/hooks/useAuth";
 import { clearAuth } from "../../stores/auth";
 import { navigate } from "astro:transitions/client";
 
