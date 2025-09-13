@@ -27,8 +27,6 @@ interface PaymentProps {
     intent: 'enroll' | 'subscribe' | 'event';
 }
 
-type Offering = Database['public']['Tables']['offerings']['Row']
-type Discount = Database['public']['Tables']['discounts']['Row']
 type UserTransactionInsert = Database['public']['Tables']['user_transactions']['Insert'];
 
 export default function Payment(props: PaymentProps) {
