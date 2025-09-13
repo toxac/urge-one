@@ -60,7 +60,7 @@ const slides: UserArchetype[] = [
     },
 ];
 
-export default function TestHero() {
+export default function Hero() {
     const [currentSlide, setCurrentSlide] = createSignal(0);
     const [displayText, setDisplayText] = createSignal("");
     const [isTyping, setIsTyping] = createSignal(false);

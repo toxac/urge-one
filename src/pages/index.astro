@@ -1,6 +1,6 @@
 ---
-import Layout from "@layouts/Layout.astro";
-import TestHero from "@components/landing/TestHero";
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/landing/Hero";
 
 
 
@@ -15,7 +15,7 @@ import TestHero from "@components/landing/TestHero";
     <div class="absolute inset-0 z-0"></div>
     {/* Your Content/Components */}
 
-    <TestHero client:load />
+    <Hero client:load />
   </section>
 </Layout>
 
