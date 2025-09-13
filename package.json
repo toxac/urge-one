@@ -1,6 +1,7 @@
 {
   "name": "urge-one",
   "type": "module",
+  "author": "amit chanchal @toxac",
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
@@ -9,6 +10,25 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.13.7"
+    "@astrojs/mdx": "^4.3.5",
+    "@astrojs/sitemap": "^3.5.1",
+    "@astrojs/solid-js": "^5.1.1",
+    "@astrojs/vercel": "^8.2.7",
+    "@nanostores/logger": "^1.0.0",
+    "@nanostores/solid": "^1.1.1",
+    "@supabase/ssr": "^0.7.0",
+    "@supabase/supabase-js": "^2.57.4",
+    "@tailwindcss/vite": "^4.1.13",
+    "astro": "^5.13.7",
+    "nanostores": "^1.0.1",
+    "node-cache": "^5.1.2",
+    "solid-js": "^1.9.9",
+    "tailwindcss": "^4.1.13"
+  },
+  "devDependencies": {
+    "@iconify-icon/solid": "^3.0.0",
+    "@iconify-json/mdi": "^1.2.3",
+    "astro-icon": "^1.1.5",
+    "daisyui": "^5.1.10"
   }
 }
