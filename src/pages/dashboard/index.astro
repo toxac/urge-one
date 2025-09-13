@@ -1,6 +1,6 @@
 ---
-import Layout from "@layouts/Layout.astro";
-import Session from "@components/auth/SessionTest";
+import Layout from "../../layouts/Layout.astro";
+
 
 const { session } = Astro.locals;
 
@@ -11,6 +11,5 @@ if (!session) {
 ---
 
 <Layout title="urge Dashboard" description="Urge dashboard">
-  <Session client:load />
   <h1>Dashboard</h1>
 </Layout>
