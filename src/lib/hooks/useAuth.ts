@@ -1,7 +1,7 @@
 import { createSignal, createEffect, onMount } from 'solid-js'
 import { useStore } from '@nanostores/solid'
-import { authStore, setAuth, setLoading } from '../stores/auth'
-import { supabaseBrowserClient } from '../lib/supabase/client'
+import { authStore, setAuth, setLoading, clearAuth } from '../../stores/auth'
+import { supabaseBrowserClient } from '../../lib/supabase/client'
 
 export function useAuth() {
     const auth = useStore(authStore)
@@ -117,9 +117,11 @@ export function useAuth() {
             if (!response.ok) {
                 const data = await response.json()
                 throw new Error(data.error)
+            }else {
+                clearAuth();
+                return { success: true, error: null }
             }
-
-            return { success: true, error: null }
+            
         } catch (err: any) {
             setError(err.message)
             return { success: false, error: err.message }

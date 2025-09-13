@@ -1,12 +1,8 @@
 import { atom, computed } from 'nanostores';
 import type { User, Session } from '@supabase/supabase-js';
-import type { AuthStoreState } from '../../types/appTypes';
-import type { Database } from "../../database.types"
+import type { AuthStore } from '../../types/urgeTypes';
 
-type Profile = Database['public']['Tables']['user_profiles']['Row'];
-
-
-export const authStore = atom<AuthStoreState>({
+export const authStore = atom<AuthStore>({
   user: null,
   session: null,
   loading: true
@@ -28,6 +24,11 @@ export const setLoading = (loading: boolean) => {
     ...authStore.get(), 
     loading 
   });
+};
+
+export const getCurrentUserId = (): string | null => {
+  const auth = authStore.get();
+  return auth.user?.id || null;
 };
 
 // Optional clear function
