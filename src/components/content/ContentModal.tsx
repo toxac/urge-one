@@ -1,6 +1,6 @@
 // components/ModalWrapper.jsx
 import { createSignal, type JSX } from "solid-js";
-import Modal from "@components/appFeedback/Modal";
+import Modal from "../appFeedback/Modal";
 interface ComponentProps {
     children: JSX.Element;
     buttonText?: string;
