@@ -1,0 +1,145 @@
+---
+import DashLayout from "@layouts/DashLayout.astro";
+import {
+  getCollection,
+  getEntry,
+  getEntries,
+  type CollectionEntry,
+} from "astro:content";
+// UI components
+
+import { toSingular } from "@lib/content/grammar";
+import Accomplishments from "@components/program/progress/Accomplishments.tsx";
+import ProgressFeedBack from "@components/program/progress/ProgressFeedback.tsx";
+import MilestoneCompletion from "@components/program/progress/MilestoneCompletion.tsx";
+
+import { hasAccess, accessProfiles } from "@lib/rbac";
+const { userRoles, session } = Astro.locals;
+
+// Authentication Check
+const isAuthenticated: boolean = session !== null;
+// Access Check
+const hasPageAccess: boolean = hasAccess(
+  userRoles,
+  accessProfiles.programStart
+);
+
+// redirect if doesnt have access
+if (!isAuthenticated || !hasPageAccess) {
+  return Astro.redirect("/program");
+}
+
+// 1. Parse all relevant query parameters from the URL
+const urlParams = Astro.url.searchParams;
+
+const contentId = urlParams.get("contentId"); // This is the SLUG of the completed content
+const contentType = urlParams.get("contentType"); // e.g., 'concepts', 'milestones'
+const accomplishment = urlParams.get("accomplishmentId"); //
+
+let accomplishmentId: number | null = null;
+
+if (accomplishment) {
+  accomplishmentId = parseInt(accomplishment);
+}
+
+type CompletedContentData = CollectionEntry<
+  "challenges" | "exercises" | "concepts"
+> | null;
+
+let contentData: CompletedContentData | null = null;
+let contentMetaId: string | null = null;
+
+// Fetch data for the completed content from content collection
+const isValidCollection =
+  contentType &&
+  (contentType === "concepts" ||
+    contentType === "challenges" ||
+    contentType === "exercises");
+
+if (contentId && contentType && isValidCollection) {
+  try {
+    const contentEntry = await getEntry(contentType, contentId);
+    contentData = contentEntry ?? null;
+    contentMetaId = contentData?.data.contentMetaId || null;
+  } catch (e) {
+    console.error(
+      `[progress-handler.astro] Error fetching content details for slug "${contentId}" from collection "${contentType}":`,
+      e
+    );
+  }
+} else {
+  console.warn(
+    `[progress-handler.astro] Skipping content details fetch: completedContentId: ${contentId}, completedContentType: ${contentType}, isValidCollection: ${isValidCollection}`
+  );
+  return Astro.redirect("/program/progress"); // if no params found go to main progress page
+}
+
+/* MILESTONE COMPLETION CHECK **/
+// check if this is summary concept
+const isSummary =
+  contentData?.collection === "concepts" &&
+  contentData.data.isFinalContentInMilestone;
+
+// Construct the full redirect URL
+let redirectUrl: string;
+if (contentData?.data.next) {
+  redirectUrl = `/program/${contentData?.data.next.type}/${contentData?.data.next.id}`;
+} else {
+  redirectUrl = "/program/dashboard";
+  console.warn(
+    `[progress-handler.astro] Missing nextType or nextId. Defaulting redirect to ${redirectUrl}.`
+  );
+}
+
+// Prepare breadcrumb links for this page
+const breadcrumbSegments = [
+  { name: "Home", url: "/" },
+  { name: "Program", url: "/program" },
+  { name: "Completion", url: "/program/progress/completion" },
+];
+---
+
+<DashLayout
+    title="Progress Update | Urge"
+    description="Your progress update for the Urge program"
+    breadcrumbItems={breadcrumbSegments}
+>
+  <section class="bg-gray-50 rounded-xl p-6 sm:p-8 lg:p-16 backdrop-blur-sm">
+    {!isSummary? 
+      <h2 class="text-4xl font-extrabold dark:text-white">Your Progress</h2>
+      <h1>Your Progress</h1>
+      <p class="mb-3 text-gray-500 dark:text-gray-400 prose-lg">
+        {contentData?.data.summary}
+      </p>
+      :
+      <MilestoneCompletion contentMetaId={contentMetaId} client:load />
+    }
+    <!-- Accomplishment -->
+    <div class="py-12 flex justify-center">
+      {
+        accomplishmentId && contentMetaId ? (
+          <Accomplishments
+            accomplishmentId={accomplishmentId}
+            contentMetaId={contentMetaId}
+            client:load
+          />
+        ) : null
+      }
+      {
+        accomplishmentId && contentMetaId ? (
+          <ProgressFeedBack contentMetaId={contentMetaId} client:load />
+        ) : null
+      }
+    </div>
+    
+    <!-- Navigation -->
+    <a class="btn w-full flex flex-col" href={redirectUrl}>
+      <p>Next</p>
+      <p>
+        {toSingular(contentData?.data.next?.type || null)}: {
+          contentData?.data.next?.id
+        }
+      </p>
+    </a>
+  </section>
+</DashLayout>

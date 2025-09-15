@@ -1,0 +1,134 @@
+---
+/**
+ * @description challenges detail page (protected)
+ * @file /src/pages/program/challenges/[slug]/index.astro
+ * @param slug
+ * @author amitchanchal
+ * @updated August 27, 2025
+ */
+
+import DashLayout from "@layouts/DashLayout.astro";
+import { render, getEntry, type CollectionEntry } from "astro:content";
+import MDContainer from "@components/content/MDContainer.astro";
+import ContentInitializer from "@components/program/progress/ContentInitializer";
+import ContentNavigationButtons from "@components/program/progress/ContentNavigationButtons";
+import ContentProgressStatus from "@components/program/progress/ContentProgressStatus";
+import AddNote from "@components/user/actions/AddNote";
+import PostQuestion from "@components/user/actions/PostQuestion";
+import SaveBookmark from "@components/user/actions/SaveBookmark";
+import SpeechBar from "@components/content/SpeechBar.astro";
+import ActionBar from "@components/content/ActionBar.astro";
+
+import { hasAccess, accessProfiles } from "@lib/rbac";
+const { userRoles, session } = Astro.locals;
+
+// Authentication Check
+const isAuthenticated: boolean = session !== null;
+// Access Check
+const hasPageAccess: boolean = hasAccess(
+  userRoles,
+  accessProfiles.programStart
+);
+
+// redirect if doesnt have access
+if (!isAuthenticated || !hasPageAccess) {
+  return Astro.redirect("/program");
+}
+
+type Challenge = CollectionEntry<"challenges">;
+
+// get the slug from incoming server request
+const pathname: string = Astro.url.pathname;
+const { slug } = Astro.params;
+if (slug === undefined) {
+  return Astro.redirect("/404");
+}
+
+const challenge = await getEntry("challenges", slug);
+if (challenge === undefined) {
+  return Astro.redirect("/404");
+}
+
+const { Content } = await render(challenge);
+
+// get Parent Milestone
+const parentMilestone = await getEntry(challenge.data.milestone);
+
+// Breadcrumbs data
+const breadcrumbs = [
+  { name: "Home", url: "/" },
+  { name: "Program", url: "/program" },
+  {
+    name: `Milestone ${parentMilestone.data.sequence}`,
+    url: `/program/milestone/${parentMilestone.slug}`,
+  },
+  {
+    name: `Challenge - ${challenge.data.title}`,
+    url: `/program/challenges/${challenge.slug}`,
+  },
+];
+---
+
+<DashLayout
+  title={`challenge - ${challenge.data.title} | urge`}
+  description={challenge.data?.description || challenge.data.title}
+  breadcrumbItems={breadcrumbs}
+>
+  <ActionBar>
+    <div class="bg-white p-2 rounded-lg shadow-md border border-gray-200">
+      <ContentInitializer
+        contentMetaId={challenge.data.contentMetaId}
+        client:load
+      />
+      <ContentProgressStatus
+        contentId={challenge.data.contentMetaId}
+        client:load
+      />
+    </div>
+
+    {
+      session != null && session.user.id ? (
+        <div class="flex gap-4">
+          <PostQuestion
+            contentType={challenge.collection}
+            referenceTable={"content_meta"}
+            referenceUrl={pathname}
+            relatedContentId={challenge.data.contentMetaId}
+            userId={session?.user.id}
+            client:load
+          />
+          <AddNote
+            contentType={challenge.collection}
+            referenceTable={"content_meta"}
+            referenceUrl={pathname}
+            relatedContentId={challenge.data.contentMetaId}
+            userId={session?.user.id}
+            client:load
+          />
+          <SaveBookmark
+            contentType={challenge.collection}
+            referenceTable={"content_meta"}
+            referenceUrl={pathname}
+            relatedContentId={challenge.data.contentMetaId}
+            userId={session?.user.id}
+            client:load
+          />
+        </div>
+      ) : null
+    }
+  </ActionBar>
+  <h1>{challenge.data.title}</h1>
+  <SpeechBar>Speed controls</SpeechBar>
+  <MDContainer>
+    <Content />
+  </MDContainer>
+  <ContentNavigationButtons
+    contentType={challenge.collection}
+    nextContentId={challenge.data.next?.id}
+    previousContentId={challenge.data.previous?.id}
+    nextContentType={challenge.data.next?.type}
+    previousContentType={challenge.data.previous?.type}
+    contentMetaId={challenge.data.contentMetaId}
+    client:load
+  />
+</DashLayout>

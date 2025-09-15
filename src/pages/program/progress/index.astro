@@ -1,0 +1,35 @@
+---
+import DashLayout from "@layouts/DashLayout.astro";
+import ProgramProgress from "@components/program/progress/ProgramProgress";
+
+import { hasAccess, accessProfiles } from "../../../lib/rbac";
+const { userRoles, session } = Astro.locals;
+
+// Authentication Check
+const isAuthenticated: boolean = session !== null;
+// Access Check
+const hasPageAccess: boolean = hasAccess(
+  userRoles,
+  accessProfiles.programStart
+);
+
+// redirect if doesnt have access
+if (!isAuthenticated || !hasPageAccess) {
+  return Astro.redirect("/program");
+}
+
+// Prepare breadcrumb links for this page
+const breadcrumbSegments = [
+  { name: "Home", url: "/" },
+  { name: "Program", url: "/program" },
+  { name: "Content Progress", url: "/program/progress" },
+];
+---
+
+<DashLayout
+  title="Program Progress | Urge"
+  description="Your progress update for the Urge program"
+  breadcrumbItems={breadcrumbSegments}
+>
+  <ProgramProgress client:load />
+</DashLayout>

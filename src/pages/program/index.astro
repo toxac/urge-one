@@ -1,0 +1,119 @@
+---
+import Layout from "@layouts/Layout.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+import { hasAccess, accessProfiles } from "../../lib/rbac";
+
+const { userRoles, session } = Astro.locals;
+
+const isAuthenticated: boolean = session !== null;
+
+const hasPageAccess: boolean = hasAccess(
+  userRoles,
+  accessProfiles.programStart
+);
+
+// redirect to dashboard if authenticated and enrolled
+if (isAuthenticated && hasPageAccess) {
+  return Astro.redirect("/dashboard");
+}
+
+/**
+ * 1. isAuthenticated && hasPageAccess -> redirect to dashboard
+ * 2. !isAuthenticated -> button /auth/register?intent=enroll&details=b594dc90-3af0-4d62-9f5e-4b5dccba3fe9
+ * 3. isAuthenticated && !hasPageAccess -> button /payments?intent=enroll&details=b594dc90-3af0-4d62-9f5e-4b5dccba3fe9
+ */
+
+// Get Milestones to show
+type Milestone = CollectionEntry<"milestones">;
+
+const milestones: Milestone[] = await getCollection("milestones");
+// sort by sequence order
+milestones.sort((a, b) => {
+  return a.data.sequence - b.data.sequence;
+});
+---
+
+<Layout
+  title="start with urge"
+  description="Start your entrepreneurship journey with urge"
+>
+  <section class="bg-neutral py-20 lg:py-32 px-5 md:px-10">
+    <div class="container mx-auto">
+      <h1 class="text-center text-base-100">Embark on Your Journey</h1>
+      <div class="text-center max-w-6xl mx-auto">
+        <p class="text-base-200 mb-6">
+          Launch your entrepreneurial journey with "urge"! This program guides
+          first-time founders through logical milestones, each packed with
+          actionable activities to build your business step-by-step. Master core
+          concepts through practical exercises, and tackle mindset-shifting
+          challenges that drive real progress. Forget lengthy theory—"start" is
+          about doing and building your venture, one focused activity at a time.
+        </p>
+        {
+          isAuthenticated && !hasPageAccess ? (
+            <a
+              class="btn btn-primary"
+              href="/payments?intent=enroll&details=b594dc90-3af0-4d62-9f5e-4b5dccba3fe9"
+            >
+              Enroll Now!
+            </a>
+          ) : (
+            <a
+              class="btn btn-primary"
+              href="/auth/register?intent=enroll&details=b594dc90-3af0-4d62-9f5e-4b5dccba3fe9"
+            >
+              Enroll Now!
+            </a>
+          )
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-base-200 py-20 lg:py-32 px-5 md:px-10">
+    <div class="container mx-auto">
+      <h2 class="text-center mb-12">Your Pathway to Success</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {
+          milestones.map((milestone: Milestone) => {
+            return (
+              <div class="card w-full bg-base-100 card-md shadow-[0_4px_6px_-1px_rgb(0,0,0,0.1),0_2px_4px_-2px_rgb(0,0,0,0.1)] hover:shadow-[0_10px_15px_-3px_rgb(0,0,0,0.1),0_4px_6px_-4px_rgb(0,0,0,0.1)] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-1.5 border border-base-200 hover:border-base-300">
+                <div class="card-body">
+                  <span class="badge badge-xs badge-base-300">
+                    milestone - {milestone.data.sequence}
+                  </span>
+                  <h2 class="card-title text-primary">
+                    {milestone.data.title}
+                  </h2>
+                  <p>{milestone.data.description}</p>
+                  <div class="justify-end card-actions" />
+                </div>
+              </div>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-base-100 py-20 lg:py-32 px-5">
+    <div class="container mx-auto">
+      <h2 class="text-center">Try an open challenge</h2>
+      <div class="text-center max-w-6xl mx-auto mb-12">
+        <p>
+          Starting a business is less about textbooks and theories, and more
+          about conquering your fears and taking action. It's about pushing your
+          boundaries, becoming adventurous, and building resilience in the face
+          of rejection. It's about solving problems that people are willing to
+          pay for. We've crafted these challenges to push you outside your
+          comfort zone, help you embrace the unknown, and ultimately, transform
+          you into a fearless entrepreneur. Are you ready to take the leap?
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        Get new challenges from database table -> challenges status == open
+      </div>
+    </div>
+  </section>
+</Layout>

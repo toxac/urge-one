@@ -1,0 +1,151 @@
+---
+/**
+ * @description Page for all the challenges (protected)
+ * @file /program/challenges/index.astro
+ * @param none
+ * @author amitchanchal
+ * @updated August 27, 2025
+ */
+
+import { getCollection, type CollectionEntry } from "astro:content";
+import { Icon } from "astro-icon/components";
+import DashLayout from "@layouts/DashLayout.astro";
+import MDContainer from "@components/content/MDContainer.astro";
+import ContentProgressStatus from "@components/program/progress/ContentProgressStatus";
+import { hasAccess, accessProfiles } from "@lib/rbac";
+const { userRoles, session } = Astro.locals;
+
+// Authentication Check
+const isAuthenticated: boolean = session !== null;
+// Access Check
+const hasPageAccess: boolean = hasAccess(
+  userRoles,
+  accessProfiles.programStart
+);
+
+// redirect if doesnt have access
+if (!isAuthenticated || !hasPageAccess) {
+  return Astro.redirect("/program");
+}
+
+type Challenge = CollectionEntry<"challenges">;
+
+const getGroupedAndSortedChallenges = async () => {
+  const challenges = await getCollection("challenges");
+  const milestones = await getCollection("milestones");
+
+  const milestoneMap = new Map(
+    milestones.map((milestone) => [milestone.data.id, milestone])
+  );
+
+  const groupedChallenges = challenges.reduce((acc, challenge) => {
+    const milestoneId = challenge.data.milestone.id; // Use id of reference
+    if (!acc.has(milestoneId)) {
+      acc.set(milestoneId, []);
+    }
+    acc.get(milestoneId)?.push(challenge);
+    return acc;
+  }, new Map<string, Challenge[]>());
+
+  const groupedArray = Array.from(groupedChallenges.entries()).map(
+    ([milestoneId, challenges]) => ({
+      milestoneId,
+      challenges,
+    })
+  );
+
+  groupedArray.sort((a, b) => {
+    const sequenceA =
+      milestoneMap.get(a.milestoneId)?.data.sequence ?? Infinity;
+    const sequenceB =
+      milestoneMap.get(b.milestoneId)?.data.sequence ?? Infinity;
+    return sequenceA - sequenceB;
+  });
+
+  groupedArray.forEach((group) => {
+    group.challenges.sort((a, b) => {
+      const sequenceA = a.data.sequence ?? Infinity;
+      const sequenceB = b.data.sequence ?? Infinity;
+      return sequenceA - sequenceB;
+    });
+  });
+
+  return groupedArray;
+};
+
+const groupedChallenges = await getGroupedAndSortedChallenges();
+const milestones = await getCollection("milestones");
+const milestoneMap = new Map(
+  milestones.map((milestone) => [milestone.data.id, milestone.data])
+);
+
+// Breadcrumbs
+const breadcrumbs = [
+  { name: "Home", url: "/" },
+  { name: "Program", url: "/program" },
+  {
+    name: "Milestones",
+    url: "/program/milestones",
+  },
+  {
+    name: "Challenges",
+    url: "/program/challenges",
+  },
+];
+---
+
+<DashLayout
+  title="Challenges | urge-start"
+  description="Challenges for building entrepreneurial resilience"
+  breadcrumbItems={breadcrumbs}
+>
+  <h1 class="mb-8">Program Challenges</h1>
+  <MDContainer>
+    <p>
+      Challenges are your mission to step outside your comfort zone and into the real world. Each challenge is a deliberate push to help you build resilience and confidence, transforming your fear into fuel. Remember, the goal isn't to get a "yes" every time—it's to get comfortable with the "no." Every rejection is just a piece of data, and every challenge you face is a powerful step closer to building a business that's as fearless as you are.
+    </p>
+  </MDContainer>
+  <section class="mt-12">
+    <ul class="list bg-base-100 rounded-box shadow-md">
+      {
+        groupedChallenges.map((group) => (
+
+            <li class="p-4 pb-2 text-lg opacity-60 tracking-wide">
+              Milestone {milestoneMap.get(group.milestoneId)?.sequence}
+              {" - "}
+              {milestoneMap.get(group.milestoneId)?.title}
+            </li>
+            <>
+              {group.challenges.map((challenge: Challenge) => {
+                return (
+                  <li class="list-row">
+                    <div class="avatar avatar-placeholder">
+                      <div class="bg-base-300 text-neutral-content w-8  rounded">
+                        <span class="text-lg text-neutral">{challenge.data.sequence}</span>
+                      </div>
+                    </div>
+
+                      <div class="text-lg font-bold">{challenge.data.title}</div>
+
+
+                    <ContentProgressStatus
+                        contentId={challenge.data.contentMetaId}
+                        client:load
+                      />
+
+                    <a
+                        href={`/program/challenges/${challenge.slug}`}
+                        class="btn btn-ghost btn-square flex justify-center items-center"
+                      >
+                        <Icon name="mdi:arrow-top-right-thick" class="text-2xl text-primary" />
+                      </a>
+
+                  </li>
+                );
+              })}
+            </>
+        ))
+      }
+    </ul>
+  </section>
+</DashLayout>

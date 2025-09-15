@@ -1,0 +1,160 @@
+---
+/**
+ * @description exercise list page (protected)
+ * @file /program/exercises/index.astro
+ * @param none
+ * @author amitchanchal
+ * @updated August 27, 2025
+ */
+import { getCollection, type CollectionEntry } from "astro:content";
+import { Icon } from "astro-icon/components";
+import DashLayout from "@layouts/DashLayout.astro";
+import { hasAccess, accessProfiles } from "@lib/rbac";
+import MDContainer from "@components/content/MDContainer.astro";
+import ContentProgressStatus from "@components/program/progress/ContentProgressStatus";
+const { userRoles, session } = Astro.locals;
+
+// Authentication Check
+const isAuthenticated: boolean = session !== null;
+// Access Check
+const hasPageAccess: boolean = hasAccess(
+  userRoles,
+  accessProfiles.programStart
+);
+
+// redirect if doesnt have access
+if (!isAuthenticated || !hasPageAccess) {
+  return Astro.redirect("/program");
+}
+
+const pathname: string = Astro.url.pathname;
+
+type Exercise = CollectionEntry<"exercises">;
+type Milestone = CollectionEntry<"milestones">;
+
+const getGroupedAndSortedExercises = async () => {
+  const exercises = await getCollection("exercises");
+  const milestones = await getCollection("milestones");
+
+  const milestoneMap = new Map(
+    milestones.map((milestone) => [milestone.data.id, milestone])
+  );
+
+  const groupedExercises = exercises.reduce((acc, exercise) => {
+    const milestoneId = exercise.data.milestone.id; //Use id of reference
+    if (!acc.has(milestoneId)) {
+      acc.set(milestoneId, []);
+    }
+    acc.get(milestoneId)?.push(exercise);
+    return acc;
+  }, new Map<string, Exercise[]>());
+
+  const groupedArray = Array.from(groupedExercises.entries()).map(
+    ([milestoneId, exercises]) => ({
+      milestoneId,
+      exercises,
+    })
+  );
+
+  groupedArray.sort((a, b) => {
+    const sequenceA =
+      milestoneMap.get(a.milestoneId)?.data.sequence ?? Infinity;
+    const sequenceB =
+      milestoneMap.get(b.milestoneId)?.data.sequence ?? Infinity;
+    return sequenceA - sequenceB;
+  });
+
+  groupedArray.forEach((group) => {
+    group.exercises.sort((a, b) => {
+      const sequenceA = a.data.sequence ?? Infinity;
+      const sequenceB = b.data.sequence ?? Infinity;
+      return sequenceA - sequenceB;
+    });
+  });
+
+  return groupedArray;
+};
+
+const groupedExercises = await getGroupedAndSortedExercises();
+const milestones = await getCollection("milestones");
+const milestoneMap = new Map(
+  milestones.map((milestone) => [milestone.data.id, milestone.data])
+);
+
+// Breadcrumbs data
+const breadcrumbs = [
+  { name: "Home", url: "/" },
+  { name: "Program", url: "/program" },
+  {
+    name: "Milestones",
+    url: "/program/milestones",
+  },
+  {
+    name: "Exercises",
+    url: "/program/exercises",
+  },
+];
+---
+
+<DashLayout
+  title="milestones | urge-start"
+  description="milestones in urge start program"
+  breadcrumbItems={breadcrumbs}
+>
+  <h1 class="mb-8">Program Exercises</h1>
+  <MDContainer>
+    <p>
+      Get ready to take meaningful action! Exercises are your hands-on business workbooks, designed to bridge the gap between theory and practice. Each one is a practical task with a clear goal, giving you a chance to create something tangible, calculate something critical, or plan a key step for your project. Don't worry about perfection; just focus on getting it done. The real lessons, insights, and confidence come from the act of doing, so let's get our hands dirty and make some real progress!
+    </p>
+  </MDContainer>
+
+  <section class="mt-12 w-full">
+    <ul class="list bg-base-100 rounded-box shadow-md w-full">
+      {
+        groupedExercises.map((group) => (
+
+            <li class="p-4 pb-2 text-lg text-primary font-semibold opacity-60 tracking-wide">
+              Milestone {milestoneMap.get(group.milestoneId)?.sequence}
+              {" - "}
+              {milestoneMap.get(group.milestoneId)?.title}
+            </li>
+            <>
+              {group.exercises.map((exercise: Exercise) => {
+                return (
+                  <li class="list-row">
+                    <div class="avatar avatar-placeholder">
+                      <div class="bg-base-300 text-neutral-content w-8  rounded">
+                        <span class="text-lg text-neutral">{exercise.data.sequence}</span>
+                      </div>
+                    </div>
+
+                      <div class="text-lg font-bold">{exercise.data.title}</div>
+
+
+                    <ContentProgressStatus
+                        contentId={exercise.data.contentMetaId}
+                        client:load
+                      />
+
+                    <a
+                        href={`/program/exercises/${exercise.slug}`}
+                        class="btn btn-ghost btn-square flex justify-center items-center"
+                      >
+                        <Icon name="mdi:arrow-top-right-thick" class="text-2xl text-primary" />
+                      </a>
+
+                  </li>
+                );
+              })}
+            </>
+        ))
+      }
+    </ul>
+  </section>
+</DashLayout>
+
+
+
+
+
+  

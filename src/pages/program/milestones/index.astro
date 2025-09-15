@@ -1,0 +1,87 @@
+---
+import DashLayout from "@layouts/DashLayout.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+import { hasAccess, accessProfiles } from "../../../lib/rbac";
+import MDContainer from "@components/content/MDContainer.astro";
+import SimpleCard from "@components/content/SimpleCard.astro";
+import ContentProgressStatus from "@components/program/progress/ContentProgressStatus";
+
+// CHECK AUTHENTICATION AND ACCESS
+const { userRoles, session } = Astro.locals;
+
+const isAuthenticated: boolean = session !== null;
+
+const hasPageAccess: boolean = hasAccess(
+  userRoles,
+  accessProfiles.programStart
+);
+
+// redirect if doesnt have access
+if (!isAuthenticated || !hasPageAccess) {
+  return Astro.redirect("/program");
+}
+
+// FETCH THE PAGE CONTENT
+type Milestone = CollectionEntry<"milestones">;
+
+const milestones: Milestone[] = await getCollection("milestones");
+milestones.sort((a, b) => {
+  return a.data.sequence - b.data.sequence;
+});
+
+// BREADCRUMBS
+const breadcrumbs = [
+  { name: "Home", url: "/" },
+  { name: "Program", url: "/program" },
+  { name: "Milestone", url: "/program/milestones" },
+];
+---
+
+<DashLayout
+  title="milestones | urge-start"
+  description="milestones in urge start program"
+  breadcrumbItems={breadcrumbs}
+>
+  <h1 class="mb-8">Milestones: Your Entrepreneurial Roadmap</h1>
+  <MDContainer>
+    <p>
+      Urge program is structured in to milestones. Think of each milestone as a
+      major chapter in your entrepreneurial journey. This isn’t just a list of
+      things to do; it’s a strategic roadmap that breaks down the overwhelming
+      process of starting a business into manageable, focused phases. By
+      completing each milestone, you'll not only gain a new set of skills and
+      insights, but you'll also build a tangible foundation for your MSP
+      (Minimal Sell-able Product), getting you one step closer to real sales and
+      revenue. So, let's dive into this next phase with clarity and purpose.
+    </p>
+  </MDContainer>
+
+  <div class="py-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg-grid-cols-2 gap-10">
+      {
+        milestones.map((milestone) => {
+          return (
+            <SimpleCard>
+              <div class="flex flex-col justify-between h-full">
+                <div class="flex flex-col">
+                  <div class="flex justify-between items-center">
+                    <div class="badge badge-nuetral badge-outline">
+                      Milestone- {milestone.data.sequence}
+                    </div>
+                    <ContentProgressStatus
+                      contentId={milestone.data.contentMetaId}
+                      client:load
+                    />
+                  </div>
+                  <h4 class="mt-8">{milestone.data.title}</h4>
+                  <p class="mt-4 text-gray-700">{milestone.data.description}</p>
+                </div>
+                <div class="flex justify-end">see details</div>
+              </div>
+            </SimpleCard>
+          );
+        })
+      }
+    </div>
+  </div>
+</DashLayout>

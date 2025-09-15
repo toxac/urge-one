@@ -1,0 +1,149 @@
+---
+/**
+ * @description concepts main page (protected)
+ * @file /program/concepts/index.astro
+ * @param none
+ * @author amitchanchal
+ * @updated August 27, 2025
+ */
+import { getCollection, type CollectionEntry } from "astro:content";
+import { Icon } from "astro-icon/components";
+import DashLayout from "@layouts/DashLayout.astro";
+import ContentProgressStatus from "@components/program/progress/ContentProgressStatus";
+import MDContainer from "@components/content/MDContainer.astro";
+import { hasAccess, accessProfiles } from "@lib/rbac";
+
+// CHECK AUTHENTICATION AND ACCESS
+const { userRoles, session } = Astro.locals;
+
+const isAuthenticated: boolean = session !== null;
+
+const hasPageAccess: boolean = hasAccess(
+  userRoles,
+  accessProfiles.programStart
+);
+
+// redirect if doesnt have access
+if (!isAuthenticated || !hasPageAccess) {
+  return Astro.redirect("/program");
+}
+
+// Fetch Content
+type Milestone = CollectionEntry<"milestones">;
+type Concept = CollectionEntry<"concepts">;
+
+// Get all concepts and group them by milestione
+const getGroupedAndSortedConcepts = async () => {
+  const concepts = await getCollection("concepts");
+  const milestones = await getCollection("milestones");
+  // Create a map of milestone IDs to milestone objects for easy lookup
+  const milestoneMap = new Map<string, Milestone>(
+    milestones.map((milestone) => [milestone.data.id, milestone])
+  );
+
+  // Group concept by milestone ID
+  const groupedConcepts = concepts.reduce((acc, concept) => {
+    const milestoneId = concept.data.milestone;
+    if (!acc.has(milestoneId.id)) {
+      acc.set(milestoneId.id, []);
+    }
+    acc.get(milestoneId.id)?.push(concept);
+    return acc;
+  }, new Map<string, Concept[]>());
+
+  // Convert the map to an array of objects for easier sorting
+  const groupedArray = Array.from(groupedConcepts.entries()).map(
+    ([milestoneId, concepts]) => ({
+      milestoneId,
+      concepts,
+    })
+  );
+  // Sort milestones by sequence
+  groupedArray.sort((a, b) => {
+    const sequenceA =
+      milestoneMap.get(a.milestoneId)?.data.sequence ?? Infinity; // Handle missing milestone
+    const sequenceB =
+      milestoneMap.get(b.milestoneId)?.data.sequence ?? Infinity;
+    return sequenceA - sequenceB;
+  });
+
+  // Sort concepts within each milestone by sequence
+  groupedArray.forEach((group) => {
+    group.concepts.sort((a, b) => {
+      const sequenceA = a.data.sequence ?? Infinity; // Handle missing activity sequence
+      const sequenceB = b.data.sequence ?? Infinity;
+      return sequenceA - sequenceB;
+    });
+  });
+
+  return groupedArray;
+};
+
+const groupedConcepts = await getGroupedAndSortedConcepts();
+const milestones = await getCollection("milestones");
+const milestoneMap = new Map(
+  milestones.map((milestone) => [milestone.data.id, milestone.data])
+);
+
+const breadcrumbs = [
+  { name: "Home", url: "/" },
+  { name: "Program", url: "/program" },
+  { name: "Concepts", url: "/program/concepts" },
+];
+---
+
+<DashLayout
+  title="concepts | urge-start"
+  description="concepts in urge start program"
+  breadcrumbItems={breadcrumbs}
+>
+  <h1 class="mb-8">Program Concepts</h1>
+  <MDContainer>
+    <p>
+      Explore the Concepts section! This is where we get to the good stuff—the "aha!" moments that demystify entrepreneurship. We'll peel back the layers on specific ideas, approaches, and strategies, cutting through the confusing textbooks to show you why they matter in the real world. Think of each concept as a foundational insight that transforms how you see business, giving you the clarity and framework you need to move on to the next task.
+    </p>
+  </MDContainer>
+  <section class="mt-12">
+    <ul class="list bg-base-100 rounded-box shadow-md">
+      {
+        groupedConcepts.map((group) => (
+
+            <li class="p-4 pb-2 text-lg opacity-60 tracking-wide">
+              Milestone {milestoneMap.get(group.milestoneId)?.sequence}
+              {" - "}
+              {milestoneMap.get(group.milestoneId)?.title}
+            </li>
+            <>
+              {group.concepts.map((concept: Concept) => {
+                return (
+                  <li class="list-row">
+                    <div class="avatar avatar-placeholder">
+                      <div class="bg-base-300 text-neutral-content w-8  rounded">
+                        <span class="text-lg text-neutral">{concept.data.sequence}</span>
+                      </div>
+                    </div>
+
+                      <div class="text-lg font-bold">{concept.data.title}</div>
+
+
+                    <ContentProgressStatus
+                        contentId={concept.data.contentMetaId}
+                        client:load
+                      />
+
+                    <a
+                        href={`/program/concepts/${concept.slug}`}
+                        class="btn btn-ghost btn-square flex justify-center items-center"
+                      >
+                        <Icon name="mdi:arrow-top-right-thick" class="text-2xl text-primary" />
+                      </a>
+
+                  </li>
+                );
+              })}
+            </>
+        ))
+      }
+    </ul>
+  </section>
+</DashLayout>
