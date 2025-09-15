@@ -1,14 +1,14 @@
 import { atom } from 'nanostores';
 import { supabaseBrowserClient } from '../../lib/supabase/client.ts';
 import { type Database } from "../../../database.types.ts";
-import { type UniversalError } from '../../../types/appTypes.ts';
+import { type SupabaseCustomError } from '../../../types/urgeTypes.ts';
 
 const supabase = supabaseBrowserClient;
 type Opportunity = Database['public']['Tables']['user_opportunities']['Row'];
 
 export const opportunitiesStore = atom<Opportunity[]>([]);
 export const opportunitiesStoreLoading = atom(false);
-export const opportunitiesStoreError = atom<UniversalError | null>(null);
+export const opportunitiesStoreError = atom<SupabaseCustomError | null>(null);
 
 export function manageOpportunities(
   op: 'create' | 'update' | 'delete',

@@ -1,14 +1,14 @@
 import { atom } from 'nanostores';
 import { supabaseBrowserClient } from '../../lib/supabase/client.ts';
 import { type Database } from "../../../database.types.ts";
-import { type UniversalError } from '../../../types/appTypes.ts';
+import { type SupabaseCustomError } from '../../../types/urgeTypes.ts';
 
 const supabase = supabaseBrowserClient;
 type Journal = Database['public']['Tables']['user_journals']['Row'];
 
 export const journalsStore = atom<Journal[]>([]);
 export const journalsStoreLoading = atom(false);
-export const journalsStoreError = atom<UniversalError | null>(null);
+export const journalsStoreError = atom<SupabaseCustomError | null>(null);
 
 export function manageJournals(
   op: 'create' | 'update' | 'delete',

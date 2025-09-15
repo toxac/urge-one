@@ -1,14 +1,14 @@
 import { atom } from 'nanostores';
 import { supabaseBrowserClient } from '../../lib/supabase/client.ts';
 import { type Database } from "../../../database.types.ts";
-import { type UniversalError } from '../../../types/appTypes.ts';
+import { type SupabaseCustomError } from '../../../types/urgeTypes.ts';
 
 const supabase = supabaseBrowserClient;
 type Challenge = Database['public']['Tables']['user_challenge_progress']['Row'];
 
 export const challengeStore = atom<Challenge[]>([]);
 export const challengeStoreLoading = atom(false);
-export const challengeStoreError = atom<UniversalError | null>(null);
+export const challengeStoreError = atom<SupabaseCustomError | null>(null);
 
 export function manageChallenges(
   op: 'create' | 'update' | 'delete',

@@ -2,14 +2,14 @@
 import { atom } from 'nanostores';
 import { supabaseBrowserClient } from '../../lib/supabase/client.ts';
 import { type Database } from "../../../database.types.ts";
-import { type UniversalError } from '../../../types/appTypes.ts';
+import { type SupabaseCustomError } from '../../../types/urgeTypes.ts';
 
 const supabase = supabaseBrowserClient;
 type Note = Database['public']['Tables']['user_notes']['Row'];
 
 export const notesStore = atom<Note[]>([]);
 export const notesStoreLoading = atom(false);
-export const notesStoreError = atom<UniversalError | null>(null);
+export const notesStoreError = atom<SupabaseCustomError | null>(null);
 
 export function manageNotes(
   op: 'create' | 'update' | 'delete',

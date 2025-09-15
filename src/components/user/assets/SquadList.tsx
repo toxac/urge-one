@@ -1,6 +1,6 @@
 import { createEffect, For, Show } from 'solid-js';
 import { useStore } from '@nanostores/solid';
-import { squadStore } from '../../../stores/userAssets';
+import { squadStore } from '../../../stores/userAssets/squad';
 
 const SquadList = () => {
     const $squad = useStore(squadStore);

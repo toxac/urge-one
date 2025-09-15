@@ -2,14 +2,14 @@
 import { atom } from 'nanostores';
 import { supabaseBrowserClient } from '../../lib/supabase/client.ts';
 import { type Database } from "../../../database.types.ts";
-import { type UniversalError } from '../../../types/appTypes.ts';
+import { type SupabaseCustomError } from '../../../types/urgeTypes.ts';
 
 const supabase = supabaseBrowserClient;
 type Bookmark = Database['public']['Tables']['user_bookmarks']['Row'];
 
 export const bookmarksStore = atom<Bookmark[]>([]);
 export const bookmarkStoreLoading = atom(false);
-export const bookmarkStoreError = atom<UniversalError| null>(null)
+export const bookmarkStoreError = atom<SupabaseCustomError| null>(null)
 
 // Bookmarks
 export function manageBookmarks(

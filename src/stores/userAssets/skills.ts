@@ -1,14 +1,14 @@
 import { atom } from 'nanostores';
 import { supabaseBrowserClient } from '../../lib/supabase/client.ts';
 import { type Database } from "../../../database.types.ts";
-import { type UniversalError } from '../../../types/appTypes.ts';
+import { type SupabaseCustomError } from '../../../types/urgeTypes.ts';
 
 const supabase = supabaseBrowserClient;
 type Skill = Database['public']['Tables']['user_skills']['Row'];
 
 export const skillsStore = atom<Skill[]>([]);
 export const skillsStoreLoading = atom(false);
-export const skillsStoreError = atom<UniversalError | null>(null);
+export const skillsStoreError = atom<SupabaseCustomError | null>(null);
 
 export function manageSkills(
   op: 'create' | 'update' | 'delete',

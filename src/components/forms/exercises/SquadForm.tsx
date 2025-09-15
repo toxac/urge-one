@@ -1,9 +1,9 @@
 import { createEffect, createSignal, Show, For } from 'solid-js';
 import { createForm } from '@felte/solid';
-import { supabaseBrowserClient } from '@lib/supabase/client';
+import { supabaseBrowserClient } from '../../../lib/supabase/client';
 import { validator } from '@felte/validator-zod';
 import { notify } from '../../../stores/notifications';
-import { manageSquad } from '../../../stores/userAssets';
+import { manageSquad } from '../../../stores/userAssets/squad';
 import { saveFormAndMarkCompleted } from '../../../stores/progress';
 import { useStore } from '@nanostores/solid';
 import { authStore } from '../../../stores/auth';
