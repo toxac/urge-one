@@ -6,19 +6,19 @@
  * @author amitchanchal
  * @updated August 27, 2025
  */
-import DashLayout from "@layouts/DashLayout.astro";
+import DashLayout from "../../../../layouts/DashLayout.astro";
 import { render, getEntry, type CollectionEntry } from "astro:content";
-import MDContainer from "@components/content/MDContainer.astro";
-import ContentInitializer from "@components/program/progress/ContentInitializer";
-import ContentNavigationButtons from "@components/program/progress/ContentNavigationButtons";
-import ContentProgressStatus from "@components/program/progress/ContentProgressStatus";
-import AddNote from "@components/user/actions/AddNote";
-import PostQuestion from "@components/user/actions/PostQuestion";
-import SaveBookmark from "@components/user/actions/SaveBookmark";
-import SpeechBar from "@components/content/SpeechBar.astro";
-import ActionBar from "@components/content/ActionBar.astro";
+import MDContainer from "../../../../components/content/MDContainer.astro";
+import ContentInitializer from "../../../../components/program/progress/ContentInitializer";
+import ContentNavigationButtons from "../../../../components/program/progress/ContentNavigationButtons";
+import ContentProgressStatus from "../../../../components/program/progress/ContentProgressStatus";
+import AddNote from "../../../../components/user/actions/AddNote";
+import PostQuestion from "../../../../components/user/actions/PostQuestion";
+import SaveBookmark from "../../../../components/user/actions/SaveBookmark";
+import SpeechBar from "../../../../components/content/SpeechBar.astro";
+import ActionBar from "../../../../components/content/ActionBar.astro";
 
-import { hasAccess, accessProfiles } from "@lib/rbac";
+import { hasAccess, accessProfiles } from "../../../../lib/rbac";
 const { userRoles, session } = Astro.locals;
 
 // Authentication Check

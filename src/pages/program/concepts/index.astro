@@ -8,10 +8,10 @@
  */
 import { getCollection, type CollectionEntry } from "astro:content";
 import { Icon } from "astro-icon/components";
-import DashLayout from "@layouts/DashLayout.astro";
-import ContentProgressStatus from "@components/program/progress/ContentProgressStatus";
-import MDContainer from "@components/content/MDContainer.astro";
-import { hasAccess, accessProfiles } from "@lib/rbac";
+import DashLayout from "../../../layouts/DashLayout.astro";
+import ContentProgressStatus from "../../../components/program/progress/ContentProgressStatus";
+import MDContainer from "../../../components/content/MDContainer.astro";
+import { hasAccess, accessProfiles } from "../../../lib/rbac";
 
 // CHECK AUTHENTICATION AND ACCESS
 const { userRoles, session } = Astro.locals;
