@@ -1,10 +1,10 @@
 ---
-import DashLayout from "@layouts/DashLayout.astro";
+import DashLayout from "../../../layouts/DashLayout.astro";
 import { getCollection, type CollectionEntry } from "astro:content";
 import { hasAccess, accessProfiles } from "../../../lib/rbac";
-import MDContainer from "@components/content/MDContainer.astro";
-import SimpleCard from "@components/content/SimpleCard.astro";
-import ContentProgressStatus from "@components/program/progress/ContentProgressStatus";
+import MDContainer from "../../../components/content/MDContainer.astro";
+import SimpleCard from "../../../components/content/SimpleCard.astro";
+import ContentProgressStatus from "../../../components/program/progress/ContentProgressStatus";
 
 // CHECK AUTHENTICATION AND ACCESS
 const { userRoles, session } = Astro.locals;
