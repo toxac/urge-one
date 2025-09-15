@@ -1,7 +1,7 @@
 import { createSignal, createEffect, Show, createMemo } from "solid-js";
 import { createForm } from "@felte/solid";
 import { validator } from "@felte/validator-zod";
-import { supabaseBrowserClient } from "@lib/supabase/client.ts";
+import { supabaseBrowserClient } from "../../../lib/supabase/client.ts";
 import { z } from "zod";
 import { notify } from "../../../stores/notifications.ts";
 import { useStore } from "@nanostores/solid";

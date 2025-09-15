@@ -2,7 +2,7 @@
 import { createSignal, Show, onMount } from "solid-js";
 import { For } from "solid-js";
 import { myths } from "../../../constants/exercises/myths.ts";
-import { supabaseBrowserClient } from "@lib/supabase/client.ts";
+import { supabaseBrowserClient } from "../../../lib/supabase/client.ts";
 import { useStore } from "@nanostores/solid";
 import { authStore } from "../../../stores/auth.ts";
 import { profileStore } from "../../../stores/profile.ts";
