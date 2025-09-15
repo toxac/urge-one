@@ -1,4 +1,4 @@
-import { onMount, onCleanup, createEffect, Show } from 'solid-js'
+import { onMount, onCleanup, createEffect } from 'solid-js'
 import { supabaseBrowserClient } from '../../lib/supabase/client';
 // import all stores
 import { setAuth, clearAuth } from '../../stores/auth';
