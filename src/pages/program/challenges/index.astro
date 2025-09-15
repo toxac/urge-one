@@ -6,13 +6,12 @@
  * @author amitchanchal
  * @updated August 27, 2025
  */
-
+import DashLayout from "../../../layouts/DashLayout.astro";
 import { getCollection, type CollectionEntry } from "astro:content";
 import { Icon } from "astro-icon/components";
-import DashLayout from "@layouts/DashLayout.astro";
-import MDContainer from "@components/content/MDContainer.astro";
-import ContentProgressStatus from "@components/program/progress/ContentProgressStatus";
-import { hasAccess, accessProfiles } from "@lib/rbac";
+import MDContainer from "../../../components/content/MDContainer.astro";
+import ContentProgressStatus from "../../../components/program/progress/ContentProgressStatus";
+import { hasAccess, accessProfiles } from "../../../lib/rbac";
 const { userRoles, session } = Astro.locals;
 
 // Authentication Check
