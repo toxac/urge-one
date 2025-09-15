@@ -11,6 +11,9 @@ export default function Logout() {
                 clearAuth();
                 navigate("/");
             }
+            if(error){
+                throw new Error("Could not logout!");
+            }
         } catch (error) {
             console.log("Error logging out!")
         }
