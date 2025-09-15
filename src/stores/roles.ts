@@ -1,6 +1,6 @@
 import { atom } from "nanostores";
 import { type Database } from "../../database.types";
-import { supabaseBrowserClient } from "@lib/supabase/client";
+import { supabaseBrowserClient } from "../lib/supabase/client";
 
 const supabase = supabaseBrowserClient;
 

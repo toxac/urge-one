@@ -2,7 +2,7 @@
 // stores/content.ts
 import { atom } from 'nanostores';
 import { type Database } from "../../database.types.ts";
-import { supabaseBrowserClient } from '@lib/supabase/client.ts';
+import { supabaseBrowserClient } from '../lib/supabase/client.ts';
 
 type Content = Database['public']['Tables']['content_meta']['Row'];
 

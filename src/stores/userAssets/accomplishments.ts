@@ -1,14 +1,14 @@
 import { atom } from 'nanostores';
 import { supabaseBrowserClient } from '../../lib/supabase/client.ts';
 import { type Database } from "../../../database.types.ts";
-import { type UniversalError } from '../../../types/appTypes.ts';
+import { type SupabaseCustomError } from '../../../types/urgeTypes.ts';
 
 const supabase = supabaseBrowserClient;
 type Accomplishment = Database['public']['Tables']['user_accomplishments']['Row'];
 
 export const accomplishmentStore = atom<Accomplishment[]>([]);
 export const accomplishmentStoreLoading = atom(false);
-export const accomplishmentStoreError = atom<UniversalError | null>(null);
+export const accomplishmentStoreError = atom<SupabaseCustomError | null>(null);
 
 export function manageAccomplishments(
   op: 'create' | 'update' | 'delete',
