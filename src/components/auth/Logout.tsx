@@ -1,6 +1,7 @@
 import { useAuth } from "../../lib/hooks/useAuth";
 import { clearAuth } from "../../stores/auth";
 import { navigate } from "astro:transitions/client";
+import type { PostgrestError } from "@supabase/supabase-js";
 
 export default function Logout() {
     const { logout } = useAuth();
@@ -12,7 +13,24 @@ export default function Logout() {
                 navigate("/");
             }
             if(error){
-                throw new Error("Could not logout!");
+                 // Type guard to check if it's a PostgrestError
+                const supabaseError = error as PostgrestError;
+                console.error("Supabase logout error:", {
+                    code: supabaseError.code,
+                    message: supabaseError.message,
+                    details: supabaseError.details,
+                    hint: supabaseError.hint
+                });
+                
+                // Handle specific error codes if needed
+                if (supabaseError.code === 'auth_session_missing') {
+                    // Session already expired, just clear local auth
+                    clearAuth();
+                    navigate("/");
+                    return;
+                }
+                
+                throw new Error(`Logout failed: ${supabaseError.message}`);
             }
         } catch (error) {
             console.log("Error logging out!")
