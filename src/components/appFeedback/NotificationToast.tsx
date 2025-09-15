@@ -7,21 +7,6 @@ import { Icon } from '@iconify-icon/solid';
 export default function NotificationToast() {
     const notifications = useStore(notificationStore);
 
-    const getToastClass = (type: string) => {
-        switch (type) {
-            case 'success':
-                return 'alert-success';
-            case 'error':
-                return 'alert-error';
-            case 'warning':
-                return 'alert-warning';
-            case 'info':
-                return 'alert-info';
-            default:
-                return '';
-        }
-    };
-
     const getIcon = (type: string) => {
         switch (type) {
             case 'success':
