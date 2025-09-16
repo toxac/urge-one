@@ -11,10 +11,10 @@
     "dbtypes": "supabase gen types typescript --project-id xqxzcpocbwqhuoqymhbr --schema public > database.types.ts"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.4",
     "@astrojs/mdx": "^4.3.5",
     "@astrojs/sitemap": "^3.5.1",
     "@astrojs/solid-js": "^5.1.1",
+    "@astrojs/ts-plugin": "^1.10.4",
     "@astrojs/vercel": "^8.2.7",
     "@felte/solid": "^1.2.14",
     "@felte/validator-zod": "^1.0.18",
@@ -28,7 +28,7 @@
     "node-cache": "^5.1.2",
     "solid-js": "^1.9.9",
     "tailwindcss": "^4.1.13",
-    "typescript": "^5.9.2"
+    "typescript": "5.8.3"
   },
   "devDependencies": {
     "@iconify-icon/solid": "^3.0.0",

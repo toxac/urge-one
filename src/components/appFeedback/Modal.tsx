@@ -10,12 +10,13 @@ interface ModalProps {
     closeOnBackdropClick?: boolean;
 }
 
+
 export default function Modal(props: ModalProps) {
 
     // Set defaults
     const size = props.size || "md";
     const closeOnBackdropClick = props.closeOnBackdropClick !== false;
-
+    
     // Size classes mapping
     const sizeClasses = {
         sm: "w-1/4 max-w-md",

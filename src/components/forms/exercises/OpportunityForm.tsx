@@ -14,13 +14,14 @@ import {
   opportunitiesStoreLoading,
 } from "../../../stores/userAssets/opportunities";
 import { authStore } from "../../../stores/auth";
-import { supabaseBrowserClient } from "@lib/supabase/client";
+import { supabaseBrowserClient } from "../../../lib/supabase/client";
 import {
   discoveryMethodOptions,
   categoryOptions,
   alignmentWithGoalsOptions,
 } from "../../../constants/exercises/opportunities";
 import { type Database } from "../../../../database.types";
+
 
 type OpportunityRow = Database["public"]["Tables"]["user_opportunities"]["Row"];
 type OpportunityInsert =
@@ -80,6 +81,7 @@ export default function OpportunityForm(props: Props) {
       setUserId(session.user.id);
     }
   });
+  
 
   const { form, data, errors, setFields } = createForm({
     initialValues: {
@@ -93,6 +95,13 @@ export default function OpportunityForm(props: Props) {
     onSubmit: async () => {},
     validate: validator({ schema }),
   });
+
+  // load and set opportunity 
+  createEffect(()=>{
+    if(props.opportunityId){
+      
+    }
+  })
 
   return (
     <section class="w-full bg-white border-1 border-primary rounded-lg p-8">

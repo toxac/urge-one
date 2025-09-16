@@ -2,8 +2,9 @@ import { createSignal, createEffect, Show, For, onCleanup } from "solid-js";
 import { useStore } from "@nanostores/solid";
 import { profileStore } from "../../stores/profile";
 import { authStore } from "../../stores/auth";
-import Logout from "@components/auth/Logout";
-import type { AuthStoreState } from "../../types";
+import type { AuthStore } from '../../../types/urgeTypes';
+import Logout from "../../components/auth/Logout";
+
 
 const menuItems = [
     { title: "program", link: "/program", submenu: [] },
@@ -24,7 +25,7 @@ const menuItems = [
 export default function Navbar() {
     const $auth = useStore(authStore);
     const $profile = useStore(profileStore);
-    const [auth, setAuth] = createSignal<AuthStoreState | null>(null);
+    const [auth, setAuth] = createSignal<AuthStore | null>(null);
     const [isScrolled, setIsScrolled] = createSignal(false);
 
     createEffect(() => {
