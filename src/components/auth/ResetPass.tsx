@@ -3,7 +3,7 @@ import { useAuth } from '../../lib/hooks/useAuth'
 import { navigate } from 'astro:transitions/client'
 
 interface Props {
-  resetPasswordCode: string
+  code: string
 }
 
 export default function ResetPasswordForm(props: Props) {
@@ -35,7 +35,7 @@ export default function ResetPasswordForm(props: Props) {
         setLoading(true)
         
         try {
-            const result = await resetPassword(props.resetPasswordCode, password())
+            const result = await resetPassword(props.code, password())
 
             if (result.success) {
                 setSuccess(true)
