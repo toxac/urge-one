@@ -115,7 +115,7 @@ export default function Hero() {
         <div class="container mx-auto">
             <div class="relative">
                 {/* Slide Container with Transition */}
-                <div class="rounded-none lg:rounded-2xl p-8 md:p-12 flex flex-col relative overflow-hidden h-[65vh] lg:h-[70vh]">
+                <div class="rounded-none lg:rounded-2xl p-8 md:p-12 flex flex-col relative overflow-hidden h-[65vh] lg:h-[70vh] border-3 border-white">
                     {/* Image with Crossfade Transition */}
                     <div class="absolute inset-0 z-0">
                         {slides.map((slide, index) => (
@@ -153,7 +153,7 @@ export default function Hero() {
                     {/* Column 1: Title and Body Text */}
                     <div class="flex-1">
                         <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-3">
-                            {slides[currentSlide()].heading}
+                            Start Your Business Today
                         </h3>
                         <p class="text-gray-700 text-base md:text-lg leading-relaxed">
                             {slides[currentSlide()].body}
@@ -164,15 +164,15 @@ export default function Hero() {
                     <div class="flex flex-col sm:flex-row lg:flex-col gap-3 lg:gap-4 lg:items-end lg:justify-center">
                         <a
                             href="/auth/register?intent=enroll&details=b594dc90-3af0-4d62-9f5e-4b5dccba3fe9"
-                            class="bg-gray-900 text-amber-50 px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition shadow-md text-center min-w-[180px]"
+                            class="bg-gray-900 text-amber-50 px-6 py-3 w-full rounded-lg font-medium hover:bg-gray-800 transition shadow-md text-center min-w-[180px]"
                         >
-                            <i class="fas fa-calendar-check mr-2"></i>Enroll Now
+                            Start Now
                         </a>
                         <a
                             href="/auth/register?intent=challenge"
-                            class="bg-white text-gray-900 px-6 py-3 rounded-lg font-medium border border-amber-300 hover:bg-amber-50 transition shadow-md text-center min-w-[180px]"
+                            class="bg-white text-gray-900 px-6 py-3 w-full rounded-lg font-medium border border-amber-300 hover:bg-amber-50 transition shadow-md text-center min-w-[180px]"
                         >
-                            <i class="fas fa-info-circle mr-2"></i>Try Free Challenge
+                            Try Free Challenge
                         </a>
                     </div>
                 </div>
