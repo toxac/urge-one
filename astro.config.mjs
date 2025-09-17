@@ -11,6 +11,8 @@ import sitemap from '@astrojs/sitemap';
 
 import mdx from '@astrojs/mdx';
 
+import icon from 'astro-icon';
+
 // https://astro.build/config
 export default defineConfig({
   output: "server",
@@ -19,5 +21,5 @@ export default defineConfig({
   },
 
   adapter: vercel(),
-  integrations: [solidJs(), sitemap(), mdx()]
+  integrations: [solidJs(), sitemap(), mdx(), icon()]
 });

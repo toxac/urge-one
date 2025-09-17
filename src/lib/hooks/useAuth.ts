@@ -103,6 +103,36 @@ export function useAuth() {
             setLoading(false)
         }
     }
+    
+    // reset password 
+    const resetPassword = async (code: string, newPassword: string) => {
+        setError(null)
+        setLoading(true)
+
+        try {
+            const response = await fetch('/api/auth/reset-password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code, password: newPassword })
+            })
+
+            const data = await response.json()
+
+            if (!response.ok) {
+            throw new Error(data.error)
+            }
+
+            return { success: true, message: data.message }
+        } catch (err: any) {
+            setError(err.message)
+            return { success: false, error: err.message }
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    // clear store errors
+    const clearError = () => setError(null)
 
     // Logout handler
     const logout = async () => {
@@ -136,6 +166,8 @@ export function useAuth() {
     login,
     register,
     forgotPassword,
-    logout
+    logout,
+    resetPassword,
+    clearError
   }
 }
