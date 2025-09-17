@@ -7,12 +7,7 @@
     "paths": {
       "~/*": ["src/*"]
     },
-    "types": ["astro/client"],
-    "plugins": [
-      {
-        "name": "@astrojs/ts-plugin"
-      },
-    ],
+
   },
   "include": [
     ".astro/types.d.ts",
