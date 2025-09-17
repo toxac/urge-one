@@ -1,0 +1,116 @@
+---
+// Original content
+const approachData = {
+  headline: "A Fresh Perspective",
+  subheadline: "Forget the old playbook of building a business.",
+  description: "At Urge, we've created a new approach—a fresh perspective on an age-old process. We don't hope for one big winner among many losers; we believe everyone can start and everyone can succeed, no matter the scale. This is the truth that makes us different.",
+  
+  principles: [
+    {
+      title: "Mindset First, Money Second",
+      description: "We tackle the toughest part head-on: getting started. My experience has shown that the biggest barriers are internal—the fears and doubts that stop us from taking a first step. The Urge program focuses on building resilience, encouraging you to ask, and making you bulletproof to rejection.",
+    },
+    {
+      title: "Opportunities, Not Just Ideas",
+      description: "Ideas are a dime a dozen. We're hunting for real opportunities—problems that people genuinely need solved. You'll learn to find these by looking at your own life, the people around you, and then the broader world. This keeps you grounded in reality and makes your business more likely to succeed.",
+    },
+    {
+      title: "Real Sales, Not Pitch Decks",
+      description: "We're not building a business for investors; we're building it for customers. We focus on getting you to create a Minimal Sell-able Product (MSP) that actually makes money. Your success isn't defined by a pitch deck, but by real sales and revenue.",
+    },
+    {
+      title: "A Program Built for You",
+      description: "This entire approach is encapsulated in our program, which is broken down into a simple, logical sequence of Milestones, Concepts, Exercises, and Challenges. It's your personalized roadmap, ensuring you always know your next step in the journey from a problem to a profitable business.",
+    }
+  ]
+};
+---
+
+<section class="relative flex max-w-[100vw] flex-col place-content-center place-items-center overflow-hidden py-20 px-5">
+  <div class="mt-8 flex flex-col w-full h-full place-items-center gap-5">
+    {/* Header */}
+    <div class="reveal-up mt-5 flex flex-col gap-3 text-center">
+      <h2 class="text-6xl font-medium max-md:text-3xl p-2 text-gray-900">
+        {approachData.headline}
+      </h2>
+      <p class="text-xl text-primary font-medium">
+        {approachData.subheadline}
+      </p>
+      <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+        {approachData.description}
+      </p>
+    </div>
+
+    {/* Principles Grid */}
+    <div class="mt-6 flex flex-col max-w-[1150px] max-lg:max-w-full h-full p-4 max-lg:place-content-center gap-8">
+      <div class="max-xl:flex max-xl:flex-col place-items-center grid grid-cols-2 gap-8 place-content-center auto-rows-auto">
+        {approachData.principles.slice(0, 2).map((principle) => (
+          <div class="reveal-up w-full h-[400px] flex max-md:w-full">
+            <div class="relative p-10 transition-all duration-300 group/card gap-5 flex flex-col w-full h-full bg-gray-50 rounded-3xl hover:scale-[1.02]">
+              <div class="text-5xl mb-4">
+              </div>
+              <h2 class="text-3xl max-md:text-2xl font-medium text-gray-900">
+                {principle.title}
+              </h2>
+              <p class="text-base leading-normal text-gray-600">
+                {principle.description}
+              </p>
+              <div class="flex items-center gap-2 mt-auto">
+                <span class="text-primary">Learn more</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary transform transition-transform duration-300 group-hover/card:translate-x-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Full width bottom cards */}
+      <div class="grid grid-cols-2 gap-8 max-md:grid-cols-1">
+        {approachData.principles.slice(2).map((principle) => (
+          <div class="reveal-up w-full h-[350px] flex">
+            <div class="relative p-10 transition-all duration-300 group/card gap-5 flex flex-col w-full h-full bg-gray-50 rounded-3xl hover:scale-[1.02]">
+              <div class="text-5xl mb-4">
+              </div>
+              <h2 class="text-3xl max-md:text-2xl font-medium text-gray-900">
+                {principle.title}
+              </h2>
+              <p class="text-base leading-normal text-gray-600">
+                {principle.description}
+              </p>
+              <div class="flex items-center gap-2 mt-auto">
+                <span class="text-primary">Learn more</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary transform transition-transform duration-300 group-hover/card:translate-x-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Custom animation for reveal-up */
+  .reveal-up {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: revealUp 0.6s ease forwards;
+  }
+  
+  @keyframes revealUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Delay for staggered animation */
+  .reveal-up:nth-child(1) { animation-delay: 0.1s; }
+  .reveal-up:nth-child(2) { animation-delay: 0.2s; }
+  .reveal-up:nth-child(3) { animation-delay: 0.3s; }
+  .reveal-up:nth-child(4) { animation-delay: 0.4s; }
+</style>

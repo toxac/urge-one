@@ -1,0 +1,86 @@
+---
+// Integrated problem data directly in the component
+const problemPoints = {
+  default: [
+    {
+      problem: "Fear of Asking",
+      flipText: "That awkward feeling of asking a stranger for a few minutes of their time."
+    },
+    {
+      problem: "Fear of Rejection",
+      flipText: "The painful sting of hearing 'no' to your idea."
+    },
+    {
+      problem: "Analysis Paralysis",
+      flipText: "The endless 'what ifs' that keep you planning and researching but never doing."
+    },
+    {
+      problem: "Lack of a Clear First Step",
+      flipText: "The feeling of being completely overwhelmed, with no simple, tangible task to start with."
+    },
+  ]
+};
+
+const problemData = {
+  staticHeadline: ["Starting is Difficult", "Just Not How You Think"],
+  introParagraph: "The world tells us stories about why we don't start a business. They say it's because we lack a huge pile of money, the right business degree, or a network of influential friends. But here's the truth we've learned in our ventures: those aren't the real barriers. The real dream-killers are internal. They're the silent fears and doubts that stop us from taking that first, wobbly step.",
+  instructionText: "We built Urge to help you break through those real barriers. We've torn up the old playbook and created a new approach to get you moving.",
+  problems: problemPoints.default
+};
+---
+
+<section class="py-20 px-5 md:py-28 bg-slate-900 text-white">
+  <div class="container mx-auto">
+    {/* Header */}
+    <div class="text-center mb-16">
+      <div class="w-full flex justify-center mb-6">
+        <div class="border border-primary text-primary text-sm rounded-full px-4 py-1 font-medium font-variation-medium">
+          The Real Hurdles
+        </div>
+      </div>
+      <h2 class="text-4xl md:text-5xl font-heading font-variation-bold text-white mb-4">
+        {problemData.staticHeadline[0]}
+        <span class="block text-primary mt-2 font-variation-semibold">{problemData.staticHeadline[1]}</span>
+      </h2>
+      <p class="text-lg text-slate-300 leading-relaxed w-full max-w-4xl mx-auto mt-6 font-variation-normal whitespace-pre-line">
+        The world tells us stories about why we don't start a business. They say it's because we lack a huge pile of money, the right business degree, or a network of influential friends. But here's the truth we've learned in our ventures:<span class="font-variation-semibold underline decoration-primary"> those aren't the real barriers. </span> The real dream-killers are internal. They're the silent fears and doubts that stop us from taking that first, wobbly step.
+      </p>
+    </div>
+
+    {/* Cards */}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {problemData.problems.map((point, index) => (
+        <div class="group h-64 [perspective:1000px]">
+          <div class="relative h-full w-full rounded-xl transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+            {/* Front of card */}
+            <div class="absolute inset-0 bg-slate-800 rounded-xl p-6 border border-slate-700 flex items-center justify-center text-center backface-hidden">
+              <p class="text-white font-variation-semibold text-xl">{point.problem}</p>
+            </div>
+            
+            {/* Back of card */}
+            <div class="absolute inset-0 bg-primary/10 rounded-xl p-6 border border-primary flex items-center justify-center text-center backface-hidden [transform:rotateY(180deg)]">
+              <p class="text-white font-variation-medium text-lg">{point.flipText}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* Instruction text */}
+    <div class="text-center mt-16 max-w-2xl mx-auto">
+      <p class="text-slate-300 font-variation-medium text-md leading-relaxed">{problemData.instructionText}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Ensure proper 3D rendering and fix the flip issue */
+  [transform-style\:preserve-3d] {
+    transform-style: preserve-3d;
+  }
+  
+  .backface-hidden {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+</style>
