@@ -1,0 +1,85 @@
+---
+// src/components/landing/FinalCtaSection.astro
+export interface Props {
+  segment: string;
+}
+const { segment } = Astro.props;
+
+// Segment-specific content
+const getSegmentContent = (segment: string) => {
+  switch (segment) {
+    case "young_pro":
+      return {
+        headline: "Start Building Your Future Today",
+        content:
+          "Your 20s are the perfect time to launch. Gain real-world experience that beats any internship while creating income options.",
+        primaryCta: "Student/Young Pro Program",
+      };
+    case "career_changer":
+      return {
+        headline: "Your Next Chapter Starts Now",
+        content:
+          "Transition from employee to founder with a proven system. Leverage your experience while learning entrepreneurial skills.",
+        primaryCta: "Career Transition Program",
+      };
+    case "flex_seeker":
+      return {
+        headline: "Build Your Freedom Business",
+        content:
+          "Create income that fits your lifestyle, not the other way around. Start small, stay lean, and scale on your terms.",
+        primaryCta: "Freedom-First Program",
+      };
+    case "encore":
+      return {
+        headline: "Your Experience Is Your Advantage",
+        content:
+          "Turn decades of knowledge into a meaningful venture. We'll help you package your wisdom into a fulfilling business.",
+        primaryCta: "Encore Entrepreneur Program",
+      };
+    default:
+      return {
+        headline: "Stop Waiting for 'Someday'",
+        content:
+          "That urge to build something yours? It won't happen by itself. Ditch the doubt and start taking practical action today.",
+        primaryCta: "Choose Your Starting Point",
+      };
+  }
+};
+
+const { headline, content, primaryCta } = getSegmentContent(segment);
+const secondaryCta = "Try a Free Challenge First";
+---
+
+<section class="py-20 md:py-32 bg-gradient-to-b from-white to-base-200">
+  <div class="container mx-auto px-6 text-center">
+    <div class="max-w-3xl mx-auto">
+      {/* Headline */}
+      <h2
+        class="text-4xl md:text-5xl font-bold mb-6 leading-tight text-base-content"
+      >
+        {headline}
+      </h2>
+
+      {/* Content */}
+      <p class="text-xl text-base-content/80 mb-10 leading-relaxed">
+        {content}
+      </p>
+
+      {/* Buttons */}
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href="#pricing"
+          class="btn btn-primary btn-lg hover:scale-[1.02] transition-transform"
+        >
+          {primaryCta}
+        </a>
+        <a
+          href="/register"
+          class="btn btn-outline btn-lg border-base-content/20 hover:border-primary"
+        >
+          {secondaryCta}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

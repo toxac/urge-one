@@ -1,0 +1,344 @@
+---
+// src/components/landing/PricingSection.astro
+
+// --- PROPS ---
+export interface Props {
+  segment: string;
+}
+const { segment } = Astro.props;
+const allowEntranceAnimation = segment !== "encore";
+
+// --- CONTENT & CONFIG ---
+// Interface for Offer Card Data
+interface Offer {
+  title: string;
+  price: string;
+  priceDetails: string;
+  description: string;
+  features: string[];
+  ctaText: string;
+  ctaLink: string;
+  isRecommended?: boolean; // Flag for highlighting
+  footnote?: string;
+  nonIncluded?: string; // To explicitly state what's NOT included
+}
+
+const sectionHeadline: string = "Find Your Starting Point"; // Updated Headline
+
+const freeOffer: Offer = {
+  title: "Explore Urge",
+  price: "₹0",
+  priceDetails: "Free Forever",
+  description:
+    "Get a feel for Urge. Access select resources, try free challenges, and peek into the community.",
+  features: [
+    "✓ Try a Free Mindset Challenge",
+    "✓ Select Starter Kits & Resources",
+    "✓ Read Community Discussions",
+    "✓ Get Insights from Network Activity",
+  ],
+  ctaText: "Register for Free",
+  ctaLink: "/register", // Link to registration
+};
+
+const bundleOffer: Offer = {
+  title: "Urge Start Program (+ Network)",
+  price: "₹5000",
+  priceDetails: "One-time enrollment + 1 Yr Pro Network", // Confirm this model
+  description:
+    "The complete package to launch successfully. Get lifetime access* to the full Start Program content PLUS 1 year of Pro Network membership.",
+  features: [
+    "✓ Full 8-Milestone Start Program", // (*Assuming* lifetime access - add footnote)
+    "✓ 1 Year Pro Network Membership",
+    "✓ All Mindset Challenges & Exercises",
+    "✓ Live Expert Sessions & Q&As",
+    "✓ Internal Launches & Feedback",
+    "✓ Find Partners, Experts & Services",
+    "✓ Post Your Offerings & Services",
+    "✓ Build Your Network Connections",
+    "✓ All Quick Start Kits & Resources",
+    "✓ Cheer Squad Accountability",
+    "✓ Everything in Free",
+  ],
+  ctaText: "Enroll in the Program",
+  ctaLink: "/start-program", // Link to program/checkout
+  isRecommended: true, // Highlight this card
+  footnote:
+    "*Lifetime access to program materials. Network renewable annually after first year.", // Example footnote
+};
+
+const membershipOffer: Offer = {
+  title: "Pro Network Membership",
+  price: "₹2500 / year",
+  priceDetails: "(or ₹250 / month)",
+  description:
+    "Access our vibrant Pro Network and resources. Connect, collaborate, find opportunities, and grow.",
+  features: [
+    "✓ 1 Year Pro Network Membership",
+    "✓ Live Expert Sessions & Q&As", // Assumed YES - Confirm?
+    "✓ Internal Launches & Feedback",
+    "✓ Find Partners, Experts & Services",
+    "✓ Post Your Offerings & Services",
+    "✓ Build Your Network Connections",
+    "✓ Full Community Forum Access",
+  ],
+  ctaText: "Join the Network",
+  ctaLink: "/subscribe/network", // Link to network subscription
+  nonIncluded: "Start Program course content not included.", // Explicit exclusion
+};
+
+const offers = [freeOffer, bundleOffer, membershipOffer]; // Order for display
+---
+
+<section id="pricing" class="py-20 md:py-28 bg-gray-50">
+  <div class="container mx-auto px-6">
+    {/* Section Header */}
+    <div class="text-center mb-16 max-w-3xl mx-auto">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
+        Simple, Transparent Pricing
+      </h2>
+      <p class="text-lg text-base-content/80">
+        Choose the perfect starting point for your entrepreneurial journey
+      </p>
+    </div>
+
+    {/* Pricing Grid */}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+      {/* Free Tier */}
+      <div class="bg-white p-6 rounded-xl border border-base-200">
+        <div class="text-center mb-6">
+          <h3 class="text-xl font-semibold mb-2">Starter</h3>
+          <div class="text-4xl font-bold text-base-content mb-1">₹0</div>
+          <p class="text-sm text-base-content/70">Free forever</p>
+        </div>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-start">
+            <svg
+              class="w-5 h-5 text-primary mr-2 mt-0.5 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>1 free mindset challenge</span>
+          </li>
+          <li class="flex items-start">
+            <svg
+              class="w-5 h-5 text-primary mr-2 mt-0.5 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>Starter resources</span>
+          </li>
+          <li class="flex items-start">
+            <svg
+              class="w-5 h-5 text-primary mr-2 mt-0.5 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>Community preview</span>
+          </li>
+        </ul>
+        <a
+          href="/register"
+          class="btn btn-outline w-full border-base-content/20"
+        >
+          Get Started Free
+        </a>
+      </div>
+
+      {/* Recommended Program */}
+      <div
+        class="relative bg-white p-6 rounded-xl border-2 border-primary shadow-lg"
+      >
+        <div
+          class="absolute top-0 right-0 bg-primary text-white px-4 py-1 text-xs font-bold rounded-bl-lg"
+        >
+          MOST POPULAR
+        </div>
+        <div class="text-center mb-6">
+          <h3 class="text-xl font-semibold mb-2">Start Program</h3>
+          <div class="text-4xl font-bold text-primary mb-1">₹5000</div>
+          <p class="text-sm text-base-content/70">One-time + 1 year network</p>
+        </div>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-start">
+            <svg
+              class="w-5 h-5 text-primary mr-2 mt-0.5 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>Full 8-milestone program</span>
+          </li>
+          <li class="flex items-start">
+            <svg
+              class="w-5 h-5 text-primary mr-2 mt-0.5 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>All mindset challenges</span>
+          </li>
+          <li class="flex items-start">
+            <svg
+              class="w-5 h-5 text-primary mr-2 mt-0.5 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>1 year Pro Network access</span>
+          </li>
+          <li class="flex items-start">
+            <svg
+              class="w-5 h-5 text-primary mr-2 mt-0.5 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>Lifetime content access</span>
+          </li>
+          <li class="flex items-start">
+            <svg
+              class="w-5 h-5 text-primary mr-2 mt-0.5 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>Expert Q&A sessions</span>
+          </li>
+        </ul>
+        <a href="/start-program" class="btn btn-primary w-full"> Enroll Now </a>
+        <p class="text-xs text-center mt-3 text-base-content/60">
+          *Network renewable annually after first year
+        </p>
+      </div>
+
+      {/* Network Only */}
+      <div class="bg-white p-6 rounded-xl border border-base-200">
+        <div class="text-center mb-6">
+          <h3 class="text-xl font-semibold mb-2">Network Only</h3>
+          <div class="text-4xl font-bold text-base-content mb-1">₹2500</div>
+          <p class="text-sm text-base-content/70">Per year (₹250/month)</p>
+        </div>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-start">
+            <svg
+              class="w-5 h-5 text-primary mr-2 mt-0.5 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>1 year Pro Network access</span>
+          </li>
+          <li class="flex items-start">
+            <svg
+              class="w-5 h-5 text-primary mr-2 mt-0.5 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>Expert Q&A sessions</span>
+          </li>
+          <li class="flex items-start">
+            <svg
+              class="w-5 h-5 text-primary mr-2 mt-0.5 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>Community feedback</span>
+          </li>
+          <li class="flex items-start text-base-content/50">
+            <svg
+              class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+            <span>Program content not included</span>
+          </li>
+        </ul>
+        <a
+          href="/subscribe/network"
+          class="btn btn-outline w-full border-base-content/20"
+        >
+          Join Network
+        </a>
+      </div>
+    </div>
+  </div>
+</section>S

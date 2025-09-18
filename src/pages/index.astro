@@ -3,8 +3,9 @@ import Layout from "../layouts/Layout.astro";
 import Hero from "../components/landing/Hero";
 import Problem from "../components/landing/Problem.astro";
 import Approach from "../components/landing/Approach.astro"
-
-
+import Pricing from "~/components/landing/Pricing.astro";
+import CTA from "../components/landing/CTA.astro";
+import Solution from "../components/landing/Solution.astro"
 
 ---
 
@@ -16,6 +17,10 @@ import Approach from "../components/landing/Approach.astro"
   </section>
   <Problem />
   <Approach />
+  <Solution segment="default" />
+  <Pricing segment="default" />
+  <CTA segment="default" />
 </Layout>
 
 <style></style>
+ 
