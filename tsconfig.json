@@ -1,19 +1,47 @@
 {
   "extends": "astro/tsconfigs/base",
   "compilerOptions": {
+    // JSX configuration for SolidJS
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
+    
+    // Module resolution
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    
+    // Astro TypeScript plugin for better IDE support
+    "plugins": [
+      {
+        "name": "@astrojs/ts-plugin"
+      }
+    ],
+    
+    // Path mapping for cleaner imports
     "baseUrl": ".",
-    "paths": {
-      "~/*": ["src/*"]
-    },
 
+    
+    // Type checking (optional but recommended)
+    "strict": true,
+    "noUnusedLocals": false, // Set to true if you want stricter checking
+    "noUnusedParameters": false, // Set to true if you want stricter checking
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    
+    // Other useful options
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
     ".astro/types.d.ts",
-    "src/**/*"
+    "src/**/*",
+    "*.config.*"
   ],
   "exclude": [
+    "node_modules",
     "dist",
+    ".astro"
   ]
 }

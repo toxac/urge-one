@@ -23,6 +23,7 @@ import {
 import { type Database } from "../../../../database.types";
 
 
+
 type OpportunityRow = Database["public"]["Tables"]["user_opportunities"]["Row"];
 type OpportunityInsert =
   Database["public"]["Tables"]["user_opportunities"]["Insert"];
@@ -98,9 +99,7 @@ export default function OpportunityForm(props: Props) {
 
   // load and set opportunity 
   createEffect(()=>{
-    if(props.opportunityId){
-      
-    }
+    props.opportunityId
   })
 
   return (
