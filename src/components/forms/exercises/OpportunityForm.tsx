@@ -1,5 +1,3 @@
-/** @jsxImportSource solid-js */
-
 import { createSignal, createEffect, Show, For } from "solid-js";
 import { createForm } from "@felte/solid";
 import { validator } from "@felte/validator-zod";
@@ -19,26 +17,24 @@ import {
   discoveryMethodOptions,
   categoryOptions,
   alignmentWithGoalsOptions,
+  
 } from "../../../constants/exercises/opportunities";
 import { type Database } from "../../../../database.types";
 
 
-
 type OpportunityRow = Database["public"]["Tables"]["user_opportunities"]["Row"];
-type OpportunityInsert =
-  Database["public"]["Tables"]["user_opportunities"]["Insert"];
-type OpportunityUpdate =
-  Database["public"]["Tables"]["user_opportunities"]["Update"];
+type OpportunityInsert = Database["public"]["Tables"]["user_opportunities"]["Insert"];
+type OpportunityUpdate = Database["public"]["Tables"]["user_opportunities"]["Update"];
 
 interface Props {
   opportunityId?: string;
   contentMetaId: string;
   onSuccess?: () => void;
   approach?:
-    | "personal-problems"
-    | "skill-based"
-    | "zone-of-influence"
-    | "broader-search";
+  | "personal-problems"
+  | "skill-based"
+  | "zone-of-influence"
+  | "broader-search";
 }
 
 const schema = z.object({
@@ -82,28 +78,48 @@ export default function OpportunityForm(props: Props) {
       setUserId(session.user.id);
     }
   });
+
+  const hasApproach = () =>{
+    if(props.approach){
+      return true;
+    } else {
+      return false;
+    }
+  }
   
+
 
   const { form, data, errors, setFields } = createForm({
     initialValues: {
       category: "",
       description: "",
-      discovery_method: "",
+      discovery_method: props.approach || "", // props.approach
       goal_alignment: "",
       observation_type: "",
       title: "",
     },
-    onSubmit: async () => {},
+    onSubmit: async () => {
+      //handle update if props.oportunityId 
+      //handle insert if new opportunity
+      // saveFormAndMarkCompleted(props.contentMetaId)
+
+    },
     validate: validator({ schema }),
   });
 
   // load and set opportunity 
-  createEffect(()=>{
-    props.opportunityId
+  createEffect(() => {
+    if(props.opportunityId && !opportunitiesStoreLoading()){
+      //find opportunity in opportunity
+
+      //set Fields from opportunity
+    }
   })
 
   return (
     <section class="w-full bg-white border-1 border-primary rounded-lg p-8">
+      <h3>Add an opportunity </h3>
+      <p></p>
       <form use:form class="flex flex-col gap-8">
         <label class="input input-neutral w-full">
           <Icon icon="mdi:format-title" />
@@ -113,15 +129,16 @@ export default function OpportunityForm(props: Props) {
             placeholder="Name of the opoprtunity"
           />
         </label>
-
-        <select class="select select-neutral w-full" name="discovery_method">
-          <option value="" disabled selected>
-            Select appropriate discovery method
-          </option>
-          <For each={discoveryMethodOptions}>
-            {(item) => <option value={item.value}>{item.label}</option>}
-          </For>
-        </select>
+        <Show when={!props.approach}>
+          <select class="select select-neutral w-full" name="discovery_method">
+            <option value="" disabled selected>
+              Select appropriate discovery method
+            </option>
+            <For each={discoveryMethodOptions}>
+              {(item) => <option value={item.value}>{item.label}</option>}
+            </For>
+          </select>
+        </Show>
 
         <select class="select select-neutral w-full" name="category">
           <option value="" disabled selected>
@@ -153,7 +170,6 @@ export default function OpportunityForm(props: Props) {
           <button
             type="submit"
             class="btn btn-primary btn-outline"
-            onClick={handleSubmit}
             disabled={loading()}
           >
             {loading() ? "Saving..." : "Save Opportunity"}
