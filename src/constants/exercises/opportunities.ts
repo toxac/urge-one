@@ -131,9 +131,6 @@ interface DiscoveryMethosOption {
     },
   ];
 
-function getDiscoveryMethodByValue(value: string): DiscoveryMethosOption | undefined {
-  return discoveryMethodOptions.find(option => option.value === value);
-}
 
 interface SelectOption {
   value: string;

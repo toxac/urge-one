@@ -28,7 +28,8 @@
     "nanostores": "^1.0.1",
     "node-cache": "^5.1.2",
     "solid-js": "^1.9.9",
-    "tailwindcss": "^4.1.13"
+    "tailwindcss": "^4.1.13",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@iconify-icon/solid": "^3.0.0",

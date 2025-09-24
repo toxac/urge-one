@@ -7,8 +7,10 @@ import { manageSquad } from '../../../stores/userAssets/squad';
 import { saveFormAndMarkCompleted } from '../../../stores/progress';
 import { useStore } from '@nanostores/solid';
 import { authStore } from '../../../stores/auth';
-import { z } from 'zod';
+import * as z from "zod";
 import type { Database } from '../../../../database.types';
+
+
 
 type CheerSquad = Database['public']['Tables']['user_cheer_squad']['Row'];
 type CheerSquadUpdate = Database['public']['Tables']['user_cheer_squad']['Update'];

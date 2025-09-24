@@ -1,181 +1,66 @@
-import { createSignal, createEffect, Show, For } from "solid-js";
-import { createForm } from "@felte/solid";
-import { validator } from "@felte/validator-zod";
-import { z } from "zod";
+import { createSignal } from "solid-js";
 import { useStore } from "@nanostores/solid";
-import { notify } from "../../../stores/notifications";
-import { Icon } from "@iconify-icon/solid";
-import { saveFormAndMarkCompleted } from "../../../stores/progress";
-import {
-  opportunitiesStore,
-  manageOpportunities,
-  opportunitiesStoreLoading,
-} from "../../../stores/userAssets/opportunities";
-import { authStore } from "../../../stores/auth";
-import { supabaseBrowserClient } from "../../../lib/supabase/client";
-import {
-  discoveryMethodOptions,
-  categoryOptions,
-  alignmentWithGoalsOptions,
-  
-} from "../../../constants/exercises/opportunities";
-import { type Database } from "../../../../database.types";
+import { authStore } from "src/stores/auth";
+import { createForm } from '@felte/solid';
+import * as z from "zod";
+import { supabaseBrowserClient } from '../../../lib/supabase/client';
+import { validator } from '@felte/validator-zod';
+import { notify } from '../../../stores/notifications';
+import { manageSquad } from '../../../stores/userAssets/squad';
+import { saveFormAndMarkCompleted } from '../../../stores/progress';
+import { opportunitiesStore } from "src/stores/userAssets/opportunities";
+import {discoveryMethodOptions} from "../../../constants/exercises/opportunities"
+import type { Database } from "../../../../database.types";
 
 
-type OpportunityRow = Database["public"]["Tables"]["user_opportunities"]["Row"];
-type OpportunityInsert = Database["public"]["Tables"]["user_opportunities"]["Insert"];
-type OpportunityUpdate = Database["public"]["Tables"]["user_opportunities"]["Update"];
 
-interface Props {
-  opportunityId?: string;
-  contentMetaId: string;
-  onSuccess?: () => void;
-  approach?:
-  | "personal-problems"
-  | "skill-based"
-  | "zone-of-influence"
-  | "broader-search";
-}
+type UserOpportunity = Database['public']['Tables']['user_opportunities']['Row'];
+type UserOpportunityUpdate = Database['public']['Tables']['user_opportunities']['Update'];
+type UserOpportunityInsert = Database['public']['Tables']['user_opportunities']['Insert'];
 
 const schema = z.object({
-  category: z.string(),
-  description: z
-    .string()
-    .min(20, "Describe at least 20 characters")
-    .max(300, "Keep it under 300 characters"),
-  discovery_method: z.string(),
-  goal_alignment: z.string(),
-  observation_type: z.string(),
-  title: z
-    .string()
-    .min(3, "Must complete the sentence with at least 10 characters")
-    .max(200, "Keep it concise (under 200 characters)"),
+    category: z.string(),
+    created_at: z.string(),
+    description: z.string(),
+    discovery_method: z.string(),
+    goal_alignment: z.string(),
+    observation_type: z.string(),
+    title: z.string(),
 });
 
-const supabase = supabaseBrowserClient;
 
-export default function OpportunityForm(props: Props) {
-  //Stores
-  const $session = useStore(authStore);
-  const $opportunities = useStore(opportunitiesStore);
-  const $opportunityStoreLoading = useStore(opportunitiesStoreLoading);
-  //States
-  const [success, setSuccess] = createSignal(false);
-  const [userId, setUserId] = createSignal("");
-  const [loading, setLoading] = createSignal(false);
-  const [observationType, setObservationType] = createSignal<string | null>(
-    null
-  );
-  const [opportunity, setOpportunity] = createSignal<OpportunityRow | null>(
-    null
-  );
+interface ComponentProps {
+    contentMetaId: string;
+    approach?: "personal-problems" | "skill-based" | "zone-of-influence" | "broader-search"  ;  // discovery
+}
 
-  // Load and set User
-  createEffect(() => {
-    const session = $session();
-    if (session.loading) return;
-    if (session.user) {
-      setUserId(session.user.id);
-    }
-  });
+export default function OpportunityForm (props: ComponentProps){
+    // Store
+    const $session = useStore(authStore);
+    const $opportunities = useStore(opportunitiesStore);
+    const [userId, setUserId] = createSignal<string | null>(null);
+    const [loading, setLoading] = createSignal(false);
+    const [success, setSuccess] = createSignal(false);
+    const [markedCompleted, setMarkedCompleted] = createSignal(false);
+    const [error, setError] = createSignal("");
 
-  const hasApproach = () =>{
-    if(props.approach){
-      return true;
-    } else {
-      return false;
-    }
-  }
-  
+    const currentDiscoveryMethod = discoveryMethodOptions.find(option => option.value === props.approach);
+
+    const {form, data, errors} = createForm({
+        initialValues:{
+
+        },
+        onSubmit: async() =>{
+
+        },
+        extend: validator({schema})
 
 
-  const { form, data, errors, setFields } = createForm({
-    initialValues: {
-      category: "",
-      description: "",
-      discovery_method: props.approach || "", // props.approach
-      goal_alignment: "",
-      observation_type: "",
-      title: "",
-    },
-    onSubmit: async () => {
-      //handle update if props.oportunityId 
-      //handle insert if new opportunity
-      // saveFormAndMarkCompleted(props.contentMetaId)
+    })
 
-    },
-    validate: validator({ schema }),
-  });
+    return(
+        <section class="w-full bg-white border-1 border-primary rounded-lg p-8">
 
-  // load and set opportunity 
-  createEffect(() => {
-    if(props.opportunityId && !opportunitiesStoreLoading()){
-      //find opportunity in opportunity
-
-      //set Fields from opportunity
-    }
-  })
-
-  return (
-    <section class="w-full bg-white border-1 border-primary rounded-lg p-8">
-      <h3>Add an opportunity </h3>
-      <p></p>
-      <form use:form class="flex flex-col gap-8">
-        <label class="input input-neutral w-full">
-          <Icon icon="mdi:format-title" />
-          <input
-            type="text"
-            name="title"
-            placeholder="Name of the opoprtunity"
-          />
-        </label>
-        <Show when={!props.approach}>
-          <select class="select select-neutral w-full" name="discovery_method">
-            <option value="" disabled selected>
-              Select appropriate discovery method
-            </option>
-            <For each={discoveryMethodOptions}>
-              {(item) => <option value={item.value}>{item.label}</option>}
-            </For>
-          </select>
-        </Show>
-
-        <select class="select select-neutral w-full" name="category">
-          <option value="" disabled selected>
-            Select a category of problem
-          </option>
-          <For each={categoryOptions}>
-            {(item) => <option value={item.value}>{item.label}</option>}
-          </For>
-        </select>
-
-        <textarea
-          class="textarea textarea-neutral w-full"
-          rows={6}
-          placeholder="Describe your opportunity"
-          name="description"
-        ></textarea>
-
-        <select class="select select-neutral w-full" name="goal_alignment">
-          <option value="" disabled selected>
-            How aligned is this opportunity with your goals
-          </option>
-          <For each={alignmentWithGoalsOptions}>
-            {(item) => <option value={item.value}>{item.label}</option>}
-          </For>
-        </select>
-
-        {/* Submit Button */}
-        <div class="pt-4 flex justify-end">
-          <button
-            type="submit"
-            class="btn btn-primary btn-outline"
-            disabled={loading()}
-          >
-            {loading() ? "Saving..." : "Save Opportunity"}
-          </button>
-        </div>
-      </form>
-    </section>
-  );
+        </section>
+    )
 }

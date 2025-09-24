@@ -1,5 +1,7 @@
-import type { Session, User } from "@supabase/supabase-js";
-import { type Database } from "../database.types";
+
+/// <reference types="astro/client" />
+/// <reference path="../.astro/types.d.ts" />
+
 import "solid-js";
 import { JSX as JSXOrig } from "solid-js";
 
@@ -19,9 +21,9 @@ interface ImportMeta {
 declare global {
   namespace App {
     interface Locals {
-      session: Session | null;
-      user: User | null;
-      userRoles: UserRole[];
+      session: import("@supabase/supabase-js").Session | null;
+      user: import("@supabase/supabase-js").User | null;
+      userRoles: import("../database.types").Database['public']['Tables']['user_roles']['Row'][];
     }
   }
 }
