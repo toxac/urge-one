@@ -1,4 +1,4 @@
-import { createSignal } from "solid-js";
+import { createSignal, createEffect, For, Show } from "solid-js";
 import { useStore } from "@nanostores/solid";
 import { authStore } from "src/stores/auth";
 import { createForm } from '@felte/solid';
@@ -15,7 +15,6 @@ import type { Database } from "../../../../database.types";
 
 
 type UserOpportunity = Database['public']['Tables']['user_opportunities']['Row'];
-type UserOpportunityUpdate = Database['public']['Tables']['user_opportunities']['Update'];
 type UserOpportunityInsert = Database['public']['Tables']['user_opportunities']['Insert'];
 
 const schema = z.object({
@@ -46,9 +45,24 @@ export default function OpportunityForm (props: ComponentProps){
 
     const currentDiscoveryMethod = discoveryMethodOptions.find(option => option.value === props.approach);
 
+    // get current user data
+    createEffect(()=>{
+        if(!$session() || !$session().loading) return;
+        const user = $session().user;
+        if(user){
+            setUserId(user.id)
+        }
+    })
+
     const {form, data, errors} = createForm({
         initialValues:{
-
+            category: "",
+            created_at: "",
+            description: "",
+            discovery_method: currentDiscoveryMethod?.value,
+            goal_alignment: "",
+            observation_type: "",
+            title: z.string(),
         },
         onSubmit: async() =>{
 
