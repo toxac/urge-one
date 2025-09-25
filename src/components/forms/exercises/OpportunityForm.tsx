@@ -11,7 +11,7 @@ import { saveFormAndMarkCompleted } from '../../../stores/progress';
 import { opportunitiesStore } from "src/stores/userAssets/opportunities";
 import {discoveryMethodOptions} from "../../../constants/exercises/opportunities"
 import type { Database } from "../../../../database.types";
-
+import type { UserOpportunitiesStatus } from "../../../../types/dbconsts";
 
 
 type UserOpportunity = Database['public']['Tables']['user_opportunities']['Row'];
@@ -62,10 +62,32 @@ export default function OpportunityForm (props: ComponentProps){
             discovery_method: currentDiscoveryMethod?.value,
             goal_alignment: "",
             observation_type: "",
-            title: z.string(),
+            title: "",
         },
-        onSubmit: async() =>{
+        onSubmit: async(values) =>{
+            const supabase = supabaseBrowserClient;
+            try {
+                if(userId()){
+                    const currentDate = new Date();
+                    const status: UserOpportunitiesStatus = "added";
+                    const newOpportunityPayload :UserOpportunityInsert ={
+                        category: values.category,
+                        description: values.description,
+                        discovery_method: values.discovery_method,
+                        goal_alignment: values.goal_alignment,
+                        observation_type: values.observation_type,
+                        title: values.title,
+                        created_at: currentDate.toISOString(),
+                        status: status
+                    }
 
+                }
+                
+            } catch (error) {
+                
+            } finally {
+
+            }
         },
         extend: validator({schema})
 
