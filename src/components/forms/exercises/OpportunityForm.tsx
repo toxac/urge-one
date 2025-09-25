@@ -6,9 +6,8 @@ import * as z from "zod";
 import { supabaseBrowserClient } from '../../../lib/supabase/client';
 import { validator } from '@felte/validator-zod';
 import { notify } from '../../../stores/notifications';
-import { manageSquad } from '../../../stores/userAssets/squad';
 import { saveFormAndMarkCompleted } from '../../../stores/progress';
-import { opportunitiesStore } from "src/stores/userAssets/opportunities";
+import { manageOpportunities } from "src/stores/userAssets/opportunities";
 import {discoveryMethodOptions} from "../../../constants/exercises/opportunities"
 import type { Database } from "../../../../database.types";
 import type { UserOpportunitiesStatus } from "../../../../types/dbconsts";
@@ -36,7 +35,6 @@ interface ComponentProps {
 export default function OpportunityForm (props: ComponentProps){
     // Store
     const $session = useStore(authStore);
-    const $opportunities = useStore(opportunitiesStore);
     const [userId, setUserId] = createSignal<string | null>(null);
     const [loading, setLoading] = createSignal(false);
     const [success, setSuccess] = createSignal(false);
@@ -78,9 +76,26 @@ export default function OpportunityForm (props: ComponentProps){
                         observation_type: values.observation_type,
                         title: values.title,
                         created_at: currentDate.toISOString(),
-                        status: status
+                        status: status,
+                        user_id: userId()
+                    }
+                    const {data, error} = await supabase.from('user_opprtunities').insert(newOpportunityPayload).select().single();
+
+                    if(data){
+                        // add inserted opportunity to store
+                        manageOpportunities("create", data);
+                        saveFormAndMarkCompleted(props.contentMetaId);
+                        notify.success("New opportunity added","Success!");
+                        setSuccess(true);
                     }
 
+                    if(error){
+                        throw new Error()
+                    }
+
+                } else {
+                    setError("User not found");
+                    notify.error("Please retry after logging in", "No user found!");
                 }
                 
             } catch (error) {
