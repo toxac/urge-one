@@ -3,29 +3,28 @@ import { useStore } from "@nanostores/solid";
 import { authStore } from "src/stores/auth";
 import { createForm } from '@felte/solid';
 import * as z from "zod";
+import { Icon } from "@iconify-icon/solid";
 import { supabaseBrowserClient } from '../../../lib/supabase/client';
 import { validator } from '@felte/validator-zod';
 import { notify } from '../../../stores/notifications';
 import { saveFormAndMarkCompleted } from '../../../stores/progress';
 import { manageOpportunities } from "src/stores/userAssets/opportunities";
-import {type DiscoveryMethodOption, discoveryMethodOptions} from "../../../constants/exercises/opportunities"
+import {type DiscoveryMethodOption, discoveryMethodOptions, categoryOptions, alignmentWithGoalsOptions} from "../../../constants/exercises/opportunities"
 import type { Database } from "../../../../database.types";
 import type { UserOpportunitiesStatus, UserOpportunitiesDiscoveryMethod } from "../../../../types/dbconsts";
-
 
 type UserOpportunity = Database['public']['Tables']['user_opportunities']['Row'];
 type UserOpportunityInsert = Database['public']['Tables']['user_opportunities']['Insert'];
 
+// Refined schema with proper validation
 const schema = z.object({
-    category: z.string(),
-    created_at: z.string(),
-    description: z.string(),
-    discovery_method: z.string(),
-    goal_alignment: z.string(),
-    observation_type: z.string(),
-    title: z.string(),
+    title: z.string().min(1, "Title is required").max(100, "Title must be less than 100 characters"),
+    description: z.string().min(1, "Description is required").max(500, "Description must be less than 500 characters"),
+    discovery_method: z.string().min(1, "Discovery method is required"),
+    observation_type: z.string().min(1, "Observation type is required"),
+    category: z.string().min(1, "Category is required"),
+    goal_alignment: z.string().min(1, "Goal alignment is required"),
 });
-
 
 interface ComponentProps {
     contentMetaId: string;
@@ -39,24 +38,25 @@ export default function OpportunityForm (props: ComponentProps){
     const [discoveryMethod, setDiscoveryMethod] = createSignal<DiscoveryMethodOption|null>(null)
     const [loading, setLoading] = createSignal(false);
     const [success, setSuccess] = createSignal(false);
+    const [observationTypes, setObservationTypes] = createSignal<{ value: string; label: string; helperText: string, example?: string }[]>([]);
 
     const getDiscoveryMethod = (discoveryMethodValue: UserOpportunitiesDiscoveryMethod) => {
         const approach = discoveryMethodOptions.find(option => option.value === discoveryMethodValue);
         if (approach) {
             setDiscoveryMethod(approach);
+            setObservationTypes(approach.observationType || []);
         } else {
-            setDiscoveryMethod(null); // or handle the undefined case appropriately
+            setDiscoveryMethod(null);
+            setObservationTypes([]);
         }
     }
-    
-    onMount(()=>{
+
+    createEffect(()=>{
+        //get and set discovery method
         if(props.approach){
             getDiscoveryMethod(props.approach)
         }
-    })
-
-    // get current user data
-    createEffect(()=>{
+        // get User
         if(!$session() || !$session().loading) return;
         const user = $session().user;
         if(user){
@@ -64,10 +64,9 @@ export default function OpportunityForm (props: ComponentProps){
         }
     })
 
-    const {form, data, errors} = createForm({
+    const {form, data, errors, isSubmitting, touched, reset} = createForm({
         initialValues:{
             category: "",
-            created_at: "",
             description: "",
             discovery_method: props.approach || "",
             goal_alignment: "",
@@ -84,7 +83,7 @@ export default function OpportunityForm (props: ComponentProps){
                     const newOpportunityPayload :UserOpportunityInsert ={
                         category: values.category,
                         description: values.description,
-                        discovery_method: values.discovery_method,
+                        discovery_method: values.discovery_method as UserOpportunitiesDiscoveryMethod,
                         goal_alignment: values.goal_alignment,
                         observation_type: values.observation_type,
                         title: values.title,
@@ -92,7 +91,7 @@ export default function OpportunityForm (props: ComponentProps){
                         status: status,
                         user_id: userId()
                     }
-                    const {data, error} = await supabase.from('user_opprtunities').insert(newOpportunityPayload).select().single();
+                    const {data, error} = await supabase.from('user_opportunities').insert(newOpportunityPayload).select().single();
 
                     if(data){
                         // add inserted opportunity to store
@@ -107,26 +106,197 @@ export default function OpportunityForm (props: ComponentProps){
                     }
 
                 } else {
-                    notify.error("No user found!, Please retry after logging in", "Fail");
+                    notify.error("No user found! Please retry after logging in", "Fail");
                 }
                 
             } catch (error) {
-                notify.error("Something went wrong at our end, Please try saving the opportunity again", "Failed")
-                
+                console.error("Error saving opportunity:", error);
+                notify.error("Something went wrong at our end. Please try saving the opportunity again", "Failed");
             } finally {
-
+                setLoading(false);
             }
         },
         extend: validator({schema})
-
-
     })
 
-    return(
-        <section class="w-full bg-white border-1 border-primary rounded-lg px-8">
-        <h2>Add a new opportunity</h2>
-        <p></p>
+    const resetForm = () => {
+        setSuccess(false);
+        reset();
+        setDiscoveryMethod(null);
+        setObservationTypes([]);
+    }
 
+    const handleDiscoveryMethodChange = (e: Event) => {
+        const target = e.target as HTMLSelectElement;
+        getDiscoveryMethod(target.value as UserOpportunitiesDiscoveryMethod);
+    }
+
+    return(
+        <section class="w-full bg-white border-1 border-primary rounded-lg px-8 py-6">
+            <Show when={success()}>
+                <div class="w-full text-center py-8">
+                    <div class="text-green-600 mb-4">
+                        <Icon icon="mdi:check-circle" width={64} height={64} />
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Success!</h3>
+                    <p class="text-gray-600 mb-6">New opportunity has been added successfully.</p>
+                    <div class="flex justify-center">
+                        <button class="btn btn-primary btn-outline" onClick={resetForm}>
+                            <Icon icon="mdi:plus" width={20} height={20} class="mr-2" />
+                            Add Another Opportunity
+                        </button>
+                    </div>
+                </div>
+            </Show>
+            
+            <Show when={!success()}>
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Add a New Opportunity</h2>
+                    <Show when={discoveryMethod()}>
+                        <p class="text-gray-600 text-sm bg-gray-50 p-3 rounded-lg">
+                            {discoveryMethod()?.helperText}
+                        </p>
+                    </Show>
+                </div>
+
+                <form use:form class="space-y-8">
+                    {/* Title Field */}
+                    <div class="form-control">
+                        <label class="input input-neutral flex w-full items-center gap-2">
+                            <Icon icon="mdi:format-title" width={20} height={20} class="text-gray-400" />
+                            <input 
+                                type="text" 
+                                name="title" 
+                                class="grow" 
+                                placeholder="Name of the opportunity" 
+                            />
+                        </label>
+                        <Show when={errors().title && touched().title}>
+                            <span class="text-sm text-red-600 mt-1">{errors().title}</span>
+                        </Show>
+                    </div>
+
+                    {/* Description Field */}
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Add a decsription</span>
+                        </label>
+                        <textarea 
+                            name="description"
+                            class="textarea textarea-neutral w-full h-24" 
+                            placeholder="Describe the opportunity in detail..."
+                        />
+                        <Show when={errors().description && touched().description}>
+                            <span class="text-sm text-red-600 mt-1">{errors().description}</span>
+                        </Show>
+                    </div>
+
+                    <Show when={!props.approach}>
+                    {/* Discovery Method Field */}
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Method of discovery</span>
+                            </label>
+                            <select 
+                                class="select select-neutral w-full" 
+                                name="discovery_method"
+                                onChange={handleDiscoveryMethodChange}
+                            >
+                                <option disabled selected value="">Select a discovery method</option>
+                                <For each={discoveryMethodOptions}>
+                                    {option => <option value={option.value} selected={option.value === props.approach}>{option.label}</option>}
+                                </For>
+                            </select>
+                            <Show when={errors().discovery_method && touched().discovery_method}>
+                                <span class="text-sm text-red-600 mt-1">{errors().discovery_method}</span>
+                            </Show>
+                        </div>
+                    </Show>
+
+                    {/* Observation Type Field - Conditionally shown */}
+                    <Show when={observationTypes().length > 0}>
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Observation Type</span>
+                            </label>
+                            <select class="select select-neutral w-full" name="observation_type">
+                                <option disabled selected value="">Select observation type</option>
+                                <For each={observationTypes()}>
+                                    {type => <option value={type.value}>{type.label}</option>}
+                                </For>
+                            </select>
+                            <Show when={errors().observation_type && touched().observation_type}>
+                                <span class="text-sm text-red-600 mt-1">{errors().observation_type}</span>
+                            </Show>
+                        </div>
+                    </Show>
+
+                    {/* Category Field */}
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Select the most relevant problem category</span>
+                        </label>
+                        <select class="select select-neutral w-full" name="category">
+                            <option disabled selected value="">Select a category</option>
+                            <For each={categoryOptions}>
+                                {category => (
+                                    <option value={category.value}>
+                                        {category.label}
+                                        <Show when={category.helperText}>
+                                            <span class="text-xs text-gray-500 ml-2">- {category.helperText}</span>
+                                        </Show>
+                                    </option>
+                                )}
+                            </For>
+                        </select>
+                        <Show when={errors().category && touched().category}>
+                            <span class="text-sm text-red-600 mt-1">{errors().category}</span>
+                        </Show>
+                    </div>
+
+                    {/* Goal Alignment Field */}
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">How aligned is this opportunity with your goals?</span>
+                        </label>
+                        <select class="select select-neutral w-full" name="goal_alignment">
+                            <option disabled selected value="">Select level of alignment</option>
+                            <For each={alignmentWithGoalsOptions}>
+                                {alignment => (
+                                    <option value={alignment.value}>
+                                        {alignment.label}
+                                        <Show when={alignment.helperText}>
+                                            <span class="text-xs text-gray-500 ml-2">- {alignment.helperText}</span>
+                                        </Show>
+                                    </option>
+                                )}
+                            </For>
+                        </select>
+                        <Show when={errors().goal_alignment && touched().goal_alignment}>
+                            <span class="text-sm text-red-600 mt-1">{errors().goal_alignment}</span>
+                        </Show>
+                    </div>
+
+                    {/* Submit Button */}
+                    <div class="flex justify-end pt-4">
+                        <button 
+                            type="submit" 
+                            class="btn btn-primary"
+                            disabled={isSubmitting()}
+                        >
+                            <Show when={isSubmitting()} fallback={
+                                <>
+                                    <Icon icon="mdi:content-save" width={20} height={20} class="mr-2" />
+                                    Save Opportunity
+                                </>
+                            }>
+                                <span class="loading loading-spinner loading-sm mr-2"></span>
+                                Saving...
+                            </Show>
+                        </button>
+                    </div>
+                </form>
+            </Show>
         </section>
     )
 }
