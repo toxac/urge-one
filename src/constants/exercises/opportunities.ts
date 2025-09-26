@@ -1,12 +1,13 @@
-interface DiscoveryMethosOption {
-    value: string;
+import type { UserOpportunitiesDiscoveryMethod } from "../../../types/dbconsts";
+export interface DiscoveryMethodOption {
+    value: UserOpportunitiesDiscoveryMethod;
     label: string;
     helperText: string;
     example?: string;
     observationType?: { value: string; label: string; helperText: string, example?: string } [];
   }
   
- export const discoveryMethodOptions: DiscoveryMethosOption [] = [
+ export const discoveryMethodOptions: DiscoveryMethodOption [] = [
     {
       value: "personal-problems",
       label: "Your problems and frustrations",

@@ -1,4 +1,4 @@
-import { createSignal, createEffect, For, Show } from "solid-js";
+import { createSignal, createEffect, For, Show, onMount } from "solid-js";
 import { useStore } from "@nanostores/solid";
 import { authStore } from "src/stores/auth";
 import { createForm } from '@felte/solid';
@@ -8,9 +8,9 @@ import { validator } from '@felte/validator-zod';
 import { notify } from '../../../stores/notifications';
 import { saveFormAndMarkCompleted } from '../../../stores/progress';
 import { manageOpportunities } from "src/stores/userAssets/opportunities";
-import {discoveryMethodOptions} from "../../../constants/exercises/opportunities"
+import {type DiscoveryMethodOption, discoveryMethodOptions} from "../../../constants/exercises/opportunities"
 import type { Database } from "../../../../database.types";
-import type { UserOpportunitiesStatus } from "../../../../types/dbconsts";
+import type { UserOpportunitiesStatus, UserOpportunitiesDiscoveryMethod } from "../../../../types/dbconsts";
 
 
 type UserOpportunity = Database['public']['Tables']['user_opportunities']['Row'];
@@ -29,19 +29,31 @@ const schema = z.object({
 
 interface ComponentProps {
     contentMetaId: string;
-    approach?: "personal-problems" | "skill-based" | "zone-of-influence" | "broader-search"  ;  // discovery
+    approach?: UserOpportunitiesDiscoveryMethod;
 }
 
 export default function OpportunityForm (props: ComponentProps){
     // Store
     const $session = useStore(authStore);
     const [userId, setUserId] = createSignal<string | null>(null);
+    const [discoveryMethod, setDiscoveryMethod] = createSignal<DiscoveryMethodOption|null>(null)
     const [loading, setLoading] = createSignal(false);
     const [success, setSuccess] = createSignal(false);
-    const [markedCompleted, setMarkedCompleted] = createSignal(false);
-    const [error, setError] = createSignal("");
 
-    const currentDiscoveryMethod = discoveryMethodOptions.find(option => option.value === props.approach);
+    const getDiscoveryMethod = (discoveryMethodValue: UserOpportunitiesDiscoveryMethod) => {
+        const approach = discoveryMethodOptions.find(option => option.value === discoveryMethodValue);
+        if (approach) {
+            setDiscoveryMethod(approach);
+        } else {
+            setDiscoveryMethod(null); // or handle the undefined case appropriately
+        }
+    }
+    
+    onMount(()=>{
+        if(props.approach){
+            getDiscoveryMethod(props.approach)
+        }
+    })
 
     // get current user data
     createEffect(()=>{
@@ -57,12 +69,13 @@ export default function OpportunityForm (props: ComponentProps){
             category: "",
             created_at: "",
             description: "",
-            discovery_method: currentDiscoveryMethod?.value,
+            discovery_method: props.approach || "",
             goal_alignment: "",
             observation_type: "",
             title: "",
         },
         onSubmit: async(values) =>{
+            setLoading(true);
             const supabase = supabaseBrowserClient;
             try {
                 if(userId()){
@@ -90,15 +103,15 @@ export default function OpportunityForm (props: ComponentProps){
                     }
 
                     if(error){
-                        throw new Error()
+                        throw error;
                     }
 
                 } else {
-                    setError("User not found");
-                    notify.error("Please retry after logging in", "No user found!");
+                    notify.error("No user found!, Please retry after logging in", "Fail");
                 }
                 
             } catch (error) {
+                notify.error("Something went wrong at our end, Please try saving the opportunity again", "Failed")
                 
             } finally {
 
@@ -110,7 +123,9 @@ export default function OpportunityForm (props: ComponentProps){
     })
 
     return(
-        <section class="w-full bg-white border-1 border-primary rounded-lg p-8">
+        <section class="w-full bg-white border-1 border-primary rounded-lg px-8">
+        <h2>Add a new opportunity</h2>
+        <p></p>
 
         </section>
     )
