@@ -281,7 +281,7 @@ export default function OpportunityForm (props: ComponentProps){
                     <div class="flex justify-end pt-4">
                         <button 
                             type="submit" 
-                            class="btn btn-primary"
+                            class="btn btn-primary btn-outline"
                             disabled={isSubmitting()}
                         >
                             <Show when={isSubmitting()} fallback={
