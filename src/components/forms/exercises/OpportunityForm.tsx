@@ -8,13 +8,13 @@ import { supabaseBrowserClient } from '../../../lib/supabase/client';
 import { validator } from '@felte/validator-zod';
 import { notify } from '../../../stores/notifications';
 import { saveFormAndMarkCompleted } from '../../../stores/progress';
-import { manageOpportunities } from "src/stores/userAssets/opportunities";
+import { createOpportunity } from "src/stores/userAssets/opportunities";
 import {type DiscoveryMethodOption, discoveryMethodOptions, categoryOptions, alignmentWithGoalsOptions} from "../../../constants/exercises/opportunities"
 import type { Database } from "../../../../database.types";
 import type { UserOpportunitiesStatus, UserOpportunitiesDiscoveryMethod } from "../../../../types/dbconsts";
 
-type UserOpportunity = Database['public']['Tables']['user_opportunities']['Row'];
-type UserOpportunityInsert = Database['public']['Tables']['user_opportunities']['Insert'];
+type Opportunity = Database['public']['Tables']['user_opportunities']['Row'];
+type OpportunityInsert = Database['public']['Tables']['user_opportunities']['Insert'];
 
 // Refined schema with proper validation
 const schema = z.object({
