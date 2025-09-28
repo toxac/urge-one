@@ -16,3 +16,7 @@ export interface SupabaseCustomError {
     details?: string
 }
 
+// ------ Opportunities ----------
+export type UserOpportunitiesStatus = "added" | "archived" | "selected";
+export type UserOpportunitiesDiscoveryMethod = "personal-problems" | "skill-based" | "zone-of-influence" | "broader-search";
+

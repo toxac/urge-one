@@ -7,7 +7,7 @@ import { supabaseBrowserClient } from '../../../lib/supabase/client';
 import { notify } from '../../../stores/notifications';
 import { deleteOpportunity } from "src/stores/userAssets/opportunities";
 import type { Database } from "../../../../database.types";
-import type { UserOpportunitiesStatus, UserOpportunitiesDiscoveryMethod } from "../../../../types/dbconsts";
+import type { UserOpportunitiesStatus, UserOpportunitiesDiscoveryMethod } from "../../../../types/urgeTypes";
 
 type UserOpportunity = Database['public']['Tables']['user_opportunities']['Row'];
 
