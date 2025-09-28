@@ -2,7 +2,8 @@ import { createSignal, Show } from "solid-js";
 import { Icon } from "@iconify-icon/solid";
 import type { Database } from "../../../../database.types";
 import { useStore } from "@nanostores/solid";
-import { opportunitiesStore } from "src/stores/userAssets/opportunities";
+import { getCommentsCount } from "../../../stores/userAssets/opportunityComments";
+import { opportunitiesStore } from "../../../stores/userAssets/opportunities";
 
 type Opportunity = Database['public']['Tables']['user_opportunities']['Row'];
 
@@ -16,8 +17,8 @@ interface OpportunityCardProps {
 export default function OpportunityCard(props: OpportunityCardProps) {
   const [showActions, setShowActions] = createSignal(false);
   
-  // In a real implementation, you'd fetch comments count
-  const commentsCount = 0; // Placeholder
+
+ const commentsCount = () => getCommentsCount(props.opportunity.id);
 
   return (
     <div class="card bg-base-100 shadow-lg border border-base-300 hover:shadow-xl transition-shadow">
