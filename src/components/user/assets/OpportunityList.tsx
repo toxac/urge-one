@@ -5,7 +5,7 @@ import { authStore } from "src/stores/auth";
 import { Icon } from "@iconify-icon/solid";
 import { supabaseBrowserClient } from '../../../lib/supabase/client';
 import { notify } from '../../../stores/notifications';
-import { manageOpportunities } from "src/stores/userAssets/opportunities";
+import { deleteOpportunity } from "src/stores/userAssets/opportunities";
 import type { Database } from "../../../../database.types";
 import type { UserOpportunitiesStatus, UserOpportunitiesDiscoveryMethod } from "../../../../types/dbconsts";
 
@@ -69,23 +69,20 @@ export default function OpportunityList(props: OpportunityListProps) {
     if (!confirm(`Are you sure you want to delete "${opportunity.title}"?`)) {
       return;
     }
-
     setDeletingId(opportunity.id);
     
     try {
-      const supabase = supabaseBrowserClient;
-      const { error } = await supabase
-        .from('user_opportunities')
-        .delete()
-        .eq('id', opportunity.id);
 
-      if (error) {
-        throw error;
+      const {success, error} = await deleteOpportunity(opportunity.id)
+      if(success){
+        notify.success("Opportunity deleted successfully", "Success!");
       }
 
-      // Remove from store
-      manageOpportunities("delete", opportunity.id );
-      notify.success("Opportunity deleted successfully", "Success!");
+      if(error){
+        throw error;
+      }
+      
+      
       
       if (props.onDelete) {
         props.onDelete(opportunity);

@@ -8,7 +8,7 @@ import { Icon } from "@iconify-icon/solid";
 import { supabaseBrowserClient } from '../../../lib/supabase/client';
 import { validator } from '@felte/validator-zod';
 import { notify } from '../../../stores/notifications';
-import { manageOpportunities } from "src/stores/userAssets/opportunities";
+import { updateOpportunity } from "src/stores/userAssets/opportunities";
 import { type DiscoveryMethodOption, discoveryMethodOptions, categoryOptions, alignmentWithGoalsOptions } from "../../../constants/exercises/opportunities"
 import type { Database } from "../../../../database.types";
 import type { UserOpportunitiesStatus, UserOpportunitiesDiscoveryMethod } from "../../../../types/dbconsts";
@@ -105,24 +105,10 @@ export default function UpdateOpportunityForm(props: ComponentProps) {
                         title: values.title,
                         updated_at: currentDate.toISOString(),
                     };
+                    const {success, data, error} = await updateOpportunity(props.opportunityId, updatedOpportunityPayload);
 
-                    const { data, error } = await supabase
-                        .from('user_opportunities')
-                        .update(updatedOpportunityPayload)
-                        .eq('id', props.opportunityId)
-                        .select()
-                        .single();
-
-                    if (data) {
-                        // Update opportunity in store
-                        manageOpportunities("update", data);
-                        notify.success("Opportunity updated successfully", "Success!");
+                    if(success && data) {
                         setSuccess(true);
-                        
-                        // Call success callback if provided
-                        if (props.onSuccess) {
-                            setTimeout(() => props.onSuccess!(), 1000);
-                        }
                     }
 
                     if (error) {
