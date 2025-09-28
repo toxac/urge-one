@@ -36,6 +36,7 @@ export default function OpportunityForm (props: ComponentProps){
     const $session = useStore(authStore);
     const [userId, setUserId] = createSignal<string | null>(null);
     const [discoveryMethod, setDiscoveryMethod] = createSignal<DiscoveryMethodOption|null>(null)
+    const [savedOpportunity, setSavedOpportunity] = createSignal<Opportunity|null>(null);
     const [loading, setLoading] = createSignal(false);
     const [success, setSuccess] = createSignal(false);
     const [observationTypes, setObservationTypes] = createSignal<{ value: string; label: string; helperText: string, example?: string }[]>([]);
@@ -80,7 +81,7 @@ export default function OpportunityForm (props: ComponentProps){
                 if(userId()){
                     const currentDate = new Date();
                     const status: UserOpportunitiesStatus = "added";
-                    const newOpportunityPayload :UserOpportunityInsert ={
+                    const newOpportunityPayload :OpportunityInsert ={
                         category: values.category,
                         description: values.description,
                         discovery_method: values.discovery_method as UserOpportunitiesDiscoveryMethod,
@@ -91,16 +92,12 @@ export default function OpportunityForm (props: ComponentProps){
                         status: status,
                         user_id: userId()
                     }
-                    const {data, error} = await supabase.from('user_opportunities').insert(newOpportunityPayload).select().single();
+                    const {success, data, error} = await createOpportunity(newOpportunityPayload);
 
-                    if(data){
-                        // add inserted opportunity to store
-                        manageOpportunities("create", data);
-                        saveFormAndMarkCompleted(props.contentMetaId);
-                        notify.success("New opportunity added","Success!");
-                        setSuccess(true);
+                    if (data && success){
+                        setSavedOpportunity(data);
+                        notify.success("A new opportunity was added.", "Success!");
                     }
-
                     if(error){
                         throw error;
                     }
@@ -123,6 +120,7 @@ export default function OpportunityForm (props: ComponentProps){
         setSuccess(false);
         reset();
         setDiscoveryMethod(null);
+        setSavedOpportunity(null);
         setObservationTypes([]);
     }
 
@@ -139,7 +137,7 @@ export default function OpportunityForm (props: ComponentProps){
                         <Icon icon="mdi:check-circle" width={64} height={64} />
                     </div>
                     <h3 class="text-2xl font-bold text-gray-900 mb-2">Success!</h3>
-                    <p class="text-gray-600 mb-6">New opportunity has been added successfully.</p>
+                    <p class="text-gray-600 mb-6">New opportunity has been added successfully. We will be working further on opportunities you have saved in future milestones. You can find saved opportunities <a href="/assets/opportunities/" target="_blank">here</a></p>
                     <div class="flex justify-center">
                         <button class="btn btn-primary btn-outline" onClick={resetForm}>
                             <Icon icon="mdi:plus" width={20} height={20} class="mr-2" />
