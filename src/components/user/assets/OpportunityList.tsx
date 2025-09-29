@@ -14,7 +14,7 @@ import type { Database } from "../../../../database.types";
 
 type Opportunity = Database['public']['Tables']['user_opportunities']['Row'];
 
-export default function OpportunitiesApp() {
+export default function OpportunitiesList() {
   const $session = useStore(authStore);
   const $opportunities = useStore(opportunitiesStore);
   
