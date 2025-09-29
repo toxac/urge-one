@@ -8,7 +8,7 @@ import { supabaseBrowserClient } from '../../../lib/supabase/client';
 import { validator } from '@felte/validator-zod';
 import { notify } from '../../../stores/notifications';
 import { saveFormAndMarkCompleted } from '../../../stores/progress';
-import { createOpportunity } from "src/stores/userAssets/opportunities";
+import { createOpportunity } from "../../../stores/userAssets/opportunities";
 import { type DiscoveryMethodOption, discoveryMethodOptions, categoryOptions, alignmentWithGoalsOptions } from "../../../constants/exercises/opportunities"
 import type { Database } from "../../../../database.types";
 import type { UserOpportunitiesStatus, UserOpportunitiesDiscoveryMethod } from "../../../../types/urgeTypes";
@@ -59,8 +59,9 @@ export default function OpportunityForm(props: ComponentProps) {
             getDiscoveryMethod(props.approach)
         }
         // get User
-        if (!$session() || !$session().loading) return;
+        if (!$session() || $session().loading) return;
         const user = $session().user;
+        console.log(`Opportunity Form: Current User: ${user}`)
         if (user) {
             setUserId(user.id)
         }
@@ -97,6 +98,9 @@ export default function OpportunityForm(props: ComponentProps) {
 
                     if (data && success) {
                         setSavedOpportunity(data);
+                        if (props.contentMetaId) {
+                            saveFormAndMarkCompleted(props.contentMetaId)
+                        }
                         notify.success("A new opportunity was added.", "Success!");
                         if (props.onSuccess) {
                             props.onSuccess();
@@ -141,7 +145,13 @@ export default function OpportunityForm(props: ComponentProps) {
                         <Icon icon="mdi:check-circle" width={64} height={64} />
                     </div>
                     <h3 class="text-2xl font-bold text-gray-900 mb-2">Success!</h3>
-                    <p class="text-gray-600 mb-6">New opportunity has been added successfully. We will be working further on opportunities you have saved in future milestones. You can find saved opportunities <a href="/assets/opportunities/" target="_blank">here</a></p>
+                    <p class="text-gray-600 mb-4">
+                        New opportunity has been added successfully. We will be working further on opportunities you have saved in future milestones. 
+                    </p>
+                    <div class="flex flex-col gap-4 mb-8">
+                        <a href={`/assets/opportunities/${savedOpportunity()?.id}`}>Current opportunity: {savedOpportunity()?.title}</a>
+                        <a href={`/assets/opportunities/`}>All opportunities </a>
+                    </div>
                     <div class="flex justify-center">
                         <button class="btn btn-primary btn-outline" onClick={resetForm}>
                             <Icon icon="mdi:plus" width={20} height={20} class="mr-2" />
@@ -171,6 +181,7 @@ export default function OpportunityForm(props: ComponentProps) {
                                 name="title"
                                 class="grow"
                                 placeholder="Name of the opportunity"
+                                aria-label="Give this opportunity a name"
                             />
                         </label>
                         <Show when={errors().title && touched().title}>
@@ -187,6 +198,7 @@ export default function OpportunityForm(props: ComponentProps) {
                             name="description"
                             class="textarea textarea-neutral w-full h-24"
                             placeholder="Describe the opportunity in detail..."
+                            aria-label="Add a description for this opportunity"
                         />
                         <Show when={errors().description && touched().description}>
                             <span class="text-sm text-red-600 mt-1">{errors().description}</span>
@@ -203,6 +215,7 @@ export default function OpportunityForm(props: ComponentProps) {
                                 class="select select-neutral w-full"
                                 name="discovery_method"
                                 onChange={handleDiscoveryMethodChange}
+                                aria-label="Approach for discovering this opportunity, select one"
                             >
                                 <option disabled selected value="">Select a discovery method</option>
                                 <For each={discoveryMethodOptions}>
@@ -221,7 +234,7 @@ export default function OpportunityForm(props: ComponentProps) {
                             <label class="label">
                                 <span class="label-text">Observation Type</span>
                             </label>
-                            <select class="select select-neutral w-full" name="observation_type">
+                            <select class="select select-neutral w-full" name="observation_type" aria-label="what type of opportunity is this, select most relevant">
                                 <option disabled selected value="">Select observation type</option>
                                 <For each={observationTypes()}>
                                     {type => <option value={type.value}>{type.label}</option>}
@@ -238,15 +251,12 @@ export default function OpportunityForm(props: ComponentProps) {
                         <label class="label">
                             <span class="label-text">Select the most relevant problem category</span>
                         </label>
-                        <select class="select select-neutral w-full" name="category">
+                        <select class="select select-neutral w-full" name="category" aria-label="Slect a problem category related to the opportunity">
                             <option disabled selected value="">Select a category</option>
                             <For each={categoryOptions}>
                                 {category => (
                                     <option value={category.value}>
                                         {category.label}
-                                        <Show when={category.helperText}>
-                                            <span class="text-xs text-gray-500 ml-2">- {category.helperText}</span>
-                                        </Show>
                                     </option>
                                 )}
                             </For>
@@ -261,15 +271,12 @@ export default function OpportunityForm(props: ComponentProps) {
                         <label class="label">
                             <span class="label-text">How aligned is this opportunity with your goals?</span>
                         </label>
-                        <select class="select select-neutral w-full" name="goal_alignment">
+                        <select class="select select-neutral w-full" name="goal_alignment" aria-label="How aligned is this opportunity with your goals, Select relevant option">
                             <option disabled selected value="">Select level of alignment</option>
                             <For each={alignmentWithGoalsOptions}>
                                 {alignment => (
                                     <option value={alignment.value}>
                                         {alignment.label}
-                                        <Show when={alignment.helperText}>
-                                            <span class="text-xs text-gray-500 ml-2">- {alignment.helperText}</span>
-                                        </Show>
                                     </option>
                                 )}
                             </For>
