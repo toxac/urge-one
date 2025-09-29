@@ -18,7 +18,7 @@ export async function initializeOpportunities(userId: string) {
   try {
     opportunitiesStoreLoading.set(true);
     opportunitiesStoreError.set(null);
-    
+
     const { data: opportunities, error } = await supabase
       .from('user_opportunities')
       .select('*')

@@ -70,7 +70,7 @@ export default function UpdateOpportunityForm(props: ComponentProps) {
             if (opportunity) {
                 setCurrentOpportunity(opportunity);
                 setFetchError(null);
-                
+
                 // Set discovery method and observation types based on current data
                 if (opportunity.discovery_method) {
                     getDiscoveryMethod(opportunity.discovery_method as UserOpportunitiesDiscoveryMethod);
@@ -105,9 +105,9 @@ export default function UpdateOpportunityForm(props: ComponentProps) {
                         title: values.title,
                         updated_at: currentDate.toISOString(),
                     };
-                    const {success, data, error} = await updateOpportunity(props.opportunityId, updatedOpportunityPayload);
+                    const { success, data, error } = await updateOpportunity(props.opportunityId, updatedOpportunityPayload);
 
-                    if(success && data) {
+                    if (success && data) {
                         setSuccess(true);
                     }
 
@@ -233,8 +233,8 @@ export default function UpdateOpportunityForm(props: ComponentProps) {
                             <option disabled value="">Select a discovery method</option>
                             <For each={discoveryMethodOptions}>
                                 {option => (
-                                    <option 
-                                        value={option.value} 
+                                    <option
+                                        value={option.value}
                                         selected={option.value === currentOpportunity()?.discovery_method}
                                     >
                                         {option.label}
@@ -257,7 +257,7 @@ export default function UpdateOpportunityForm(props: ComponentProps) {
                                 <option disabled value="">Select observation type</option>
                                 <For each={observationTypes()}>
                                     {type => (
-                                        <option 
+                                        <option
                                             value={type.value}
                                             selected={type.value === currentOpportunity()?.observation_type}
                                         >
@@ -281,7 +281,7 @@ export default function UpdateOpportunityForm(props: ComponentProps) {
                             <option disabled value="">Select a category</option>
                             <For each={categoryOptions}>
                                 {category => (
-                                    <option 
+                                    <option
                                         value={category.value}
                                         selected={category.value === currentOpportunity()?.category}
                                     >
@@ -307,7 +307,7 @@ export default function UpdateOpportunityForm(props: ComponentProps) {
                             <option disabled value="">Select level of alignment</option>
                             <For each={alignmentWithGoalsOptions}>
                                 {alignment => (
-                                    <option 
+                                    <option
                                         value={alignment.value}
                                         selected={alignment.value === currentOpportunity()?.goal_alignment}
                                     >
@@ -326,8 +326,8 @@ export default function UpdateOpportunityForm(props: ComponentProps) {
 
                     {/* Action Buttons */}
                     <div class="flex justify-end gap-4 pt-4">
-                        <button 
-                            type="button" 
+                        <button
+                            type="button"
                             class="btn btn-outline"
                             onClick={handleCancel}
                             disabled={isSubmitting()}

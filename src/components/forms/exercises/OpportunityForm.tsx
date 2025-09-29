@@ -9,7 +9,7 @@ import { validator } from '@felte/validator-zod';
 import { notify } from '../../../stores/notifications';
 import { saveFormAndMarkCompleted } from '../../../stores/progress';
 import { createOpportunity } from "src/stores/userAssets/opportunities";
-import {type DiscoveryMethodOption, discoveryMethodOptions, categoryOptions, alignmentWithGoalsOptions} from "../../../constants/exercises/opportunities"
+import { type DiscoveryMethodOption, discoveryMethodOptions, categoryOptions, alignmentWithGoalsOptions } from "../../../constants/exercises/opportunities"
 import type { Database } from "../../../../database.types";
 import type { UserOpportunitiesStatus, UserOpportunitiesDiscoveryMethod } from "../../../../types/urgeTypes";
 
@@ -29,15 +29,15 @@ const schema = z.object({
 interface ComponentProps {
     contentMetaId?: string;
     approach?: UserOpportunitiesDiscoveryMethod;
-    onSuccess?: ()=> void;
+    onSuccess?: () => void;
 }
 
-export default function OpportunityForm (props: ComponentProps){
+export default function OpportunityForm(props: ComponentProps) {
     // Store
     const $session = useStore(authStore);
     const [userId, setUserId] = createSignal<string | null>(null);
-    const [discoveryMethod, setDiscoveryMethod] = createSignal<DiscoveryMethodOption|null>(null)
-    const [savedOpportunity, setSavedOpportunity] = createSignal<Opportunity|null>(null);
+    const [discoveryMethod, setDiscoveryMethod] = createSignal<DiscoveryMethodOption | null>(null)
+    const [savedOpportunity, setSavedOpportunity] = createSignal<Opportunity | null>(null);
     const [loading, setLoading] = createSignal(false);
     const [success, setSuccess] = createSignal(false);
     const [observationTypes, setObservationTypes] = createSignal<{ value: string; label: string; helperText: string, example?: string }[]>([]);
@@ -53,21 +53,21 @@ export default function OpportunityForm (props: ComponentProps){
         }
     }
 
-    createEffect(()=>{
+    createEffect(() => {
         //get and set discovery method
-        if(props.approach){
+        if (props.approach) {
             getDiscoveryMethod(props.approach)
         }
         // get User
-        if(!$session() || !$session().loading) return;
+        if (!$session() || !$session().loading) return;
         const user = $session().user;
-        if(user){
+        if (user) {
             setUserId(user.id)
         }
     })
 
-    const {form, data, errors, isSubmitting, touched, reset} = createForm({
-        initialValues:{
+    const { form, data, errors, isSubmitting, touched, reset } = createForm({
+        initialValues: {
             category: "",
             description: "",
             discovery_method: props.approach || "",
@@ -75,14 +75,14 @@ export default function OpportunityForm (props: ComponentProps){
             observation_type: "",
             title: "",
         },
-        onSubmit: async(values) =>{
+        onSubmit: async (values) => {
             setLoading(true);
             const supabase = supabaseBrowserClient;
             try {
-                if(userId()){
+                if (userId()) {
                     const currentDate = new Date();
                     const status: UserOpportunitiesStatus = "added";
-                    const newOpportunityPayload :OpportunityInsert ={
+                    const newOpportunityPayload: OpportunityInsert = {
                         category: values.category,
                         description: values.description,
                         discovery_method: values.discovery_method as UserOpportunitiesDiscoveryMethod,
@@ -93,23 +93,23 @@ export default function OpportunityForm (props: ComponentProps){
                         status: status,
                         user_id: userId()
                     }
-                    const {success, data, error} = await createOpportunity(newOpportunityPayload);
+                    const { success, data, error } = await createOpportunity(newOpportunityPayload);
 
-                    if (data && success){
+                    if (data && success) {
                         setSavedOpportunity(data);
                         notify.success("A new opportunity was added.", "Success!");
-                        if(props.onSuccess){
+                        if (props.onSuccess) {
                             props.onSuccess();
                         }
                     }
-                    if(error){
+                    if (error) {
                         throw error;
                     }
 
                 } else {
                     notify.error("No user found! Please retry after logging in", "Fail");
                 }
-                
+
             } catch (error) {
                 console.error("Error saving opportunity:", error);
                 notify.error("Something went wrong at our end. Please try saving the opportunity again", "Failed");
@@ -117,7 +117,7 @@ export default function OpportunityForm (props: ComponentProps){
                 setLoading(false);
             }
         },
-        extend: validator({schema})
+        extend: validator({ schema })
     })
 
     const resetForm = () => {
@@ -133,7 +133,7 @@ export default function OpportunityForm (props: ComponentProps){
         getDiscoveryMethod(target.value as UserOpportunitiesDiscoveryMethod);
     }
 
-    return(
+    return (
         <section class="w-full bg-white border-1 border-primary rounded-lg px-8 py-6">
             <Show when={success()}>
                 <div class="w-full text-center py-8">
@@ -150,7 +150,7 @@ export default function OpportunityForm (props: ComponentProps){
                     </div>
                 </div>
             </Show>
-            
+
             <Show when={!success()}>
                 <div class="mb-6">
                     <h2 class="text-2xl font-bold text-gray-900 mb-2">Add a New Opportunity</h2>
@@ -166,11 +166,11 @@ export default function OpportunityForm (props: ComponentProps){
                     <div class="form-control">
                         <label class="input input-neutral flex w-full items-center gap-2">
                             <Icon icon="mdi:format-title" width={20} height={20} class="text-gray-400" />
-                            <input 
-                                type="text" 
-                                name="title" 
-                                class="grow" 
-                                placeholder="Name of the opportunity" 
+                            <input
+                                type="text"
+                                name="title"
+                                class="grow"
+                                placeholder="Name of the opportunity"
                             />
                         </label>
                         <Show when={errors().title && touched().title}>
@@ -183,9 +183,9 @@ export default function OpportunityForm (props: ComponentProps){
                         <label class="label">
                             <span class="label-text">Add a decsription</span>
                         </label>
-                        <textarea 
+                        <textarea
                             name="description"
-                            class="textarea textarea-neutral w-full h-24" 
+                            class="textarea textarea-neutral w-full h-24"
                             placeholder="Describe the opportunity in detail..."
                         />
                         <Show when={errors().description && touched().description}>
@@ -194,13 +194,13 @@ export default function OpportunityForm (props: ComponentProps){
                     </div>
 
                     <Show when={!props.approach}>
-                    {/* Discovery Method Field */}
+                        {/* Discovery Method Field */}
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text">Method of discovery</span>
                             </label>
-                            <select 
-                                class="select select-neutral w-full" 
+                            <select
+                                class="select select-neutral w-full"
                                 name="discovery_method"
                                 onChange={handleDiscoveryMethodChange}
                             >
@@ -281,8 +281,8 @@ export default function OpportunityForm (props: ComponentProps){
 
                     {/* Submit Button */}
                     <div class="flex justify-end pt-4">
-                        <button 
-                            type="submit" 
+                        <button
+                            type="submit"
                             class="btn btn-primary btn-outline"
                             disabled={isSubmitting()}
                         >

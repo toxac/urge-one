@@ -16,9 +16,9 @@ interface OpportunityCardProps {
 
 export default function OpportunityCard(props: OpportunityCardProps) {
   const [showActions, setShowActions] = createSignal(false);
-  
 
- const commentsCount = () => getCommentsCount(props.opportunity.id);
+
+  const commentsCount = () => getCommentsCount(props.opportunity.id);
 
   return (
     <div class="card bg-base-100 shadow-lg border border-base-300 hover:shadow-xl transition-shadow">
@@ -31,7 +31,7 @@ export default function OpportunityCard(props: OpportunityCardProps) {
             <p class="text-sm text-gray-600 mb-3 line-clamp-2">
               {props.opportunity.description}
             </p>
-            
+
             <div class="flex flex-wrap gap-2 mb-3">
               <span class="badge badge-outline badge-primary">
                 {props.opportunity.discovery_method}
@@ -48,9 +48,9 @@ export default function OpportunityCard(props: OpportunityCardProps) {
               </Show>
             </div>
           </div>
-          
+
           <div class="dropdown dropdown-end">
-            <button 
+            <button
               class="btn btn-ghost btn-sm"
               onClick={() => setShowActions(!showActions())}
             >
@@ -63,19 +63,19 @@ export default function OpportunityCard(props: OpportunityCardProps) {
             </ul>
           </div>
         </div>
-        
+
         <div class="card-actions justify-between items-center">
           <div class="flex items-center gap-4 text-sm text-gray-500">
-            <button 
+            <button
               class="btn btn-ghost btn-sm gap-2"
               onClick={() => props.onAddComment(props.opportunity)}
             >
               <Icon icon="mdi:comment" />
-              {commentsCount} Comments
+              {commentsCount()} Comments
             </button>
           </div>
-          
-          <button 
+
+          <button
             class="btn btn-primary btn-sm"
             onClick={() => props.onViewDetails(props.opportunity)}
           >

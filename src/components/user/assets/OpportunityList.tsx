@@ -17,7 +17,7 @@ type Opportunity = Database['public']['Tables']['user_opportunities']['Row'];
 export default function OpportunitiesList() {
   const $session = useStore(authStore);
   const $opportunities = useStore(opportunitiesStore);
-  
+
   const [showAddModal, setShowAddModal] = createSignal(false);
   const [showEditModal, setShowEditModal] = createSignal(false);
   const [showCommentModal, setShowCommentModal] = createSignal(false);
@@ -64,7 +64,7 @@ export default function OpportunitiesList() {
           <h1 class="text-3xl font-bold text-gray-900">Opportunities</h1>
           <p class="text-gray-600">Manage your discovered opportunities</p>
         </div>
-        <button 
+        <button
           class="btn btn-primary"
           onClick={() => setShowAddModal(true)}
         >
@@ -85,7 +85,7 @@ export default function OpportunitiesList() {
             </div>
             <h3 class="text-xl font-semibold mb-2">No opportunities yet</h3>
             <p class="text-gray-600 mb-6">Start by adding your first opportunity</p>
-            <button 
+            <button
               class="btn btn-primary"
               onClick={() => setShowAddModal(true)}
             >
@@ -109,21 +109,21 @@ export default function OpportunitiesList() {
       </Show>
 
       {/* Modals */}
-      <Modal 
-        isOpen={showAddModal()} 
+      <Modal
+        isOpen={showAddModal()}
         onClose={() => setShowAddModal(false)}
         size="lg"
       >
         <OpportunityForm onSuccess={handleFormSuccess} />
       </Modal>
 
-      <Modal 
-        isOpen={showEditModal()} 
+      <Modal
+        isOpen={showEditModal()}
         onClose={() => setShowEditModal(false)}
         size="lg"
       >
         <Show when={selectedOpportunity()}>
-          <UpdateOpportunityForm 
+          <UpdateOpportunityForm
             opportunityId={selectedOpportunity()!.id}
             onSuccess={handleFormSuccess}
             onCancel={() => setShowEditModal(false)}
@@ -131,13 +131,13 @@ export default function OpportunitiesList() {
         </Show>
       </Modal>
 
-      <Modal 
-        isOpen={showCommentModal()} 
+      <Modal
+        isOpen={showCommentModal()}
         onClose={() => setShowCommentModal(false)}
         size="md"
       >
         <Show when={selectedOpportunity()}>
-          <CommentForm 
+          <CommentForm
             opportunityId={selectedOpportunity()!.id}
             onSuccess={handleFormSuccess}
             onCancel={() => setShowCommentModal(false)}

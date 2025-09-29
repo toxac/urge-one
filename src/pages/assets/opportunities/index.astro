@@ -10,45 +10,44 @@ const { userRoles, session } = Astro.locals;
 const isAuthenticated: boolean = session !== null;
 
 const hasPageAccess: boolean = hasAccess(
-  userRoles,
-  accessProfiles.programStart
+    userRoles,
+    accessProfiles.programStart,
 );
 
 // redirect if doesnt have access
 if (!isAuthenticated || !hasPageAccess) {
-  return Astro.redirect("/program");
+    return Astro.redirect("/program");
 }
-
 
 // BREADCRUMBS
 const breadcrumbs = [
-  { name: "Home", url: "/" },
-  { name: "Assets", url: "/assets" },
-  { name: "Opportunities", url: "/assets/opportunities"}
+    { name: "Home", url: "/" },
+    { name: "Assets", url: "/assets" },
+    { name: "Opportunities", url: "/assets/opportunities" },
 ];
 ---
 
 <DashLayout
-  title="milestones | urge-start"
-  description="milestones in urge start program"
-  breadcrumbItems={breadcrumbs}
+    title="milestones | urge-start"
+    description="milestones in urge start program"
+    breadcrumbItems={breadcrumbs}
 >
-  <h1 class="mb-8">Milestones: Your Entrepreneurial Roadmap</h1>
-  <MDContainer>
-    <p>
-      Urge program is structured in to milestones. Think of each milestone as a
-      major chapter in your entrepreneurial journey. This isn’t just a list of
-      things to do; it’s a strategic roadmap that breaks down the overwhelming
-      process of starting a business into manageable, focused phases. By
-      completing each milestone, you'll not only gain a new set of skills and
-      insights, but you'll also build a tangible foundation for your MSP
-      (Minimal Sell-able Product), getting you one step closer to real sales and
-      revenue. So, let's dive into this next phase with clarity and purpose.
-    </p>
-  </MDContainer>
+    <h1 class="mb-8">Milestones: Your Entrepreneurial Roadmap</h1>
+    <MDContainer>
+        <p>
+            Urge program is structured in to milestones. Think of each milestone
+            as a major chapter in your entrepreneurial journey. This isn’t just
+            a list of things to do; it’s a strategic roadmap that breaks down
+            the overwhelming process of starting a business into manageable,
+            focused phases. By completing each milestone, you'll not only gain a
+            new set of skills and insights, but you'll also build a tangible
+            foundation for your MSP (Minimal Sell-able Product), getting you one
+            step closer to real sales and revenue. So, let's dive into this next
+            phase with clarity and purpose.
+        </p>
+    </MDContainer>
 
-  <div class="py-12">
-    <OpportunitiesList client:load />
-    
-  </div>
+    <div class="py-12">
+        <OpportunitiesList client:load />
+    </div>
 </DashLayout>
