@@ -119,6 +119,7 @@ export default function OpportunityForm(props: ComponentProps) {
                 notify.error("Something went wrong at our end. Please try saving the opportunity again", "Failed");
             } finally {
                 setLoading(false);
+                setSuccess(true);
             }
         },
         extend: validator({ schema })

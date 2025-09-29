@@ -198,6 +198,7 @@ export default function UpdateOpportunityForm(props: ComponentProps) {
                                 name="title"
                                 class="grow"
                                 placeholder="Name of the opportunity"
+                                aria-label="Give this opportunity a name"
                             />
                         </label>
                         <Show when={errors().title && touched().title}>
@@ -214,6 +215,7 @@ export default function UpdateOpportunityForm(props: ComponentProps) {
                             name="description"
                             class="textarea textarea-neutral w-full h-24"
                             placeholder="Describe the opportunity in detail..."
+                            aria-label="describe the opportunity"
                         />
                         <Show when={errors().description && touched().description}>
                             <span class="text-sm text-red-600 mt-1">{errors().description}</span>
@@ -229,6 +231,7 @@ export default function UpdateOpportunityForm(props: ComponentProps) {
                             class="select select-neutral w-full"
                             name="discovery_method"
                             onChange={handleDiscoveryMethodChange}
+                            aria-label="Approach for discovering this opportunity, select one"
                         >
                             <option disabled value="">Select a discovery method</option>
                             <For each={discoveryMethodOptions}>
@@ -253,7 +256,7 @@ export default function UpdateOpportunityForm(props: ComponentProps) {
                             <label class="label">
                                 <span class="label-text">Observation Type</span>
                             </label>
-                            <select class="select select-neutral w-full" name="observation_type">
+                            <select class="select select-neutral w-full" name="observation_type" aria-label="what type of opportunity is this, select most relevant">
                                 <option disabled value="">Select observation type</option>
                                 <For each={observationTypes()}>
                                     {type => (
@@ -277,7 +280,7 @@ export default function UpdateOpportunityForm(props: ComponentProps) {
                         <label class="label">
                             <span class="label-text">Select the most relevant problem category</span>
                         </label>
-                        <select class="select select-neutral w-full" name="category">
+                        <select class="select select-neutral w-full" name="category" aria-label="Slect a problem category related to the opportunity">
                             <option disabled value="">Select a category</option>
                             <For each={categoryOptions}>
                                 {category => (
@@ -303,7 +306,7 @@ export default function UpdateOpportunityForm(props: ComponentProps) {
                         <label class="label">
                             <span class="label-text">How aligned is this opportunity with your goals?</span>
                         </label>
-                        <select class="select select-neutral w-full" name="goal_alignment">
+                        <select class="select select-neutral w-full" name="goal_alignment" aria-label="How aligned is this opportunity with your goals, Select relevant option">
                             <option disabled value="">Select level of alignment</option>
                             <For each={alignmentWithGoalsOptions}>
                                 {alignment => (
@@ -331,6 +334,7 @@ export default function UpdateOpportunityForm(props: ComponentProps) {
                             class="btn btn-outline"
                             onClick={handleCancel}
                             disabled={isSubmitting()}
+                            aria-label="cancel form"
                         >
                             Cancel
                         </button>
@@ -338,6 +342,7 @@ export default function UpdateOpportunityForm(props: ComponentProps) {
                             type="submit"
                             class="btn btn-primary"
                             disabled={isSubmitting()}
+                            aria-label="submit form data"
                         >
                             <Show when={isSubmitting()} fallback={
                                 <>
