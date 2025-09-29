@@ -11,7 +11,7 @@ import { saveFormAndMarkCompleted } from '../../../stores/progress';
 import { createOpportunity } from "src/stores/userAssets/opportunities";
 import {type DiscoveryMethodOption, discoveryMethodOptions, categoryOptions, alignmentWithGoalsOptions} from "../../../constants/exercises/opportunities"
 import type { Database } from "../../../../database.types";
-import type { UserOpportunitiesStatus, UserOpportunitiesDiscoveryMethod } from "../../../../types/dbconsts";
+import type { UserOpportunitiesStatus, UserOpportunitiesDiscoveryMethod } from "../../../../types/urgeTypes";
 
 type Opportunity = Database['public']['Tables']['user_opportunities']['Row'];
 type OpportunityInsert = Database['public']['Tables']['user_opportunities']['Insert'];
@@ -27,8 +27,9 @@ const schema = z.object({
 });
 
 interface ComponentProps {
-    contentMetaId: string;
+    contentMetaId?: string;
     approach?: UserOpportunitiesDiscoveryMethod;
+    onSuccess?: ()=> void;
 }
 
 export default function OpportunityForm (props: ComponentProps){
@@ -97,6 +98,9 @@ export default function OpportunityForm (props: ComponentProps){
                     if (data && success){
                         setSavedOpportunity(data);
                         notify.success("A new opportunity was added.", "Success!");
+                        if(props.onSuccess){
+                            props.onSuccess();
+                        }
                     }
                     if(error){
                         throw error;
