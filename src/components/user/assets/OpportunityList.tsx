@@ -3,8 +3,7 @@ import { createSignal, createEffect, onMount, Show, For } from "solid-js";
 import { Icon } from "@iconify-icon/solid";
 import { useStore } from "@nanostores/solid";
 import { authStore } from "../../../stores/auth";
-import { opportunitiesStore, initializeOpportunities } from "../../../stores/userAssets/opportunities";
-import { initializeOpportunityComments } from "../../../stores/userAssets/opportunityComments";
+import { opportunitiesStore, opportunitiesStoreLoading } from "../../../stores/userAssets/opportunities";
 import Modal from "../../appFeedback/Modal";
 import OpportunityForm from "../../forms/exercises/OpportunityForm";
 import UpdateOpportunityForm from "../../user/assets/OpportunityFormEdit";
@@ -17,23 +16,20 @@ type Opportunity = Database['public']['Tables']['user_opportunities']['Row'];
 export default function OpportunitiesList() {
   const $session = useStore(authStore);
   const $opportunities = useStore(opportunitiesStore);
+  const $opportunitiesLoading = useStore(opportunitiesStoreLoading);
 
   const [showAddModal, setShowAddModal] = createSignal(false);
   const [showEditModal, setShowEditModal] = createSignal(false);
   const [showCommentModal, setShowCommentModal] = createSignal(false);
+  const [savedOpportunities, setSavedOpportunities] = createSignal<Opportunity[] | []> ([]);
   const [selectedOpportunity, setSelectedOpportunity] = createSignal<Opportunity | null>(null);
-  const [loading, setLoading] = createSignal(true);
-
-  onMount(async () => {
-    const user = $session().user;
-    if (user) {
-      // Initialize both opportunities and comments
-      await Promise.all([
-        initializeOpportunityComments(user.id)
-      ]);
-    }
-    setLoading(false);
-  });
+  const [loading, setLoading] = createSignal(false);
+  
+  createEffect(()=>{
+    if($opportunitiesLoading()) return ;
+    const opportunities = $opportunities();
+    setSavedOpportunities(opportunities)
+  })
 
   const handleEditOpportunity = (opportunity: Opportunity) => {
     setSelectedOpportunity(opportunity);
@@ -61,7 +57,7 @@ export default function OpportunitiesList() {
       {/* Header */}
       <div class="flex justify-between items-center mb-8">
         <div>
-          <h1 class="text-3xl font-bold text-gray-900">Opportunities</h1>
+          <h2>Opportunities</h2>
           <p class="text-gray-600">Manage your discovered opportunities</p>
         </div>
         <button
@@ -78,7 +74,7 @@ export default function OpportunitiesList() {
           <span class="loading loading-spinner loading-lg text-primary"></span>
         </div>
       }>
-        <Show when={$opportunities().length > 0} fallback={
+        <Show when={savedOpportunities().length > 0} fallback={
           <div class="text-center py-12">
             <div class="text-gray-400 mb-4">
               <Icon icon="mdi:lightbulb-on-outline" width={64} height={64} />
@@ -93,8 +89,8 @@ export default function OpportunitiesList() {
             </button>
           </div>
         }>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <For each={$opportunities()}>
+          <div class="grid grid-cols-1 gap-4">
+            <For each={savedOpportunities()}>
               {(opportunity) => (
                 <OpportunityCard
                   opportunity={opportunity}

@@ -8,6 +8,7 @@ import { initializeNotes } from './notes';
 import { initializeQuestions } from './questions';
 import { initializeSkills } from './skills';
 import { initializeSquad } from './squad';
+import { initializeOpportunityComments } from './opportunityComments';
 
 export const isUserAssetsStoreLoading = atom(false);
 
@@ -24,7 +25,8 @@ export async function initializeUserAssets(userId: string) {
       initializeSquad(userId),
       initializeChallenges(userId),
       initializeJournals(userId),
-      initializeAccomplishments(userId)
+      initializeAccomplishments(userId),
+      initializeOpportunityComments(userId)
     ]);
 
     // Check for any failures

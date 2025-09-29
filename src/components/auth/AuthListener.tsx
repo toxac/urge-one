@@ -5,7 +5,7 @@ import { setAuth, clearAuth } from '../../stores/auth';
 import { contentMetaStore } from '../../stores/contentMeta.ts';
 import { profileStore, loadProfile } from '../../stores/profile.ts';
 import { initProgressStore, progressStore } from '../../stores/progress.ts';
-//import { initializeUserAssets } from '../../stores/userAssets';
+import { initializeUserAssets } from '../../stores/userAssets';
 import { rolesStore } from '../../stores/roles.ts';
 import { loadingStore } from '../../stores/loadingStore.ts';
 
@@ -64,7 +64,7 @@ export default function AuthListener(props: Props) {
                 console.log("[AuthProvider] Progress store initialized.");
 
                 //console.log("[AuthProvider] Initializing user assets store...");
-                //await initializeUserAssets(userId);
+                await initializeUserAssets(userId);
                 //console.log("[AuthProvider] User assets store initialized.");
 
             } else {

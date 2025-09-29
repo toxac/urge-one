@@ -12,6 +12,7 @@ import { paymentStore } from './payment';
 
 import { bookmarksStore } from './userAssets/bookmarks';
 import { opportunitiesStore } from './userAssets/opportunities';
+import { commentsStore } from './userAssets/opportunityComments';
 import { notesStore } from './userAssets/notes';
 import { questionsStore } from './userAssets/questions';
 import { journalsStore } from './userAssets/journals';
@@ -43,7 +44,8 @@ export const initStoreLogger = () => {
       'Skills': skillsStore,
       'Challenges': challengeStore,
       'Roles': rolesStore,
-      'Payments': paymentStore
+      'Payments': paymentStore,
+      'OpportunityComments': commentsStore
     });
     
     console.log('NanoStores logger initialized in development mode');
