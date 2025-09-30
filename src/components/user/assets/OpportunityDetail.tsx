@@ -116,62 +116,34 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
             <Show when={opportunity()}>
                 <div class="flex flex-col">
                     <div class="flex items-center gap-2 mb-2">
-                        <div class="badge badge-primary">{getDiscoveryMethod(opportunity()?.discovery_method)?.label}</div>
-                        <div class="badge badge-outline">Career</div>
+                        <div class="badge badge-primary">{getDiscoveryMethod(opportunity()?.discovery_method)}</div>
+                        <div class="badge badge-outline">{getObservationType(opportunity()?.discovery_method, opportunity()?.observation_type)}</div>
                     </div>
-
-                </div>
-            </Show>
-
-
-            <div class="card bg-base-100 shadow-lg">
-                <div class="card-body">
-
-                    <div class="flex items-center gap-2 mb-2">
-                        <div class="badge badge-primary"></div>
-                        <div class="badge badge-outline">Career</div>
-                    </div>
-
                     <h1 class="card-title text-3xl mb-4">{opportunity() ? opportunity()?.title : "no title"}</h1>
-
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                         <div>
-                            <span class="font-semibold text-base-content/70">Discovery Method:</span>
-                            <p class="mt-1">LinkedIn Referral</p>
+                            <span class="font-semibold text-base-content/70">Problem Type:</span>
+                            <p class="mt-1">{getCategory(opportunity()?.category)}</p>
                         </div>
                         <div>
                             <span class="font-semibold text-base-content/70">Goal Alignment:</span>
-                            <p class="mt-1">High - Aligns with career growth goals</p>
+                            <p class="mt-1">{getAlignment(opportunity()?.goal_alignment)}</p>
                         </div>
                         <div>
-                            <span class="font-semibold text-base-content/70">Observation Type:</span>
-                            <p class="mt-1">External</p>
+                            <span class="font-semibold text-base-content/70">Status:</span>
+                            <p class="mt-1 capitalize">{opportunity()?.status}</p>
                         </div>
                         <div>
                             <span class="font-semibold text-base-content/70">Rank:</span>
-                            <div class="rating rating-sm mt-1">
-                                <input type="radio" name="rank" class="mask mask-star-2 bg-warning" checked />
-                                <input type="radio" name="rank" class="mask mask-star-2 bg-warning" checked />
-                                <input type="radio" name="rank" class="mask mask-star-2 bg-warning" checked />
-                                <input type="radio" name="rank" class="mask mask-star-2 bg-warning" checked />
-                                <input type="radio" name="rank" class="mask mask-star-2 bg-base-300" />
-                            </div>
+                            <p class="mt-1 capitalize">{opportunity()?.rank ? opportunity()?.rank: "--" }</p>
                         </div>
                     </div>
-
-                    <div class="mt-6">
-                        <h3 class="font-semibold text-base-content/70 mb-2">Description</h3>
-                        <p class="text-base-content/90 leading-relaxed">
-                            This is an exciting opportunity to lead product strategy for a growing SaaS platform.
-                            The role involves working with cross-functional teams to define product roadmaps and
-                            drive user-centered design initiatives. Strong alignment with my 5-year career goals
-                            and offers significant growth potential.
-                        </p>
-                    </div>
+                    
+                    <p class="text-base-content/90 leading-relaxed mt-8">{opportunity()?.description}</p>
 
                     <div class="flex gap-4 text-xs text-base-content/60 mt-6 pt-4 border-t border-base-300">
-                        <span>Created: Jan 15, 2025</span>
-                        <span>Updated: Jan 28, 2025</span>
+                        <span>Created: {formatDate(opportunity()?.created_at)}</span>
+                        <span>Updated: {formatDate(opportunity()?.updated_at)}</span>
                     </div>
 
                     <div class="card-actions justify-end mt-4">
@@ -179,7 +151,16 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
                         <button class="btn btn-error btn-outline btn-sm">Delete</button>
                     </div>
                 </div>
-            </div>
+                {/* Oportunity Comment */}
+                <div class="mt-12">
+                    <h2 class="card-title text-2xl mb-4">Comments & Notes</h2>
+                    
+
+                </div>
+            </Show>
+
+
+           
 
             <div class="card bg-base-100 shadow-lg">
                 <div class="card-body">
