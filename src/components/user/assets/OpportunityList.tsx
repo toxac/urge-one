@@ -57,7 +57,7 @@ export default function OpportunitiesList() {
       {/* Header */}
       <div class="flex justify-between items-center mb-8">
         <div>
-          <h2>Opportunities</h2>
+          <h4>Saved Opportunities</h4>
           <p class="text-gray-600">Manage your discovered opportunities</p>
         </div>
         <button

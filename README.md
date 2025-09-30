@@ -66,16 +66,7 @@ const $session = useStore(authStore);
         }
     };
 
-    // Format date
-    const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    };
+    
 
     // Get discovery method label
     const getDiscoveryMethodLabel = (method: string) => {
