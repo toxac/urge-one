@@ -89,7 +89,7 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
     };
 
     return (
-        <section class="w-full mx-auto p-8 space-y-8 bg-base-100 shadow-lg rounded-lg">
+        <section class="w-full mx-auto p-12 space-y-8 bg-base-100 shadow-lg rounded-lg">
 
             {/* Loading State */}
             <Show when={$opportunitiesLoading()}>
@@ -154,7 +154,9 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
                 {/* Oportunity Comment */}
                 <div class="mt-12">
                     <h2 class="card-title text-2xl mb-4">Comments & Notes</h2>
+                    {opportunity()?.id ? <CommentForm opportunityId={opportunity()?.id!} /> : null }
                     
+
 
                 </div>
             </Show>

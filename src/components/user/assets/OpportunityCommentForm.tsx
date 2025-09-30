@@ -80,18 +80,22 @@ export default function CommentForm(props: CommentFormProps) {
     });
 
     return (
-        <div class="w-full bg-white rounded-lg p-6">
-            <h3 class="text-xl font-bold mb-4">Add Comment</h3>
-
+        <div class="w-full">
             <form use:form class="space-y-4">
                 <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">Comment Title</span>
-                    </label>
+                    <select name="comment_type" class="select select-neutral w-full">
+                        <option value="">Select type</option>
+                        <option value="observation">Observation</option>
+                        <option value="insight">Insight</option>
+                        <option value="question">Question</option>
+                        <option value="update">Update</option>
+                    </select>
+                </div>
+                <div class="form-control">
                     <input
                         type="text"
                         name="title"
-                        class="input input-bordered w-full"
+                        class="input input-neutral w-full"
                         placeholder="Brief title for your comment"
                     />
                     <Show when={errors().title}>
@@ -100,12 +104,9 @@ export default function CommentForm(props: CommentFormProps) {
                 </div>
 
                 <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">Comment</span>
-                    </label>
                     <textarea
                         name="content"
-                        class="textarea textarea-bordered w-full h-32"
+                        class="textarea textarea-neutral w-full h-32"
                         placeholder="Add your observations or comments..."
                     />
                     <Show when={errors().content}>
@@ -113,18 +114,7 @@ export default function CommentForm(props: CommentFormProps) {
                     </Show>
                 </div>
 
-                <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">Comment Type (Optional)</span>
-                    </label>
-                    <select name="comment_type" class="select select-bordered w-full">
-                        <option value="">Select type</option>
-                        <option value="observation">Observation</option>
-                        <option value="insight">Insight</option>
-                        <option value="question">Question</option>
-                        <option value="update">Update</option>
-                    </select>
-                </div>
+                
 
                 <div class="flex justify-end gap-3 pt-4">
                     <button
