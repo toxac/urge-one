@@ -178,23 +178,94 @@ export const alignmentWithGoalsOptions: SelectOption[] = [
   },
 ];
 
-// Getter function for discovery method
-export function getDiscoveryMethod(value: string): DiscoveryMethodOption | undefined {
-  return discoveryMethodOptions.find(option => option.value === value);
+// Getter function for discovery method - returns empty string for null/undefined
+export function getDiscoveryMethod(value: string | null | undefined): string {
+  if (!value) return '';
+  const option = discoveryMethodOptions.find(option => option.value === value);
+  return option ? option.label : '';
 }
 
-// Getter function for category
-export function getCategory(value: string): SelectOption | undefined {
-  return categoryOptions.find(option => option.value === value);
+// Getter function for category - returns empty string for null/undefined
+export function getCategory(value: string | null | undefined): string {
+  if (!value) return '';
+  const option = categoryOptions.find(option => option.value === value);
+  return option ? option.label : '';
 }
 
-// Getter function for alignment
-export function getAlignment(value: string): SelectOption | undefined {
-  return alignmentWithGoalsOptions.find(option => option.value === value);
+// Getter function for alignment - returns empty string for null/undefined
+export function getAlignment(value: string | null | undefined): string {
+  if (!value) return '';
+  const option = alignmentWithGoalsOptions.find(option => option.value === value);
+  return option ? option.label : '';
 }
 
-// Optional: More specific getter for observation types within a discovery method
-export function getObservationType(discoveryMethodValue: string, observationTypeValue: string) {
-  const discoveryMethod = getDiscoveryMethod(discoveryMethodValue);
-  return discoveryMethod?.observationType?.find(obs => obs.value === observationTypeValue);
+// Optional: Get specific property getters
+export function getDiscoveryMethodHelperText(value: string | null | undefined): string {
+  if (!value) return '';
+  const option = discoveryMethodOptions.find(option => option.value === value);
+  return option ? option.helperText : '';
+}
+
+export function getCategoryHelperText(value: string | null | undefined): string {
+  if (!value) return '';
+  const option = categoryOptions.find(option => option.value === value);
+  return option?.helperText || '';
+}
+
+export function getAlignmentHelperText(value: string | null | undefined): string {
+  if (!value) return '';
+  const option = alignmentWithGoalsOptions.find(option => option.value === value);
+  return option?.helperText || '';
+}
+
+// Getter for observation types within a discovery method
+export function getObservationType(
+  discoveryMethodValue: string | null | undefined, 
+  observationTypeValue: string | null | undefined
+): string {
+  if (!discoveryMethodValue || !observationTypeValue) return '';
+  
+  const discoveryMethod = discoveryMethodOptions.find(option => option.value === discoveryMethodValue);
+  const observationType = discoveryMethod?.observationType?.find(obs => obs.value === observationTypeValue);
+  return observationType ? observationType.label : '';
+}
+
+// Get observation type helper text
+export function getObservationTypeHelperText(
+  discoveryMethodValue: string | null | undefined, 
+  observationTypeValue: string | null | undefined
+): string {
+  if (!discoveryMethodValue || !observationTypeValue) return '';
+  
+  const discoveryMethod = discoveryMethodOptions.find(option => option.value === discoveryMethodValue);
+  const observationType = discoveryMethod?.observationType?.find(obs => obs.value === observationTypeValue);
+  return observationType?.helperText || '';
+}
+
+// Optional: Flexible getter that allows specifying which property to return
+export function getDiscoveryMethodProperty(
+  value: string | null | undefined, 
+  property: 'label' | 'helperText' = 'label'
+): string {
+  if (!value) return '';
+  const option = discoveryMethodOptions.find(option => option.value === value);
+  return option ? option[property] : '';
+}
+
+export function getCategoryProperty(
+  value: string | null | undefined, 
+  property: 'label' | 'helperText' = 'label'
+): string {
+  if (!value) return '';
+  const option = categoryOptions.find(option => option.value === value);
+  return option?.[property] || '';
+}
+
+export function getAlignmentProperty(
+  value: string | null | undefined, 
+  property: 'label' | 'helperText' = 'label'
+): string {
+  if (!value) return '';
+  const option = alignmentWithGoalsOptions.find(option => option.value === value);
+  return option?.[property] || '';
 }

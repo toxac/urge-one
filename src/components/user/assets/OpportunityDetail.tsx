@@ -14,7 +14,7 @@ import CommentForm from "./OpportunityCommentForm";
 import { notify } from '../../../stores/notifications';
 import { formatDate } from "../../../lib/content/dateUtils";
 import { type Database } from "../../../../database.types.ts";
-import {discoveryMethodOptions} from "../../../constants/exercises/opportunities.ts"
+import {getCategory, getAlignment, getDiscoveryMethod, getObservationType} from "../../../constants/exercises/opportunities.ts"
 
 type Opportunity = Database['public']['Tables']['user_opportunities']['Row'];
 type Comment = Database['public']['Tables']['user_opportunity_comments']['Row'];
@@ -116,7 +116,7 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
             <Show when={opportunity()}>
                 <div class="flex flex-col">
                     <div class="flex items-center gap-2 mb-2">
-                        <div class="badge badge-primary"></div>
+                        <div class="badge badge-primary">{getDiscoveryMethod(opportunity()?.discovery_method)?.label}</div>
                         <div class="badge badge-outline">Career</div>
                     </div>
 
