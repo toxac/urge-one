@@ -8,7 +8,7 @@ export interface DiscoveryMethodOption {
 export const discoveryMethodOptions: DiscoveryMethodOption[] = [
   {
     value: "personal-problems",
-    label: "Start with your own challenges",
+    label: "Personal Problems",
     helperText: "Look for business ideas by solving problems you experience daily. Pay attention to frustrations that keep coming up - these are often signs of larger market needs. For example, if you struggle to find healthy, convenient meals despite trying various options, this could reveal an opportunity for a specialized meal delivery service that addresses specific dietary needs or time constraints.",
     observationType: [
       {
@@ -30,7 +30,7 @@ export const discoveryMethodOptions: DiscoveryMethodOption[] = [
   },
   {
     value: "skill-based",
-    label: "Leverage your unique skills",
+    label: "Skills",
     helperText: "Identify opportunities where your specific expertise can solve problems for others. For example, as a skilled graphic designer, you might notice that many small businesses in your area have outdated branding - this presents an opportunity to offer affordable branding packages specifically tailored for local entrepreneurs looking to establish a professional online presence.",
     observationType: [
       {
@@ -57,7 +57,7 @@ export const discoveryMethodOptions: DiscoveryMethodOption[] = [
   },
   {
     value: "zone-of-influence",
-    label: "Listen to people around you",
+    label: "Zone of Influence",
     helperText: "Pay close attention to the challenges mentioned by people in your social and professional circles. For example, if multiple friends complain about the lack of reliable childcare options in your neighborhood, this could indicate an opportunity to start a licensed home daycare service with flexible hours that accommodates shift workers or parents with irregular schedules.",
     observationType: [
       {
@@ -79,7 +79,7 @@ export const discoveryMethodOptions: DiscoveryMethodOption[] = [
   },
   {
     value: "broader-search",
-    label: "Explore wider trends and markets",
+    label: "Broad Search",
     helperText: "Research emerging patterns and underserved markets to identify scalable opportunities. For example, if you notice growing consumer interest in sustainable living through social media and market reports, you could develop a line of eco-friendly household products that address specific pain points like reducing plastic waste or simplifying green living for urban dwellers.",
     observationType: [
       {
@@ -177,3 +177,24 @@ export const alignmentWithGoalsOptions: SelectOption[] = [
     helperText: "This opportunity conflicts with your values, goals, or preferred working style. Pursuing it would likely lead to frustration despite any financial potential - like an environmentally conscious person considering a business that involves significant resource waste or goes against their sustainability principles.",
   },
 ];
+
+// Getter function for discovery method
+export function getDiscoveryMethod(value: string): DiscoveryMethodOption | undefined {
+  return discoveryMethodOptions.find(option => option.value === value);
+}
+
+// Getter function for category
+export function getCategory(value: string): SelectOption | undefined {
+  return categoryOptions.find(option => option.value === value);
+}
+
+// Getter function for alignment
+export function getAlignment(value: string): SelectOption | undefined {
+  return alignmentWithGoalsOptions.find(option => option.value === value);
+}
+
+// Optional: More specific getter for observation types within a discovery method
+export function getObservationType(discoveryMethodValue: string, observationTypeValue: string) {
+  const discoveryMethod = getDiscoveryMethod(discoveryMethodValue);
+  return discoveryMethod?.observationType?.find(obs => obs.value === observationTypeValue);
+}

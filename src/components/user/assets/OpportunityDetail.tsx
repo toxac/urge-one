@@ -14,6 +14,7 @@ import CommentForm from "./OpportunityCommentForm";
 import { notify } from '../../../stores/notifications';
 import { formatDate } from "../../../lib/content/dateUtils";
 import { type Database } from "../../../../database.types.ts";
+import {discoveryMethodOptions} from "../../../constants/exercises/opportunities.ts"
 
 type Opportunity = Database['public']['Tables']['user_opportunities']['Row'];
 type Comment = Database['public']['Tables']['user_opportunity_comments']['Row'];
@@ -32,29 +33,28 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
 
     const [loading, setLoading] = createSignal(false);
     const [showCommentModal, setShowCommentModal] = createSignal(false);
-    const [opportunity, setOpportunity] = createSignal<Opportunity | null >(null);
+    const [opportunity, setOpportunity] = createSignal<Opportunity | null>(null);
     const [comments, setComments] = createSignal<Comment[] | null>(null)
     const [deletingCommentId, setDeletingCommentId] = createSignal<string | null>(null);
 
     // Opportunities Effect
-    createEffect(()=>{
-        if($opportunitiesLoading()) return;
+    createEffect(() => {
+        if ($opportunitiesLoading()) return;
         const currentOpportunity = $opportunities().find(opportunity => opportunity.id === props.opportunityId);
-        if(currentOpportunity){
-            console.log(currentOpportunity)
+        if (currentOpportunity) {
             setOpportunity(currentOpportunity);
         };
     })
 
     // Comments Effect
-    createEffect(()=>{
-        if($commentsLoading()) return;
+    createEffect(() => {
+        if ($commentsLoading()) return;
         const currentComments = $comments().filter(comment => comment.opportunity_id === props.opportunityId)
-        if(currentComments){
+        if (currentComments) {
             setComments(currentComments);
         };
     })
-    
+
 
 
     const handleAddComment = () => {
@@ -89,14 +89,16 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
     };
 
     return (
-        <section>
-            {/* Loading State - Opportunity Loading */}
-            <Show when={loading()}>
+        <section class="w-full mx-auto p-8 space-y-8 bg-base-100 shadow-lg rounded-lg">
+
+            {/* Loading State */}
+            <Show when={$opportunitiesLoading()}>
                 <div class="flex justify-center items-center py-12">
                     <span class="loading loading-spinner loading-lg text-primary"></span>
                     <span class="ml-3 text-lg text-gray-600">Loading opportunity details...</span>
                 </div>
             </Show>
+
             {/* Error State - Opportunity not found */}
             <Show when={!loading() && !opportunity()}>
                 <div class="text-center py-12">
@@ -110,77 +112,154 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
                     </a>
                 </div>
             </Show>
-            <Show when={!loading() && opportunity}>
-                <div class="bg-white rounded-lg shadow-lg border border-gray-200">
-                    {/* Header */}
-                    <div class="px-6 py-4 border-b border-gray-200">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h1 class="text-2xl font-bold text-gray-900">{opportunity()!.title}</h1>
-                                <p class="text-gray-600 mt-1">{opportunity()!.description}</p>
-                            </div>
-                            <button
-                                class="btn btn-primary"
-                                onClick={handleAddComment}
-                            >
-                                <Icon icon="mdi:comment-plus" class="mr-2" />
-                                Add Comment
-                            </button>
-                        </div>
+
+            <Show when={opportunity()}>
+                <div class="flex flex-col">
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="badge badge-primary"></div>
+                        <div class="badge badge-outline">Career</div>
                     </div>
 
-                    {/* Metadata */}
-                    <div class="px-6 py-4 bg-gray-50">
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
-                            <div>
-                                <span class="font-semibold text-gray-700">Discovery Method:</span>
-                                <p class="text-gray-600">{opportunity()!.discovery_method}</p>
-                            </div>
-                            <Show when={opportunity()!.category}>
-                                <div>
-                                    <span class="font-semibold text-gray-700">Category:</span>
-                                    <p class="text-gray-600">{opportunity()!.category}</p>
-                                </div>
-                            </Show>
-                            <Show when={opportunity()!.observation_type}>
-                                <div>
-                                    <span class="font-semibold text-gray-700">Observation Type:</span>
-                                    <p class="text-gray-600">{opportunity()!.observation_type}</p>
-                                </div>
-                            </Show>
-                            <Show when={opportunity()!.goal_alignment}>
-                                <div>
-                                    <span class="font-semibold text-gray-700">Goal Alignment:</span>
-                                    <p class="text-gray-600">{opportunity()!.goal_alignment}</p>
-                                </div>
-                            </Show>
-                            <div>
-                                <span class="font-semibold text-gray-700">Status:</span>
-                                <span class={`badge ${opportunity()!.status === 'added' ? 'badge-primary' :
-                                    opportunity()!.status === 'reviewed' ? 'badge-secondary' :
-                                        opportunity()!.status === 'prioritized' ? 'badge-accent' :
-                                            'badge-neutral'
-                                    }`}>
-                                    {opportunity()!.status || 'Added'}
-                                </span>
-                            </div>
-                            <div>
-                                <span class="font-semibold text-gray-700">Created:</span>
-                                <p class="text-gray-600">{formatDate(opportunity()!.created_at)}</p>
-                            </div>
-                            <Show when={opportunity()!.updated_at}>
-                                <div>
-                                    <span class="font-semibold text-gray-700">Last Updated:</span>
-                                    <p class="text-gray-600">{formatDate(opportunity()!.updated_at!)}</p>
-                                </div>
-                            </Show>
-                        </div>
-                    </div>
-
-                    {/* Comments Section */}
-                    
                 </div>
             </Show>
+
+
+            <div class="card bg-base-100 shadow-lg">
+                <div class="card-body">
+
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="badge badge-primary"></div>
+                        <div class="badge badge-outline">Career</div>
+                    </div>
+
+                    <h1 class="card-title text-3xl mb-4">{opportunity() ? opportunity()?.title : "no title"}</h1>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <span class="font-semibold text-base-content/70">Discovery Method:</span>
+                            <p class="mt-1">LinkedIn Referral</p>
+                        </div>
+                        <div>
+                            <span class="font-semibold text-base-content/70">Goal Alignment:</span>
+                            <p class="mt-1">High - Aligns with career growth goals</p>
+                        </div>
+                        <div>
+                            <span class="font-semibold text-base-content/70">Observation Type:</span>
+                            <p class="mt-1">External</p>
+                        </div>
+                        <div>
+                            <span class="font-semibold text-base-content/70">Rank:</span>
+                            <div class="rating rating-sm mt-1">
+                                <input type="radio" name="rank" class="mask mask-star-2 bg-warning" checked />
+                                <input type="radio" name="rank" class="mask mask-star-2 bg-warning" checked />
+                                <input type="radio" name="rank" class="mask mask-star-2 bg-warning" checked />
+                                <input type="radio" name="rank" class="mask mask-star-2 bg-warning" checked />
+                                <input type="radio" name="rank" class="mask mask-star-2 bg-base-300" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <h3 class="font-semibold text-base-content/70 mb-2">Description</h3>
+                        <p class="text-base-content/90 leading-relaxed">
+                            This is an exciting opportunity to lead product strategy for a growing SaaS platform.
+                            The role involves working with cross-functional teams to define product roadmaps and
+                            drive user-centered design initiatives. Strong alignment with my 5-year career goals
+                            and offers significant growth potential.
+                        </p>
+                    </div>
+
+                    <div class="flex gap-4 text-xs text-base-content/60 mt-6 pt-4 border-t border-base-300">
+                        <span>Created: Jan 15, 2025</span>
+                        <span>Updated: Jan 28, 2025</span>
+                    </div>
+
+                    <div class="card-actions justify-end mt-4">
+                        <button class="btn btn-outline btn-sm">Edit</button>
+                        <button class="btn btn-error btn-outline btn-sm">Delete</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-base-100 shadow-lg">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl mb-4">Comments & Notes</h2>
+
+                    <div class="form-control mb-6">
+                        <label class="label">
+                            <span class="label-text font-semibold">Add a comment</span>
+                        </label>
+                        <input type="text" placeholder="Comment title (optional)" class="input input-bordered mb-2" />
+                        <textarea
+                            class="textarea textarea-bordered h-24"
+                            placeholder="Write your comment or note here..."></textarea>
+                        <div class="flex items-center gap-2 mt-2">
+                            <select class="select select-bordered select-sm max-w-xs">
+                                <option>General</option>
+                                <option>Progress Update</option>
+                                <option>Action Item</option>
+                                <option>Research</option>
+                            </select>
+                            <button class="btn btn-primary btn-sm ml-auto">Add Comment</button>
+                        </div>
+                    </div>
+
+
+                    <div class="space-y-4">
+
+                        <div class="border-l-4 border-primary pl-4 py-2">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-semibold">Initial Research</span>
+                                    <div class="badge badge-sm badge-ghost">Research</div>
+                                </div>
+                                <span class="text-xs text-base-content/60">2 days ago</span>
+                            </div>
+                            <p class="text-sm text-base-content/80">
+                                Reached out to Sarah from the team. She mentioned the company culture is excellent
+                                and they're looking for someone with strong stakeholder management skills.
+                            </p>
+                        </div>
+
+                        <div class="border-l-4 border-success pl-4 py-2">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-semibold">Application Submitted</span>
+                                    <div class="badge badge-sm badge-ghost">Progress Update</div>
+                                </div>
+                                <span class="text-xs text-base-content/60">5 days ago</span>
+                            </div>
+                            <p class="text-sm text-base-content/80">
+                                Submitted application through referral link. Updated resume to highlight product
+                                strategy experience and included portfolio case studies.
+                            </p>
+                        </div>
+
+
+                        <div class="border-l-4 border-info pl-4 py-2">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-semibold">Interview Preparation</span>
+                                    <div class="badge badge-sm badge-ghost">Action Item</div>
+                                </div>
+                                <span class="text-xs text-base-content/60">1 week ago</span>
+                            </div>
+                            <p class="text-sm text-base-content/80">
+                                Need to prepare: product case study presentation, review STAR method for behavioral
+                                questions, research company's recent product launches.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Empty State (hide when comments exist) */}
+                    {/* <div class="text-center py-12 text-base-content/60">
+        <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+        </svg>
+        <p>No comments yet. Add your first note above!</p>
+      </div> */}
+                </div>
+            </div>
         </section>
     )
 
