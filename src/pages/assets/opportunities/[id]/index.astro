@@ -18,6 +18,13 @@ if (!isAuthenticated || !hasPageAccess) {
     return Astro.redirect("/program");
 }
 
+
+const userId = session?.user.id;
+
+if(!userId){
+    return Astro.redirect("/program");
+}
+
 const { id } = Astro.params;
 
 // BREADCRUMBS
@@ -34,15 +41,12 @@ const breadcrumbs = [
     description="milestones in urge start program"
     breadcrumbItems={breadcrumbs}
 >
-    <h1 class="mb-8">Milestones: Your Entrepreneurial Roadmap</h1>
-
-    <div class="py-12">
         {
             id ? (
-                <OpportunityDetail opportunityId={id} client:load />
+                <OpportunityDetail opportunityId={id} userId={userId} client:load />
             ) : (
                 <p>Opportunity does not exist</p>
             )
         }
-    </div>
+
 </DashLayout>
