@@ -11,9 +11,9 @@ import { Icon } from "@iconify-icon/solid";
 import Modal from "../../appFeedback/Modal";
 import CommentForm from "./OpportunityCommentForm";
 import { notify } from '../../../stores/notifications';
-import { formatDate } from "../../../lib/content/dateUtils";
+import { formatDate, getTimeDifference } from "../../../lib/content/dateUtils";
 import { type Database } from "../../../../database.types.ts";
-import {getCategory, getAlignment, getDiscoveryMethod, getObservationType} from "../../../constants/exercises/opportunities.ts"
+import { getCategory, getAlignment, getDiscoveryMethod, getObservationType } from "../../../constants/exercises/opportunities.ts"
 
 type Opportunity = Database['public']['Tables']['user_opportunities']['Row'];
 type Comment = Database['public']['Tables']['user_opportunity_comments']['Row'];
@@ -55,16 +55,13 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
         };
     })
 
+    const handleEditOpportunity = async(opprtunityId: string) =>{
 
+    }
 
-    const handleAddComment = () => {
-        setShowCommentModal(true);
-    };
+    const handleEditComment = async (commentId: string) =>{
 
-    const handleCommentSuccess = () => {
-        setShowCommentModal(false);
-        notify.success('Comment added successfully!');
-    };
+    }
 
     const handleDeleteComment = async (commentId: string) => {
         if (!confirm('Are you sure you want to delete this comment?')) {
@@ -135,10 +132,10 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
                         </div>
                         <div>
                             <span class="font-semibold text-base-content/70">Rank:</span>
-                            <p class="mt-1 capitalize">{opportunity()?.rank ? opportunity()?.rank: "--" }</p>
+                            <p class="mt-1 capitalize">{opportunity()?.rank ? opportunity()?.rank : "--"}</p>
                         </div>
                     </div>
-                    
+
                     <p class="text-base-content/90 leading-relaxed mt-8">{opportunity()?.description}</p>
 
                     <div class="flex gap-4 text-xs text-base-content/60 mt-6 pt-4 border-t border-base-300">
@@ -154,112 +151,37 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
                 {/* Oportunity Comment */}
                 <div class="mt-12">
                     <h2 class="card-title text-2xl mb-4">Comments & Notes</h2>
-                    {opportunity()?.id ? <CommentForm opportunityId={opportunity()?.id!} /> : null }
+                    {opportunity()?.id ? <CommentForm opportunityId={opportunity()?.id!} /> : null}
 
                     <Show when={comments()}>
                         <div class="flex flex-col gap-4">
                             <For each={comments()}>
                                 {(comment) => {
                                     return (
-                                        <div class="bg-base-200 px-8 py-4">
-                                            <div class="badge badge-sm badge-outline capitalize mb-4">{comment.comment_type}</div>
-                                            <p class="text-lg mb-2">{comment.title}</p>
-                                            <p class="text-sm">{comment.content}</p>
+                                        <div class="shadow-lg px-8 py-4 mt-8">
+                                            <div class="flex justify-between items-start">
+                                                <div class="badge badge-sm badge-outline capitalize mb-4">{comment.comment_type}</div>
+                                                <div class="text-sm">{getTimeDifference(comment.updated_at)}</div>
+                                            </div>
 
+                                            <p class="text-md mb-2 capitalize">{comment.title}</p>
+                                            <p class="text-sm">{comment.content}</p>
+                                            <div class="flex justify-end items-end mt-4">
+                                                <button class="btn btn-ghost btn-circle" onClick={()=> handleDeleteComment(comment.id)}>
+                                                    <Icon icon="mdi-delete-outline" class="text-lg" />
+                                                </button>
+                                                <button class="btn btn-ghost btn-circle">
+                                                    <Icon icon="mdi-edit-outline" class="text-lg" />
+                                                </button>
+                                            </div>
                                         </div>
                                     )
                                 }}
                             </For>
                         </div>
                     </Show>
-                    
-
-
                 </div>
             </Show>
-
-
-           
-
-            <div class="card bg-base-100 shadow-lg">
-                <div class="card-body">
-                    <h2 class="card-title text-2xl mb-4">Comments & Notes</h2>
-
-                    <div class="form-control mb-6">
-                        <label class="label">
-                            <span class="label-text font-semibold">Add a comment</span>
-                        </label>
-                        <input type="text" placeholder="Comment title (optional)" class="input input-bordered mb-2" />
-                        <textarea
-                            class="textarea textarea-bordered h-24"
-                            placeholder="Write your comment or note here..."></textarea>
-                        <div class="flex items-center gap-2 mt-2">
-                            <select class="select select-bordered select-sm max-w-xs">
-                                <option>General</option>
-                                <option>Progress Update</option>
-                                <option>Action Item</option>
-                                <option>Research</option>
-                            </select>
-                            <button class="btn btn-primary btn-sm ml-auto">Add Comment</button>
-                        </div>
-                    </div>
-
-
-                    <div class="space-y-4">
-
-                        <div class="border-l-4 border-primary pl-4 py-2">
-                            <div class="flex items-center justify-between mb-2">
-                                <div class="flex items-center gap-2">
-                                    <span class="font-semibold">Initial Research</span>
-                                    <div class="badge badge-sm badge-ghost">Research</div>
-                                </div>
-                                <span class="text-xs text-base-content/60">2 days ago</span>
-                            </div>
-                            <p class="text-sm text-base-content/80">
-                                Reached out to Sarah from the team. She mentioned the company culture is excellent
-                                and they're looking for someone with strong stakeholder management skills.
-                            </p>
-                        </div>
-
-                        <div class="border-l-4 border-success pl-4 py-2">
-                            <div class="flex items-center justify-between mb-2">
-                                <div class="flex items-center gap-2">
-                                    <span class="font-semibold">Application Submitted</span>
-                                    <div class="badge badge-sm badge-ghost">Progress Update</div>
-                                </div>
-                                <span class="text-xs text-base-content/60">5 days ago</span>
-                            </div>
-                            <p class="text-sm text-base-content/80">
-                                Submitted application through referral link. Updated resume to highlight product
-                                strategy experience and included portfolio case studies.
-                            </p>
-                        </div>
-
-
-                        <div class="border-l-4 border-info pl-4 py-2">
-                            <div class="flex items-center justify-between mb-2">
-                                <div class="flex items-center gap-2">
-                                    <span class="font-semibold">Interview Preparation</span>
-                                    <div class="badge badge-sm badge-ghost">Action Item</div>
-                                </div>
-                                <span class="text-xs text-base-content/60">1 week ago</span>
-                            </div>
-                            <p class="text-sm text-base-content/80">
-                                Need to prepare: product case study presentation, review STAR method for behavioral
-                                questions, research company's recent product launches.
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* Empty State (hide when comments exist) */}
-                    {/* <div class="text-center py-12 text-base-content/60">
-        <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
-        </svg>
-        <p>No comments yet. Add your first note above!</p>
-      </div> */}
-                </div>
-            </div>
         </section>
     )
 
