@@ -1,22 +1,16 @@
-import { createSignal, Show } from "solid-js";
+import { Show } from "solid-js";
 import { Icon } from "@iconify-icon/solid";
 import type { Database } from "../../../../database.types";
-import { useStore } from "@nanostores/solid";
 import { getCommentsCount } from "../../../stores/userAssets/opportunityComments";
-import { opportunitiesStore } from "../../../stores/userAssets/opportunities";
 
 type Opportunity = Database['public']['Tables']['user_opportunities']['Row'];
 
 interface OpportunityCardProps {
   opportunity: Opportunity;
-  onEdit: (opportunity: Opportunity) => void;
-  onAddComment: (opportunity: Opportunity) => void;
   onViewDetails: (opportunity: Opportunity) => void;
 }
 
 export default function OpportunityCard(props: OpportunityCardProps) {
-  const [showActions, setShowActions] = createSignal(false);
-
 
   const commentsCount = () => getCommentsCount(props.opportunity.id);
 
@@ -48,31 +42,14 @@ export default function OpportunityCard(props: OpportunityCardProps) {
               </Show>
             </div>
           </div>
-
-          <div class="dropdown dropdown-end">
-            <button
-              class="btn btn-ghost btn-sm"
-              onClick={() => setShowActions(!showActions())}
-            >
-              <Icon icon="mdi:dots-vertical" />
-            </button>
-            <ul class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-              <li><a onClick={() => props.onEdit(props.opportunity)}>Edit</a></li>
-              <li><a onClick={() => props.onAddComment(props.opportunity)}>Add Comment</a></li>
-              <li><a class="text-error">Delete</a></li>
-            </ul>
-          </div>
         </div>
 
         <div class="card-actions justify-between items-center">
           <div class="flex items-center gap-4 text-sm text-gray-500">
-            <button
-              class="btn btn-ghost btn-sm gap-2"
-              onClick={() => props.onAddComment(props.opportunity)}
-            >
+
               <Icon icon="mdi:comment" />
               {commentsCount()} Comments
-            </button>
+
           </div>
 
           <button

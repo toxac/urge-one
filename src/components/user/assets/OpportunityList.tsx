@@ -1,59 +1,47 @@
 // OpportunitiesApp.tsx
-import { createSignal, createEffect, onMount, Show, For } from "solid-js";
+import { createSignal, createEffect, Show, For } from "solid-js";
+import { navigate } from "astro:transitions/client";
 import { Icon } from "@iconify-icon/solid";
 import { useStore } from "@nanostores/solid";
-import { authStore } from "../../../stores/auth";
 import { opportunitiesStore, opportunitiesStoreLoading } from "../../../stores/userAssets/opportunities";
 import Modal from "../../appFeedback/Modal";
 import OpportunityForm from "../../forms/exercises/OpportunityForm";
-import UpdateOpportunityForm from "../../user/assets/OpportunityFormEdit";
-import CommentForm from "../../user/assets/OpportunityCommentForm";
 import OpportunityCard from "../../user/assets/OpportunityCard";
 import type { Database } from "../../../../database.types";
 
 type Opportunity = Database['public']['Tables']['user_opportunities']['Row'];
 
 export default function OpportunitiesList() {
-  const $session = useStore(authStore);
+
   const $opportunities = useStore(opportunitiesStore);
   const $opportunitiesLoading = useStore(opportunitiesStoreLoading);
 
   const [showAddModal, setShowAddModal] = createSignal(false);
-  const [showEditModal, setShowEditModal] = createSignal(false);
-  const [showCommentModal, setShowCommentModal] = createSignal(false);
   const [savedOpportunities, setSavedOpportunities] = createSignal<Opportunity[] | []> ([]);
-  const [selectedOpportunity, setSelectedOpportunity] = createSignal<Opportunity | null>(null);
   const [loading, setLoading] = createSignal(false);
   
   createEffect(()=>{
-    if($opportunitiesLoading()) return ;
-    const opportunities = $opportunities();
-    setSavedOpportunities(opportunities)
+    if($opportunitiesLoading()){
+      setLoading(true)
+      return ;
+    }else {
+      const opportunities = $opportunities();
+      setSavedOpportunities(opportunities)
+      setLoading(false);
+    }
   })
 
-  const handleEditOpportunity = (opportunity: Opportunity) => {
-    setSelectedOpportunity(opportunity);
-    setShowEditModal(true);
-  };
-
-  const handleAddComment = (opportunity: Opportunity) => {
-    setSelectedOpportunity(opportunity);
-    setShowCommentModal(true);
-  };
 
   const handleViewDetails = (opportunity: Opportunity) => {
-    window.location.href = `/assets/opportunities/${opportunity.id}`;
+    navigate(`/assets/opportunities/${opportunity.id}`);
   };
 
   const handleFormSuccess = () => {
     setShowAddModal(false);
-    setShowEditModal(false);
-    setShowCommentModal(false);
-    setSelectedOpportunity(null);
   };
 
   return (
-    <div class="container mx-auto px-4 py-8">
+    <div class="w-full mx-auto px-4 py-8">
       {/* Header */}
       <div class="flex justify-between items-center mb-8">
         <div>
@@ -74,7 +62,7 @@ export default function OpportunitiesList() {
           <span class="loading loading-spinner loading-lg text-primary"></span>
         </div>
       }>
-        <Show when={savedOpportunities().length > 0} fallback={
+        <Show when={savedOpportunities().length > 0 && !loading()} fallback={
           <div class="text-center py-12">
             <div class="text-gray-400 mb-4">
               <Icon icon="mdi:lightbulb-on-outline" width={64} height={64} />
@@ -94,8 +82,6 @@ export default function OpportunitiesList() {
               {(opportunity) => (
                 <OpportunityCard
                   opportunity={opportunity}
-                  onEdit={handleEditOpportunity}
-                  onAddComment={handleAddComment}
                   onViewDetails={handleViewDetails}
                 />
               )}
@@ -111,34 +97,6 @@ export default function OpportunitiesList() {
         size="lg"
       >
         <OpportunityForm onSuccess={handleFormSuccess} />
-      </Modal>
-
-      <Modal
-        isOpen={showEditModal()}
-        onClose={() => setShowEditModal(false)}
-        size="lg"
-      >
-        <Show when={selectedOpportunity()}>
-          <UpdateOpportunityForm
-            opportunityId={selectedOpportunity()!.id}
-            onSuccess={handleFormSuccess}
-            onCancel={() => setShowEditModal(false)}
-          />
-        </Show>
-      </Modal>
-
-      <Modal
-        isOpen={showCommentModal()}
-        onClose={() => setShowCommentModal(false)}
-        size="md"
-      >
-        <Show when={selectedOpportunity()}>
-          <CommentForm
-            opportunityId={selectedOpportunity()!.id}
-            onSuccess={handleFormSuccess}
-            onCancel={() => setShowCommentModal(false)}
-          />
-        </Show>
       </Modal>
     </div>
   );
