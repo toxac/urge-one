@@ -8,13 +8,14 @@ import { supabaseBrowserClient } from '../../../lib/supabase/client';
 import { validator } from '@felte/validator-zod';
 import { notify } from '../../../stores/notifications';
 import { saveFormAndMarkCompleted } from '../../../stores/progress';
-import { createOpportunity } from "../../../stores/userAssets/opportunities";
+import { createOpportunity, updateOpportunity } from "../../../stores/userAssets/opportunities";
 import { type DiscoveryMethodOption, discoveryMethodOptions, categoryOptions, alignmentWithGoalsOptions } from "../../../constants/exercises/opportunities"
 import type { Database } from "../../../../database.types";
 import type { UserOpportunitiesStatus, UserOpportunitiesDiscoveryMethod } from "../../../../types/urgeTypes";
 
 type Opportunity = Database['public']['Tables']['user_opportunities']['Row'];
 type OpportunityInsert = Database['public']['Tables']['user_opportunities']['Insert'];
+type OpportunityUpdate = Database['public']['Tables']['user_opportunities']['Update'];
 
 // Refined schema with proper validation
 const schema = z.object({
@@ -29,6 +30,7 @@ const schema = z.object({
 interface ComponentProps {
     contentMetaId?: string;
     approach?: UserOpportunitiesDiscoveryMethod;
+    opportunity?: Opportunity; // Pass the entire opportunity object for edit mode
     onSuccess?: () => void;
 }
 
@@ -41,6 +43,7 @@ export default function OpportunityForm(props: ComponentProps) {
     const [loading, setLoading] = createSignal(false);
     const [success, setSuccess] = createSignal(false);
     const [observationTypes, setObservationTypes] = createSignal<{ value: string; label: string; helperText: string, example?: string }[]>([]);
+    const [isEditMode, setIsEditMode] = createSignal(false);
 
     const getDiscoveryMethod = (discoveryMethodValue: UserOpportunitiesDiscoveryMethod) => {
         const approach = discoveryMethodOptions.find(option => option.value === discoveryMethodValue);
@@ -54,11 +57,11 @@ export default function OpportunityForm(props: ComponentProps) {
     }
 
     createEffect(() => {
-        //get and set discovery method
-        if (props.approach) {
-            getDiscoveryMethod(props.approach)
-        }
-        // get User
+        // Determine if we're in edit mode
+        setIsEditMode(!!props.opportunity);
+        
+        // Set discovery method and observation types based on opportunity data
+        // Get User
         if (!$session() || $session().loading) return;
         const user = $session().user;
         console.log(`Opportunity Form: Current User: ${user}`)
@@ -69,54 +72,81 @@ export default function OpportunityForm(props: ComponentProps) {
 
     const { form, data, errors, isSubmitting, touched, reset } = createForm({
         initialValues: {
-            category: "",
-            description: "",
-            discovery_method: props.approach || "",
-            goal_alignment: "",
-            observation_type: "",
-            title: "",
+            category: props.opportunity?.category || "",
+            description: props.opportunity?.description || "",
+            discovery_method: props.opportunity?.discovery_method || props.approach || "",
+            goal_alignment: props.opportunity?.goal_alignment || "",
+            observation_type: props.opportunity?.observation_type || "",
+            title: props.opportunity?.title || "",
         },
         onSubmit: async (values) => {
             setLoading(true);
             const supabase = supabaseBrowserClient;
             try {
                 if (userId()) {
-                    const currentDate = new Date();
-                    const status: UserOpportunitiesStatus = "added";
-                    const newOpportunityPayload: OpportunityInsert = {
-                        category: values.category,
-                        description: values.description,
-                        discovery_method: values.discovery_method as UserOpportunitiesDiscoveryMethod,
-                        goal_alignment: values.goal_alignment,
-                        observation_type: values.observation_type,
-                        title: values.title,
-                        created_at: currentDate.toISOString(),
-                        status: status,
-                        user_id: userId()
-                    }
-                    const { success, data, error } = await createOpportunity(newOpportunityPayload);
+                    if (isEditMode() && props.opportunity) {
+                        // Update existing opportunity
+                        const currentDate = new Date();
+                        const updates: OpportunityUpdate = {
+                            category: values.category,
+                            description: values.description,
+                            discovery_method: values.discovery_method as UserOpportunitiesDiscoveryMethod,
+                            goal_alignment: values.goal_alignment,
+                            observation_type: values.observation_type,
+                            title: values.title,
+                            updated_at: currentDate.toISOString(),
+                        };
 
-                    if (data && success) {
-                        setSavedOpportunity(data);
-                        if (props.contentMetaId) {
-                            saveFormAndMarkCompleted(props.contentMetaId)
-                        }
-                        notify.success("A new opportunity was added.", "Success!");
-                        if (props.onSuccess) {
-                            props.onSuccess();
-                        }
-                    }
-                    if (error) {
-                        throw error;
-                    }
+                        const { success, data, error } = await updateOpportunity(props.opportunity.id, updates);
 
+                        if (data && success) {
+                            setSavedOpportunity(data);
+                            notify.success("Opportunity was successfully updated.", "Success!");
+                            if (props.onSuccess) {
+                                props.onSuccess();
+                            }
+                        }
+                        if (error) {
+                            throw error;
+                        }
+                    } else {
+                        // Create new opportunity
+                        const currentDate = new Date();
+                        const status: UserOpportunitiesStatus = "added";
+                        const newOpportunityPayload: OpportunityInsert = {
+                            category: values.category,
+                            description: values.description,
+                            discovery_method: values.discovery_method as UserOpportunitiesDiscoveryMethod,
+                            goal_alignment: values.goal_alignment,
+                            observation_type: values.observation_type,
+                            title: values.title,
+                            created_at: currentDate.toISOString(),
+                            status: status,
+                            user_id: userId()
+                        }
+                        const { success, data, error } = await createOpportunity(newOpportunityPayload);
+
+                        if (data && success) {
+                            setSavedOpportunity(data);
+                            if (props.contentMetaId) {
+                                saveFormAndMarkCompleted(props.contentMetaId)
+                            }
+                            notify.success("A new opportunity was added.", "Success!");
+                            if (props.onSuccess) {
+                                props.onSuccess();
+                            }
+                        }
+                        if (error) {
+                            throw error;
+                        }
+                    }
                 } else {
                     notify.error("No user found! Please retry after logging in", "Fail");
                 }
 
             } catch (error) {
-                console.error("Error saving opportunity:", error);
-                notify.error("Something went wrong at our end. Please try saving the opportunity again", "Failed");
+                console.error(`Error ${isEditMode() ? 'updating' : 'saving'} opportunity:`, error);
+                notify.error(`Something went wrong at our end. Please try ${isEditMode() ? 'updating' : 'saving'} the opportunity again`, "Failed");
             } finally {
                 setLoading(false);
                 setSuccess(true);
@@ -147,24 +177,30 @@ export default function OpportunityForm(props: ComponentProps) {
                     </div>
                     <h3 class="text-2xl font-bold text-gray-900 mb-2">Success!</h3>
                     <p class="text-gray-600 mb-4">
-                        New opportunity has been added successfully. We will be working further on opportunities you have saved in future milestones. 
+                        {isEditMode() 
+                            ? "Opportunity has been updated successfully." 
+                            : "New opportunity has been added successfully. We will be working further on opportunities you have saved in future milestones."}
                     </p>
                     <div class="flex flex-col gap-4 mb-8">
                         <a href={`/assets/opportunities/${savedOpportunity()?.id}`}>Current opportunity: {savedOpportunity()?.title}</a>
                         <a href={`/assets/opportunities/`}>All opportunities </a>
                     </div>
-                    <div class="flex justify-center">
-                        <button class="btn btn-primary btn-outline" onClick={resetForm}>
-                            <Icon icon="mdi:plus" width={20} height={20} class="mr-2" />
-                            Add Another Opportunity
-                        </button>
-                    </div>
+                    <Show when={!isEditMode()}>
+                        <div class="flex justify-center">
+                            <button class="btn btn-primary btn-outline" onClick={resetForm}>
+                                <Icon icon="mdi:plus" width={20} height={20} class="mr-2" />
+                                Add Another Opportunity
+                            </button>
+                        </div>
+                    </Show>
                 </div>
             </Show>
 
             <Show when={!success()}>
                 <div class="mb-6">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Add a New Opportunity</h2>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">
+                        {isEditMode() ? "Edit Opportunity" : "Add a New Opportunity"}
+                    </h2>
                     <Show when={discoveryMethod()}>
                         <p class="text-gray-600 text-sm bg-gray-50 p-3 rounded-lg">
                             {discoveryMethod()?.helperText}
@@ -183,6 +219,7 @@ export default function OpportunityForm(props: ComponentProps) {
                                 class="grow"
                                 placeholder="Name of the opportunity"
                                 aria-label="Give this opportunity a name"
+                                value={props.opportunity?.title || ""}
                             />
                         </label>
                         <Show when={errors().title && touched().title}>
@@ -193,14 +230,14 @@ export default function OpportunityForm(props: ComponentProps) {
                     {/* Description Field */}
                     <div class="form-control">
                         <label class="label">
-                            <span class="label-text">Add a decsription</span>
+                            <span class="label-text">Add a description</span>
                         </label>
                         <textarea
                             name="description"
                             class="textarea textarea-neutral w-full h-24"
                             placeholder="Describe the opportunity in detail..."
                             aria-label="Add a description for this opportunity"
-                        />
+                        >{props.opportunity?.description || ""}</textarea>
                         <Show when={errors().description && touched().description}>
                             <span class="text-sm text-red-600 mt-1">{errors().description}</span>
                         </Show>
@@ -218,9 +255,16 @@ export default function OpportunityForm(props: ComponentProps) {
                                 onChange={handleDiscoveryMethodChange}
                                 aria-label="Approach for discovering this opportunity, select one"
                             >
-                                <option disabled selected value="">Select a discovery method</option>
+                                <option disabled value="">Select a discovery method</option>
                                 <For each={discoveryMethodOptions}>
-                                    {option => <option value={option.value} selected={option.value === props.approach}>{option.label}</option>}
+                                    {option => (
+                                        <option 
+                                            value={option.value} 
+                                            selected={option.value === (props.opportunity?.discovery_method || props.approach)}
+                                        >
+                                            {option.label}
+                                        </option>
+                                    )}
                                 </For>
                             </select>
                             <Show when={errors().discovery_method && touched().discovery_method}>
@@ -235,10 +279,21 @@ export default function OpportunityForm(props: ComponentProps) {
                             <label class="label">
                                 <span class="label-text">Observation Type</span>
                             </label>
-                            <select class="select select-neutral w-full" name="observation_type" aria-label="what type of opportunity is this, select most relevant">
-                                <option disabled selected value="">Select observation type</option>
+                            <select 
+                                class="select select-neutral w-full" 
+                                name="observation_type" 
+                                aria-label="what type of opportunity is this, select most relevant"
+                            >
+                                <option disabled value="">Select observation type</option>
                                 <For each={observationTypes()}>
-                                    {type => <option value={type.value}>{type.label}</option>}
+                                    {type => (
+                                        <option 
+                                            value={type.value}
+                                            selected={type.value === props.opportunity?.observation_type}
+                                        >
+                                            {type.label}
+                                        </option>
+                                    )}
                                 </For>
                             </select>
                             <Show when={errors().observation_type && touched().observation_type}>
@@ -252,11 +307,18 @@ export default function OpportunityForm(props: ComponentProps) {
                         <label class="label">
                             <span class="label-text">Select the most relevant problem category</span>
                         </label>
-                        <select class="select select-neutral w-full" name="category" aria-label="Slect a problem category related to the opportunity">
-                            <option disabled selected value="">Select a category</option>
+                        <select 
+                            class="select select-neutral w-full" 
+                            name="category" 
+                            aria-label="Select a problem category related to the opportunity"
+                        >
+                            <option disabled value="">Select a category</option>
                             <For each={categoryOptions}>
                                 {category => (
-                                    <option value={category.value}>
+                                    <option 
+                                        value={category.value}
+                                        selected={category.value === props.opportunity?.category}
+                                    >
                                         {category.label}
                                     </option>
                                 )}
@@ -272,11 +334,18 @@ export default function OpportunityForm(props: ComponentProps) {
                         <label class="label">
                             <span class="label-text">How aligned is this opportunity with your goals?</span>
                         </label>
-                        <select class="select select-neutral w-full" name="goal_alignment" aria-label="How aligned is this opportunity with your goals, Select relevant option">
-                            <option disabled selected value="">Select level of alignment</option>
+                        <select 
+                            class="select select-neutral w-full" 
+                            name="goal_alignment" 
+                            aria-label="How aligned is this opportunity with your goals, Select relevant option"
+                        >
+                            <option disabled value="">Select level of alignment</option>
                             <For each={alignmentWithGoalsOptions}>
                                 {alignment => (
-                                    <option value={alignment.value}>
+                                    <option 
+                                        value={alignment.value}
+                                        selected={alignment.value === props.opportunity?.goal_alignment}
+                                    >
                                         {alignment.label}
                                     </option>
                                 )}
@@ -296,12 +365,12 @@ export default function OpportunityForm(props: ComponentProps) {
                         >
                             <Show when={isSubmitting()} fallback={
                                 <>
-                                    <Icon icon="mdi:content-save" width={20} height={20} class="mr-2" />
-                                    Save Opportunity
+                                    <Icon icon={isEditMode() ? "mdi:content-save-edit" : "mdi:content-save"} width={20} height={20} class="mr-2" />
+                                    {isEditMode() ? "Update Opportunity" : "Save Opportunity"}
                                 </>
                             }>
                                 <span class="loading loading-spinner loading-sm mr-2"></span>
-                                Saving...
+                                {isEditMode() ? "Updating..." : "Saving..."}
                             </Show>
                         </button>
                     </div>

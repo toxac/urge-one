@@ -1,4 +1,5 @@
 import { createSignal, createEffect, Show, For, onMount, useTransition } from "solid-js";
+import { navigate } from "astro:transitions/client";
 import { useStore } from "@nanostores/solid";
 import { authStore } from "../../../stores/auth";
 import { opportunitiesStore, deleteOpportunity, opportunitiesStoreLoading } from "../../../stores/userAssets/opportunities";
@@ -10,10 +11,12 @@ import {
 import { Icon } from "@iconify-icon/solid";
 import Modal from "../../appFeedback/Modal";
 import CommentForm from "./OpportunityCommentForm";
+import OpportunityForm from "../../forms/exercises/OpportunityForm.tsx";
 import { notify } from '../../../stores/notifications';
 import { formatDate, getTimeDifference } from "../../../lib/content/dateUtils";
 import { type Database } from "../../../../database.types.ts";
 import { getCategory, getAlignment, getDiscoveryMethod, getObservationType } from "../../../constants/exercises/opportunities.ts"
+import type { UserOpportunitiesDiscoveryMethod } from "../../../../types/urgeTypes.ts";
 
 type Opportunity = Database['public']['Tables']['user_opportunities']['Row'];
 type Comment = Database['public']['Tables']['user_opportunity_comments']['Row'];
@@ -32,6 +35,7 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
 
     const [loading, setLoading] = createSignal(false);
     const [showCommentModal, setShowCommentModal] = createSignal(false);
+    const [showOpportunityModal, setShowOpportunityModal] = createSignal(false);
     const [opportunity, setOpportunity] = createSignal<Opportunity | null>(null);
     const [comments, setComments] = createSignal<Comment[] | null>(null)
     const [editingComment, setEditingComment] = createSignal<Comment | null>(null);
@@ -54,16 +58,33 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
         };
     })
 
-    const handleEditOpportunity = async(opprtunityId: string) =>{
+    const handleEditOpportunity = async() =>{
+        setShowOpportunityModal(true);
+    }
+
+    const handleDeleteOpportunity = async () =>{
+        if (!confirm('Are you sure you want to delete this opportunity?')) {
+            return;
+        }
+        try {
+            const { success, error } = await deleteOpportunity(opportunity()?.id || props.opportunityId)
+
+            if (success) {
+                notify.success('Opportunity deleted successfully!');
+                navigate("/assets/opportunities/")
+            } else if (error) {
+                throw error;
+            }
+        } catch (error) {
+            console.error('Error deleting comment:', error);
+            notify.error('Failed to delete comment', 'Error');
+        }
 
     }
 
     const handleEditComment = async (comment: Comment) =>{
-        
         setEditingComment(comment);
-        console.log(`Editing Comment: ${editingComment()}`)
         setShowCommentModal(true);
-
     }
 
     const handleDeleteComment = async (commentId: string) => {
@@ -81,8 +102,7 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
         } catch (error) {
             console.error('Error deleting comment:', error);
             notify.error('Failed to delete comment', 'Error');
-        } finally {
-        }
+        } 
     };
 
     return (
@@ -144,8 +164,8 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
                     </div>
 
                     <div class="card-actions justify-end mt-4">
-                        <button class="btn btn-outline btn-sm">Edit</button>
-                        <button class="btn btn-error btn-outline btn-sm">Delete</button>
+                        <button class="btn btn-outline btn-sm" onClick={handleEditOpportunity}>Edit</button>
+                        <button class="btn btn-error btn-outline btn-sm" onClick={handleDeleteOpportunity}>Delete</button>
                     </div>
                 </div>
                 {/* Oportunity Comment */}
@@ -182,7 +202,7 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
                     </Show>
                 </div>
             </Show>
-            {/* Add Comment Edit Modal */}
+            {/* Comment Edit Modal */}
             <Modal
                 isOpen={showCommentModal()}
                 onClose={() => setShowCommentModal(false)}
@@ -194,6 +214,21 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
                     comment={editingComment() || undefined}
                     onSuccess={() => setShowCommentModal(false)}
                     onCancel={() => setShowCommentModal(false)}
+                /> : null }
+            </Modal>
+
+            {/* Opportunity Edit Modal */}
+            <Modal
+                isOpen={showOpportunityModal()}
+                onClose={() => setShowOpportunityModal(false)}
+                size="md"
+            >
+                {opportunity() ?
+                <OpportunityForm
+                    approach = {opportunity()?.discovery_method as UserOpportunitiesDiscoveryMethod || undefined}
+                    opportunity={opportunity() || undefined}
+                    onSuccess= {() => setShowOpportunityModal(false)}
+                
                 /> : null }
             </Modal>
         </section>
