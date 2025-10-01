@@ -47,6 +47,7 @@ export async function createOpportunity(opportunityData: OpportunityInsert) {
   try {
     opportunitiesStoreLoading.set(true);
     opportunitiesStoreError.set(null);
+    console.log(opportunityData)
 
     // Supabase operation first
     const { data: opportunity, error } = await supabase

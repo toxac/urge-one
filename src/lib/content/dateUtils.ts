@@ -126,3 +126,92 @@ export const formatRelativeTime = (dateString: string | null | undefined): strin
     return '';
   }
 };
+
+
+export const getTimeDifference = (dateString: string | null | undefined): string => {
+  if (!dateString) return '';
+  
+  try {
+    const givenDate = new Date(dateString);
+    const currentDate = new Date();
+    
+    // Check if the date is valid
+    if (isNaN(givenDate.getTime())) {
+      return '';
+    }
+    
+    const diffInMs = currentDate.getTime() - givenDate.getTime();
+    const diffInSeconds = Math.floor(diffInMs / 1000);
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    const diffInDays = Math.floor(diffInHours / 24);
+    const diffInWeeks = Math.floor(diffInDays / 7);
+    const diffInMonths = Math.floor(diffInDays / 30);
+    const diffInYears = Math.floor(diffInDays / 365);
+    
+    // Return in the most appropriate unit
+    if (diffInSeconds < 60) {
+      return `${diffInSeconds} second${diffInSeconds !== 1 ? 's' : ''} ago`;
+    } else if (diffInMinutes < 60) {
+      return `${diffInMinutes} minute${diffInMinutes !== 1 ? 's' : ''} ago`;
+    } else if (diffInHours < 24) {
+      return `${diffInHours} hour${diffInHours !== 1 ? 's' : ''} ago`;
+    } else if (diffInDays < 7) {
+      return `${diffInDays} day${diffInDays !== 1 ? 's' : ''} ago`;
+    } else if (diffInWeeks < 4) {
+      return `${diffInWeeks} week${diffInWeeks !== 1 ? 's' : ''} ago`;
+    } else if (diffInMonths < 12) {
+      return `${diffInMonths} month${diffInMonths !== 1 ? 's' : ''} ago`;
+    } else {
+      return `${diffInYears} year${diffInYears !== 1 ? 's' : ''} ago`;
+    }
+  } catch (error) {
+    return '';
+  }
+};
+
+
+export const getTimeDifferenceFuture = (dateString: string | null | undefined): string => {
+  if (!dateString) return '';
+  
+  try {
+    const givenDate = new Date(dateString);
+    const currentDate = new Date();
+    
+    if (isNaN(givenDate.getTime())) {
+      return '';
+    }
+    
+    const diffInMs = givenDate.getTime() - currentDate.getTime();
+    const isFuture = diffInMs > 0;
+    const absDiffInMs = Math.abs(diffInMs);
+    
+    const diffInSeconds = Math.floor(absDiffInMs / 1000);
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    const diffInDays = Math.floor(diffInHours / 24);
+    const diffInWeeks = Math.floor(diffInDays / 7);
+    const diffInMonths = Math.floor(diffInDays / 30);
+    const diffInYears = Math.floor(diffInDays / 365);
+    
+    const tense = isFuture ? 'from now' : 'ago';
+    
+    if (diffInSeconds < 60) {
+      return `${diffInSeconds} second${diffInSeconds !== 1 ? 's' : ''} ${tense}`;
+    } else if (diffInMinutes < 60) {
+      return `${diffInMinutes} minute${diffInMinutes !== 1 ? 's' : ''} ${tense}`;
+    } else if (diffInHours < 24) {
+      return `${diffInHours} hour${diffInHours !== 1 ? 's' : ''} ${tense}`;
+    } else if (diffInDays < 7) {
+      return `${diffInDays} day${diffInDays !== 1 ? 's' : ''} ${tense}`;
+    } else if (diffInWeeks < 4) {
+      return `${diffInWeeks} week${diffInWeeks !== 1 ? 's' : ''} ${tense}`;
+    } else if (diffInMonths < 12) {
+      return `${diffInMonths} month${diffInMonths !== 1 ? 's' : ''} ${tense}`;
+    } else {
+      return `${diffInYears} year${diffInYears !== 1 ? 's' : ''} ${tense}`;
+    }
+  } catch (error) {
+    return '';
+  }
+};

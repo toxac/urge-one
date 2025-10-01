@@ -5,7 +5,6 @@ import { opportunitiesStore, deleteOpportunity, opportunitiesStoreLoading } from
 import {
     commentsStore,
     commentsStoreLoading,
-    createComment,
     deleteComment
 } from "../../../stores/userAssets/opportunityComments";
 import { Icon } from "@iconify-icon/solid";
@@ -51,6 +50,7 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
         if ($commentsLoading()) return;
         const currentComments = $comments().filter(comment => comment.opportunity_id === props.opportunityId)
         if (currentComments) {
+            console.log(currentComments);
             setComments(currentComments);
         };
     })
@@ -155,6 +155,23 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
                 <div class="mt-12">
                     <h2 class="card-title text-2xl mb-4">Comments & Notes</h2>
                     {opportunity()?.id ? <CommentForm opportunityId={opportunity()?.id!} /> : null }
+
+                    <Show when={comments()}>
+                        <div class="flex flex-col gap-4">
+                            <For each={comments()}>
+                                {(comment) => {
+                                    return (
+                                        <div class="bg-base-200 px-8 py-4">
+                                            <div class="badge badge-sm badge-outline capitalize mb-4">{comment.comment_type}</div>
+                                            <p class="text-lg mb-2">{comment.title}</p>
+                                            <p class="text-sm">{comment.content}</p>
+
+                                        </div>
+                                    )
+                                }}
+                            </For>
+                        </div>
+                    </Show>
                     
 
 
