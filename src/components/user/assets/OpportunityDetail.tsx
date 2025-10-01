@@ -34,7 +34,7 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
     const [showCommentModal, setShowCommentModal] = createSignal(false);
     const [opportunity, setOpportunity] = createSignal<Opportunity | null>(null);
     const [comments, setComments] = createSignal<Comment[] | null>(null)
-    const [deletingCommentId, setDeletingCommentId] = createSignal<string | null>(null);
+    const [editingComment, setEditingComment] = createSignal<Comment | null>(null);
 
     // Opportunities Effect
     createEffect(() => {
@@ -50,7 +50,6 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
         if ($commentsLoading()) return;
         const currentComments = $comments().filter(comment => comment.opportunity_id === props.opportunityId)
         if (currentComments) {
-            console.log(currentComments);
             setComments(currentComments);
         };
     })
@@ -59,7 +58,11 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
 
     }
 
-    const handleEditComment = async (commentId: string) =>{
+    const handleEditComment = async (comment: Comment) =>{
+        
+        setEditingComment(comment);
+        console.log(`Editing Comment: ${editingComment()}`)
+        setShowCommentModal(true);
 
     }
 
@@ -67,8 +70,6 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
         if (!confirm('Are you sure you want to delete this comment?')) {
             return;
         }
-
-        setDeletingCommentId(commentId);
         try {
             const { success, error } = await deleteComment(commentId);
 
@@ -81,7 +82,6 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
             console.error('Error deleting comment:', error);
             notify.error('Failed to delete comment', 'Error');
         } finally {
-            setDeletingCommentId(null);
         }
     };
 
@@ -170,7 +170,7 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
                                                 <button class="btn btn-ghost btn-circle" onClick={()=> handleDeleteComment(comment.id)}>
                                                     <Icon icon="mdi-delete-outline" class="text-lg" />
                                                 </button>
-                                                <button class="btn btn-ghost btn-circle">
+                                                <button class="btn btn-ghost btn-circle" onClick={()=> handleEditComment(comment)}>
                                                     <Icon icon="mdi-edit-outline" class="text-lg" />
                                                 </button>
                                             </div>
@@ -182,6 +182,20 @@ export default function OpportunityDetail(props: OpportunityDetailProps) {
                     </Show>
                 </div>
             </Show>
+            {/* Add Comment Edit Modal */}
+            <Modal
+                isOpen={showCommentModal()}
+                onClose={() => setShowCommentModal(false)}
+                size="md"
+            >
+                {editingComment() ?
+                <CommentForm
+                    opportunityId={props.opportunityId}
+                    comment={editingComment() || undefined}
+                    onSuccess={() => setShowCommentModal(false)}
+                    onCancel={() => setShowCommentModal(false)}
+                /> : null }
+            </Modal>
         </section>
     )
 

@@ -6,11 +6,12 @@ import { authStore } from "../../../stores/auth";
 import * as z from "zod";
 import { Icon } from "@iconify-icon/solid";
 import { notify } from '../../../stores/notifications';
-import { createComment, commentsStore, updateComment, getCommentById, commentsStoreLoading } from "../../../stores/userAssets/opportunityComments";
+import { createComment, updateComment} from "../../../stores/userAssets/opportunityComments";
 import { type Database } from "../../../../database.types";
 
 type CommentInsert = Database['public']['Tables']['user_opportunity_comments']['Insert'];
 type CommentUpdate = Database['public']['Tables']['user_opportunity_comments']['Update'];
+type Comment = Database['public']['Tables']['user_opportunity_comments']['Row'];
 
 const schema = z.object({
     title: z.string().min(1, "Title is required").max(100),
@@ -18,18 +19,16 @@ const schema = z.object({
     comment_type: z.string().optional(),
 });
 
-type FormData = z.infer<typeof schema>;
 
 interface CommentFormProps {
     opportunityId: string;
-    commentId?: string; // only used min edit mode
+    comment?: Comment; // only used min edit mode
     onSuccess?: () => void;
     onCancel?: () => void;
 }
 
 export default function CommentForm(props: CommentFormProps) {
     const $session = useStore(authStore);
-    const $comments = useStore(commentsStore);
     const [userId, setUserId] = createSignal<string | null>(null);
     const [loading, setLoading] = createSignal(false);
     const [isEditMode, setIsEditMode] = createSignal(false);
@@ -43,18 +42,24 @@ export default function CommentForm(props: CommentFormProps) {
         }
     })
 
+    createEffect(() => {
+        setIsEditMode(!!props.comment);
+    });
 
-    const { form, isSubmitting, errors, reset, setFields } = createForm<FormData>({
+
+
+
+    const { form, isSubmitting, errors, reset, setFields } = createForm({
         initialValues: {
-            comment_type: "",
-            content: "",
-            title: ""
+            comment_type: props.comment?.comment_type || "",
+            content: props.comment?.content || "",
+            title: props.comment?.title || ""
         },
         onSubmit: async (values) => {
             setLoading(true);
             try {
                 if (userId()) {
-                    if (isEditMode() && props.commentId) {
+                    if (isEditMode() && props.comment) {
                         // update comment
                         const updatedCommentPayload: CommentUpdate = {
                             comment_type: values.comment_type,
@@ -63,7 +68,7 @@ export default function CommentForm(props: CommentFormProps) {
                             updated_at: new Date().toISOString(),
                         }
 
-                        const { success, error } = await updateComment(props.commentId, updatedCommentPayload);
+                        const { success, error } = await updateComment(props.comment.id, updatedCommentPayload);
                         if (success) {
                             notify.success("Comment was successfully updated.", "Success!");
                             props.onSuccess?.();
@@ -105,23 +110,6 @@ export default function CommentForm(props: CommentFormProps) {
         extend: validator({ schema })
     });
 
-    createEffect(() => {
-    if (props.commentId) {
-        setIsEditMode(true);
-        if ($comments().length > 0) {
-            const comment = $comments().find(c => c.id === props.commentId);
-            if (comment) {
-                setFields('comment_type', comment.comment_type || "");
-                setFields('content', comment.content || "");
-                setFields('title', comment.title || "");
-            } else {
-                console.warn(`Comment with id ${props.commentId} not found in store`);
-                notify.error("Comment not found", "Error");
-                props.onCancel?.();
-            }
-        }
-    }
-});
 
     return (
         <div class="w-full">
@@ -177,7 +165,7 @@ export default function CommentForm(props: CommentFormProps) {
                         <Show when={isSubmitting()} fallback={
                             <>
                                 <Icon icon="mdi:comment-plus" class="mr-2" />
-                                Add Comment
+                                {isEditMode() ? "Update Comment" :"Add Comment" }
                             </>
                         }>
                             <span class="loading loading-spinner loading-sm"></span>
