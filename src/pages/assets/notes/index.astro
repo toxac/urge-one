@@ -1,7 +1,7 @@
 ---
 import DashLayout from "../../../layouts/DashLayout.astro";
 import { hasAccess, accessProfiles } from "../../../lib/rbac";
-import Bookmarks from "../../../components/user/assets/Bookmarks";
+import NoteList from "src/components/user/assets/Notes";
 
 // CHECK AUTHENTICATION AND ACCESS
 const { userRoles, session } = Astro.locals;
@@ -22,7 +22,7 @@ if (!isAuthenticated || !hasPageAccess) {
 const breadcrumbs = [
     { name: "Home", url: "/" },
     { name: "Assets", url: "/assets" },
-    { name: "Opportunities", url: "/assets/bookmarks" },
+    { name: "Notes", url: "/assets/notes" },
 ];
 ---
 
@@ -31,9 +31,9 @@ const breadcrumbs = [
     description="milestones in urge start program"
     breadcrumbItems={breadcrumbs}
 >
-    <h1 class="mb-8">Bookmarks</h1>
+    <h1 class="mb-8">Notes</h1>
 
     <div class="py-12">
-        <Bookmarks client:load />
+        <NoteList client:load />
     </div>
 </DashLayout>
