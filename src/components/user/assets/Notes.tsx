@@ -6,6 +6,7 @@ import { useStore } from "@nanostores/solid";
 import { notesStore, deleteNote, updateNote, notesStoreLoading } from "../../../stores/userAssets/notes";
 import { notify } from "../../../stores/notifications";
 import { getTimeDifference } from "../../../lib/content/dateUtils";
+import AddNote from "../actions/AddNote";
 import Modal from "../../appFeedback/Modal";
 
 import type { Database } from "../../../../database.types";
@@ -51,8 +52,6 @@ export default function NoteList() {
             notify.error("Note could not be deleted", "Failed.");
         }
     }
-
-
 
 
     const handleFormSuccess = () => {
@@ -110,13 +109,24 @@ export default function NoteList() {
 
 
 
-            {/* Modals */}
+            {/* Edit Note Modal */}
             <Modal
-                isOpen={showAddModal()}
-                onClose={() => setShowAddModal(false)}
+                isOpen={showModal()}
+                onClose={() => setShowModal(false)}
                 size="lg"
             >
-                <OpportunityForm onSuccess={handleFormSuccess} />
+                {editingNote() &&
+                    <AddNote 
+                        userId={editingNote()!.user_id}
+                        contentType={editingNote()!.content_type || ""}
+                        relatedContentId={editingNote()!.related_content_id || ""}
+                        referenceUrl={editingNote()!.reference_url}
+                        referenceTable={editingNote()!.reference_table || ""}
+                        note={editingNote()!}
+                        onSuccess={() => setShowModal(false)} 
+                    />
+                }
+                
             </Modal>
         </div>
     );
