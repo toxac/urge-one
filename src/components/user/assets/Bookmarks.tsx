@@ -9,7 +9,7 @@ import type { Database } from "../../../../database.types";
 
 type Bookmark = Database['public']['Tables']['user_bookmarks']['Row'];
 
-export default function OpportunitiesList() {
+export default function BookmarkList() {
 
     const $bookmarks = useStore(bookmarksStore);
     const $bookmarksLoading = useStore(bookmarksStoreLoading);
