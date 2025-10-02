@@ -1,6 +1,5 @@
 // OpportunitiesApp.tsx
 import { createSignal, createEffect, Show, For } from "solid-js";
-import { navigate } from "astro:transitions/client";
 import { Icon } from "@iconify-icon/solid";
 import { useStore } from "@nanostores/solid";
 import { bookmarksStore, bookmarkStoreLoading } from "../../../stores/userAssets/bookmarks";
@@ -28,12 +27,9 @@ export default function OpportunitiesList() {
         }
     })
 
+    const handleDelete = async(selectedBookmark: Bookmark) =>{
 
-    const handleViewDetails = (bookmark: Bookmark) => {
-        navigate(`/assets/bookmarks/${bookmark.id}`);
-    };
-
-
+    }
 
     return (
         <div class="w-full mx-auto px-4 py-8">
@@ -53,15 +49,7 @@ export default function OpportunitiesList() {
                     <p class="text-gray-600 mb-6">You can bookmark program content or resources. Bookmark button is on top right of all the pages.</p>
                 </div>
             </Show>
-            {/* Bookmark Grid  {
-          content_type: string | null
-          created_at: string
-          id: number
-          reference_table: string | null
-          reference_url: string | null
-          related_content_id: string | null
-          user_id: string | null
-        } */}
+            {/* Bookmark Grid  */}
             <Show when={bookmarks().length > 0 && !loading()}>
                 <div class="grid grid-cols-1 gap-4">
                     <For each={bookmarks()}>
@@ -74,8 +62,11 @@ export default function OpportunitiesList() {
 
                                 <p class="text-md mb-2 capitalize">{bookmark.title}</p>
                                 <div class="flex justify-end items-end mt-4">
+                                    <button class="btn btn-ghost btn-circle" onClick={()=> handleDelete(bookmark)}>
+                                                    <Icon icon="mdi-delete-outline" class="text-lg" />
+                                                </button>
                                     <a class="btn btn-ghost btn-circle" href={bookmark.reference_url}>
-                                        <Icon icon="mdi-delete-outline" class="text-lg" />
+                                        <Icon icon="mdi:arrow-top-right-thick" class="text-lg" />
                                     </a>
                                 </div>
                             </div>
