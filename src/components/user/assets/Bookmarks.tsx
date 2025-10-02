@@ -2,7 +2,8 @@
 import { createSignal, createEffect, Show, For } from "solid-js";
 import { Icon } from "@iconify-icon/solid";
 import { useStore } from "@nanostores/solid";
-import { bookmarksStore, bookmarkStoreLoading } from "../../../stores/userAssets/bookmarks";
+import { bookmarksStore, bookmarksStoreLoading, deleteBookmark } from "../../../stores/userAssets/bookmarks";
+import { notify } from "../../../stores/notifications";
 import { getTimeDifference } from "../../../lib/content/dateUtils";
 import type { Database } from "../../../../database.types";
 
@@ -11,7 +12,7 @@ type Bookmark = Database['public']['Tables']['user_bookmarks']['Row'];
 export default function OpportunitiesList() {
 
     const $bookmarks = useStore(bookmarksStore);
-    const $bookmarksLoading = useStore(bookmarkStoreLoading);
+    const $bookmarksLoading = useStore(bookmarksStoreLoading);
 
     const [bookmarks, setBookmarks] = createSignal<Bookmark[] | []>([]);
     const [loading, setLoading] = createSignal(false);
@@ -28,7 +29,16 @@ export default function OpportunitiesList() {
     })
 
     const handleDelete = async(selectedBookmark: Bookmark) =>{
-
+        try {
+            const {error, success} = await deleteBookmark(selectedBookmark.id);
+            if(error) throw error;
+            if(success){
+                notify.success(`Bookmark for ${selectedBookmark.title} deleted`, "Success");
+            }
+        } catch (error) {
+            console.error(error);
+            notify.error("Bookmark could not be deleted", "Failed.");
+        }
     }
 
     return (
