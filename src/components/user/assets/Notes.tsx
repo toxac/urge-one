@@ -4,6 +4,7 @@ import { navigate } from "astro:transitions/client";
 import { Icon } from "@iconify-icon/solid";
 import { useStore } from "@nanostores/solid";
 import { notesStore, deleteNote, updateNote, notesStoreLoading } from "../../../stores/userAssets/notes";
+import { notify } from "../../../stores/notifications";
 import { getTimeDifference } from "../../../lib/content/dateUtils";
 import Modal from "../../appFeedback/Modal";
 
@@ -18,6 +19,7 @@ export default function NoteList() {
 
     const [showModal, setShowModal] = createSignal(false);
     const [notes, setNotes] = createSignal<Note[] | []>([]);
+    const [editingNote, setEditingNote] = createSignal<Note | null> (null)
     const [loading, setLoading] = createSignal(false);
 
     createEffect(() => {
@@ -30,6 +32,26 @@ export default function NoteList() {
             setLoading(false);
         }
     })
+
+    const handleEdit = async(selectedNote: Note) =>{
+        setEditingNote(selectedNote);
+        setShowModal(true);
+
+    }
+
+    const handleDelete = async(selectedNote: Note) =>{
+        try {
+            const {success, error} = await deleteNote(selectedNote.id);
+            if(error) throw error;
+            if(success){
+                notify.success(`Note: ${selectedNote.title} deleted`, "Success");
+            }
+        } catch (error) {
+            console.error(error);
+            notify.error("Note could not be deleted", "Failed.");
+        }
+    }
+
 
 
 
@@ -45,7 +67,7 @@ export default function NoteList() {
                     <span class="loading loading-spinner loading-lg text-primary"></span>
                 </div>
             </Show>
-            {/* No bookmarks */}
+            {/* No Notes */}
             <Show when={notes().length == 0 && !loading()}>
                 <div class="text-center py-12">
                     <div class="text-gray-400 mb-4">
@@ -55,18 +77,7 @@ export default function NoteList() {
                     <p class="text-gray-600 mb-6">You can add notes to program content or resources. Note button is on top right of all the pages.</p>
                 </div>
             </Show>
-            {/* Bookmark Grid {
-    content: string | null;
-    content_type: string | null;
-    created_at: string;
-    id: number;
-    reference_table: string | null;
-    reference_url: string | null;
-    related_content_id: string | null;
-    title: string | null;
-    updated_at: string | null;
-    user_id: string;
-} */}
+            {/* Notes Grid  */}
             <Show when={notes().length > 0 && !loading()}>
                 <div class="grid grid-cols-1 gap-4">
                     <For each={notes()}>
