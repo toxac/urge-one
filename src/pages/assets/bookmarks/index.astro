@@ -1,0 +1,39 @@
+---
+import DashLayout from "../../../layouts/DashLayout.astro";
+import { hasAccess, accessProfiles } from "../../../lib/rbac";
+import Bookmarks from "../../../components/user/assets/Bookmarks";
+
+// CHECK AUTHENTICATION AND ACCESS
+const { userRoles, session } = Astro.locals;
+
+const isAuthenticated: boolean = session !== null;
+
+const hasPageAccess: boolean = hasAccess(
+    userRoles,
+    accessProfiles.programStart,
+);
+
+// redirect if doesnt have access
+if (!isAuthenticated || !hasPageAccess) {
+    return Astro.redirect("/program");
+}
+
+// BREADCRUMBS
+const breadcrumbs = [
+    { name: "Home", url: "/" },
+    { name: "Assets", url: "/assets" },
+    { name: "Opportunities", url: "/assets/bookmarks" },
+];
+---
+
+<DashLayout
+    title="milestones | urge-start"
+    description="milestones in urge start program"
+    breadcrumbItems={breadcrumbs}
+>
+    <h1 class="mb-8">Bookmarks</h1>
+
+    <div class="py-12">
+        <Bookmarks client:load />
+    </div>
+</DashLayout>
