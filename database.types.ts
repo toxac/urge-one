@@ -982,8 +982,9 @@ export type Database = {
           created_at: string
           id: number
           reference_table: string | null
-          reference_url: string | null
+          reference_url: string
           related_content_id: string | null
+          title: string | null
           user_id: string | null
         }
         Insert: {
@@ -991,8 +992,9 @@ export type Database = {
           created_at?: string
           id?: number
           reference_table?: string | null
-          reference_url?: string | null
+          reference_url: string
           related_content_id?: string | null
+          title?: string | null
           user_id?: string | null
         }
         Update: {
@@ -1000,8 +1002,9 @@ export type Database = {
           created_at?: string
           id?: number
           reference_table?: string | null
-          reference_url?: string | null
+          reference_url?: string
           related_content_id?: string | null
+          title?: string | null
           user_id?: string | null
         }
         Relationships: []

@@ -8,7 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "dbtypes": "supabase gen types typescript --project-id xqxzcpocbwqhuoqymhbr --schema public > database.types.ts"
+    "dbtypes": "npx supabase gen types typescript --project-id xqxzcpocbwqhuoqymhbr --schema public > database.types.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.5",
@@ -41,6 +41,7 @@
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-unused-imports": "^4.2.0",
     "prettier": "^3.6.2",
+    "supabase": "^2.47.2",
     "typescript": "^5.9.2"
   }
 }
