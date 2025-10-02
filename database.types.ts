@@ -1361,7 +1361,7 @@ export type Database = {
           created_at: string
           id: number
           reference_table: string | null
-          reference_url: string | null
+          reference_url: string
           related_content_id: string | null
           title: string | null
           updated_at: string | null
@@ -1373,7 +1373,7 @@ export type Database = {
           created_at?: string
           id?: number
           reference_table?: string | null
-          reference_url?: string | null
+          reference_url: string
           related_content_id?: string | null
           title?: string | null
           updated_at?: string | null
@@ -1385,7 +1385,7 @@ export type Database = {
           created_at?: string
           id?: number
           reference_table?: string | null
-          reference_url?: string | null
+          reference_url?: string
           related_content_id?: string | null
           title?: string | null
           updated_at?: string | null
