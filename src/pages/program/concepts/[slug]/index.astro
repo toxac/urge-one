@@ -17,6 +17,7 @@ import PostQuestion from "../../../../components/user/actions/PostQuestion";
 import SaveBookmark from "../../../../components/user/actions/SaveBookmark";
 import SpeechBar from "../../../../components/content/SpeechBar.astro";
 import ActionBar from "../../../../components/content/ActionBar.astro";
+import ContentAction from "src/components/user/actions/ContentActions";
 
 import { hasAccess, accessProfiles } from "../../../../lib/rbac";
 const { userRoles, session } = Astro.locals;
@@ -82,8 +83,7 @@ const breadcrumbs = [
 
     {
       session != null && session.user.id ? (
-        <div class="flex gap-4">
-          <PostQuestion
+          <ContentAction
             contentType={concept.collection}
             referenceTable={"content_meta"}
             referenceUrl={pathname}
@@ -91,23 +91,7 @@ const breadcrumbs = [
             userId={session?.user.id}
             client:load
           />
-          <AddNote
-            contentType={concept.collection}
-            referenceTable={"content_meta"}
-            referenceUrl={pathname}
-            relatedContentId={concept.data.contentMetaId}
-            userId={session?.user.id}
-            client:load
-          />
-          <SaveBookmark
-            contentType={concept.collection}
-            referenceTable={"content_meta"}
-            referenceUrl={pathname}
-            relatedContentId={concept.data.contentMetaId}
-            userId={session?.user.id}
-            client:load
-          />
-        </div>
+          
       ) : null
     }
   </ActionBar>
