@@ -1,6 +1,6 @@
-import { Show, createSignal } from "solid-js";
+import { Show, createSignal, createEffect } from "solid-js";
 import { useStore } from "@nanostores/solid";
-import { bookmarksStore, manageBookmarks, bookmarkStoreLoading } from "../../../stores/userAssets/bookmarks";
+import { bookmarksStore, createBookmark, deleteBookmark, bookmarksStoreLoading } from "../../../stores/userAssets/bookmarks";
 import { Icon } from "@iconify-icon/solid";
 import { notify } from "../../../stores/notifications";
 import { supabaseBrowserClient } from "../../../lib/supabase/client";
@@ -17,44 +17,44 @@ interface BookmarkProps {
     referenceTable: string; // maps to reference_table
 }
 
-const supabase = supabaseBrowserClient;
-
 export default function SaveBookmark(props: BookmarkProps) {
-    const [showToast, setShowToast] = createSignal(false);
-    const [error, setError] = createSignal("");
-
     const $bookmarks = useStore(bookmarksStore);
-    const $bookmarkStoreLoading = useStore(bookmarkStoreLoading);
+    const $bookmarksLoading = useStore(bookmarksStoreLoading);
 
-    // Check if current content is already bookmarked
-    const isBookmarked = () => {
-        return $bookmarks().some(
-            bookmark =>
-                bookmark.related_content_id === props.relatedContentId &&
-                bookmark.user_id === props.userId
-        );
-    };
+    const [loading, setLoading] = createSignal(false);
+    const [bookmark, setBookmark] = createSignal<Boookmark | null>(null)
+
 
     // Find existing bookmark ID for deletion
     const getExistingBookmarkId = () => {
-        const bookmark = $bookmarks().find(
+        const currentBookmark = $bookmarks().find(
             b => b.related_content_id === props.relatedContentId && b.user_id === props.userId
         );
-        return bookmark?.id;
+        if(currentBookmark) {
+            return bookmark;
+        } else { return null}
+        
     };
 
+    createEffect(()=>{
+        if($bookmarksLoading()){
+            setLoading(true);
+        } else {
+            const currentBookmark  =  getExistingBookmarkId()
+            if(currentBookmark){
+                setBookmark(currentBookmark);
+            }
+            setLoading(false);
+        }
+    })
 
-    const handleClick = async () => {
-        if (isBookmarked()) {
+
+    const handleBookmark = async () => {
+        if (bookmark().length) {
             // Delete existing bookmark
             try {
-                const bookmarkId = getExistingBookmarkId();
-                if (!bookmarkId) return;
 
-                const { error: deleteError } = await supabase
-                    .from("user_bookmarks")
-                    .delete()
-                    .eq("id", bookmarkId);
+                const { error: deleteError } = await deleteBookmark(bookmark().id)
 
                 if (deleteError) throw deleteError;
 
