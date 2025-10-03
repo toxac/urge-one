@@ -20,3 +20,15 @@ export interface SupabaseCustomError {
 export type UserOpportunitiesStatus = "added" | "archived" | "selected";
 export type UserOpportunitiesDiscoveryMethod = "personal-problems" | "skill-based" | "zone-of-influence" | "broader-search";
 export type UserOppotunityCommentType =  "observation"| "insight" | "question" |"update";
+
+// ----- User Questions ------
+
+export type UserQuestionStatus = "pending" | "answered" | "rejected" | "archived" | "flagged" ;
+/*
+"pending" — The question has been submitted but not yet reviewed or answered.
+"approved" — The question has been reviewed and approved for display.
+"answered" — The question has received an answer.
+"rejected" — The question was reviewed but not approved (e.g., inappropriate or off-topic).
+"archived" — The question is no longer active but kept for record/history.
+"flagged" — The question has been reported for review (e.g., inappropriate content).
+*/
