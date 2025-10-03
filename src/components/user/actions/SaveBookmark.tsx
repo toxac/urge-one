@@ -6,7 +6,6 @@ import { notify } from "../../../stores/notifications";
 import { supabaseBrowserClient } from "../../../lib/supabase/client";
 import { type Database } from "../../../../database.types";
 
-type Boookmark = Database["public"]["Tables"]["user_bookmarks"]["Row"];
 type BoookmarkInsert = Database["public"]["Tables"]["user_bookmarks"]["Insert"];
 
 interface BookmarkProps {
@@ -22,7 +21,8 @@ export default function SaveBookmark(props: BookmarkProps) {
     const $bookmarksLoading = useStore(bookmarksStoreLoading);
 
     const [loading, setLoading] = createSignal(false);
-    const [bookmark, setBookmark] = createSignal<Boookmark | null>(null)
+    const [currentBookmarkId, setCurrentBookmarkId] = createSignal <number | null>(null);
+    const [submitting, setSubmitting] = createSignal(false);
 
 
     // Find existing bookmark ID for deletion
@@ -31,8 +31,8 @@ export default function SaveBookmark(props: BookmarkProps) {
             b => b.related_content_id === props.relatedContentId && b.user_id === props.userId
         );
         if(currentBookmark) {
-            return bookmark;
-        } else { return null}
+            setCurrentBookmarkId(currentBookmark.id)
+        } 
         
     };
 
@@ -40,32 +40,27 @@ export default function SaveBookmark(props: BookmarkProps) {
         if($bookmarksLoading()){
             setLoading(true);
         } else {
-            const currentBookmark  =  getExistingBookmarkId()
-            if(currentBookmark){
-                setBookmark(currentBookmark);
-            }
-            setLoading(false);
+            getExistingBookmarkId();
         }
-    })
+    }) 
 
 
     const handleBookmark = async () => {
-        if (bookmark().length) {
+        setSubmitting(true);
+        const bookmarkId = currentBookmarkId();
+        if (bookmarkId !== null) {
             // Delete existing bookmark
             try {
-
-                const { error: deleteError } = await deleteBookmark(bookmark().id)
-
-                if (deleteError) throw deleteError;
-
-                manageBookmarks('delete', { id: bookmarkId });
-                setError("");
-                notify.success("Bookmark removed successfully!");
-            } catch (err) {
-                console.error("Delete failed:", err);
-                setError("Failed to remove bookmark");
+                const { success, error} = await deleteBookmark(bookmarkId);
+                if(error) throw error;
+                if(success){
+                    notify.success("Bookmark removed successfully!", "Success!");
+                }
+                
+            } catch (error) {
+                console.error("Delete failed:", error);
                 // Show error notification
-                notify.error("Failed to remove bookmark. Please try again.");
+                notify.error("Failed to remove bookmark. Please try again.", "Fail.");
             }
         } else {
             // Create new bookmark
@@ -80,38 +75,32 @@ export default function SaveBookmark(props: BookmarkProps) {
             };
 
             try {
-                const { data: bookmarkData, error: bookmarkError } = await supabase
-                    .from("user_bookmarks")
-                    .insert(payload)
-                    .select('*')
-                    .single();
+                const { success, error } = await createBookmark(payload);
 
-                if (bookmarkError) throw bookmarkError;
+                if(error) throw error
 
-                if (bookmarkData) {
-                    manageBookmarks('create', bookmarkData);
-                    setError("");
-                    // Show success notification
-                    notify.success("Bookmark saved successfully!");
+                if (success) {
+                    notify.success("Bookmark saved successfully!", "Success!");
                 }
             } catch (err) {
                 console.error("Create failed:", err);
-                setError("Bookmark could not be saved");
                 notify.error("Bookmark could not be saved. Please try again.");
+            } finally {
+                setSubmitting(false);
             }
         }
     };
-    //<Icon icon="mdi:bookmark-check" width="24" height="24" />
+
 
     return (
         <button
-            onClick={handleClick}
+            onClick={handleBookmark}
             class="p-2 bg-white shadow-md rounded-full flex justify-center items-center hover:bg-base-100"
-            aria-label={isBookmarked() ? "Remove bookmark" : "Add bookmark"}
+            aria-label={currentBookmarkId() ? "Remove bookmark" : "Add bookmark"}
         >
             <Icon
-                icon={isBookmarked() ? "mdi:bookmark-check" : "mdi:bookmark"}
-                class={`text-xl ${isBookmarked() ? "text-accent" : "text-primary"}`}
+                icon={currentBookmarkId() ? "mdi:bookmark-check" : "mdi:bookmark"}
+                class={`text-xl ${currentBookmarkId() ? "text-accent" : "text-primary"}`}
             />
         </button>
 
