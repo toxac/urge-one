@@ -1781,43 +1781,43 @@ export type Database = {
       }
       user_questions: {
         Row: {
-          content: string | null
-          content_type: string | null
+          content: string
+          content_type: string
           created_at: string
           id: number
-          is_public: boolean | null
-          reference_table: string | null
-          reference_url: string | null
-          related_content_id: string | null
-          status: string | null
-          title: string | null
-          user_id: string | null
+          is_public: boolean
+          reference_table: string
+          reference_url: string
+          related_content_id: string
+          status: string
+          title: string
+          user_id: string
         }
         Insert: {
-          content?: string | null
-          content_type?: string | null
+          content: string
+          content_type: string
           created_at?: string
           id?: number
-          is_public?: boolean | null
-          reference_table?: string | null
-          reference_url?: string | null
-          related_content_id?: string | null
-          status?: string | null
-          title?: string | null
-          user_id?: string | null
+          is_public: boolean
+          reference_table: string
+          reference_url: string
+          related_content_id: string
+          status: string
+          title: string
+          user_id: string
         }
         Update: {
-          content?: string | null
-          content_type?: string | null
+          content?: string
+          content_type?: string
           created_at?: string
           id?: number
-          is_public?: boolean | null
-          reference_table?: string | null
-          reference_url?: string | null
-          related_content_id?: string | null
-          status?: string | null
-          title?: string | null
-          user_id?: string | null
+          is_public?: boolean
+          reference_table?: string
+          reference_url?: string
+          related_content_id?: string
+          status?: string
+          title?: string
+          user_id?: string
         }
         Relationships: []
       }
