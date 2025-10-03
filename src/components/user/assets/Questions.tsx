@@ -67,7 +67,7 @@ export default function NoteList() {
                 </div>
             </Show>
             {/* No Notes */}
-            <Show when={notes().length == 0 && !loading()}>
+            <Show when={questions().length == 0 && !loading()}>
                 <div class="text-center py-12">
                     <div class="text-gray-400 mb-4">
                         <Icon icon="mdi:lightbulb-on-outline" width={64} height={64} />
@@ -76,15 +76,27 @@ export default function NoteList() {
                     <p class="text-gray-600 mb-6">You can add notes to program content or resources. Note button is on top right of all the pages.</p>
                 </div>
             </Show>
-            {/* Notes Grid  */}
-            <Show when={notes().length > 0 && !loading()}>
+            {/* Notes Grid {
+    content: string | null;
+    content_type: string | null;
+    created_at: string;
+    id: number;
+    is_public: boolean | null;
+    reference_table: string | null;
+    reference_url: string | null;
+    related_content_id: string | null;
+    status: string | null;
+    title: string | null;
+    user_id: string | null;
+} */}
+            <Show when={questions().length > 0 && !loading()}>
                 <div class="grid grid-cols-1 gap-4">
-                    <For each={notes()}>
+                    <For each={questions()}>
                         {(note) => (
                             <div class="shadow-lg px-8 py-4 mt-8">
                                 <div class="flex justify-between items-start">
                                     <div class="badge badge-sm badge-outline capitalize mb-4">{note.content_type}</div>
-                                    <div class="text-sm">{getTimeDifference(note.updated_at)}</div>
+                                    <div class="text-sm">{getTimeDifference(note.created_at)}</div>
                                 </div>
 
                                 <p class="text-md mb-2 capitalize">{note.title}</p>
@@ -106,28 +118,6 @@ export default function NoteList() {
                 </div>
 
             </Show>
-
-
-
-            {/* Edit Note Modal */}
-            <Modal
-                isOpen={showModal()}
-                onClose={() => setShowModal(false)}
-                size="lg"
-            >
-                {editingNote() &&
-                    <AddNote 
-                        userId={editingNote()!.user_id}
-                        contentType={editingNote()!.content_type || ""}
-                        relatedContentId={editingNote()!.related_content_id || ""}
-                        referenceUrl={editingNote()!.reference_url}
-                        referenceTable={editingNote()!.reference_table || ""}
-                        note={editingNote()!}
-                        onSuccess={() => setShowModal(false)} 
-                    />
-                }
-                
-            </Modal>
         </div>
     );
 }

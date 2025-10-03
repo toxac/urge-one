@@ -1740,31 +1740,34 @@ export type Database = {
       }
       user_question_responses: {
         Row: {
-          content: string | null
+          asker_id: string
+          content: string
           created_at: string
           feedback_rating: number | null
           id: number
           question_id: number | null
-          updated_at: string | null
-          user_id: string | null
+          updated_at: string
+          user_id: string
         }
         Insert: {
-          content?: string | null
+          asker_id: string
+          content: string
           created_at?: string
           feedback_rating?: number | null
           id?: number
           question_id?: number | null
-          updated_at?: string | null
-          user_id?: string | null
+          updated_at?: string
+          user_id: string
         }
         Update: {
-          content?: string | null
+          asker_id?: string
+          content?: string
           created_at?: string
           feedback_rating?: number | null
           id?: number
           question_id?: number | null
-          updated_at?: string | null
-          user_id?: string | null
+          updated_at?: string
+          user_id?: string
         }
         Relationships: [
           {
