@@ -3,7 +3,7 @@ import { createSignal, createEffect, Show, For } from "solid-js";
 import { navigate } from "astro:transitions/client";
 import { Icon } from "@iconify-icon/solid";
 import { useStore } from "@nanostores/solid";
-import { notesStore, deleteNote, updateNote, notesStoreLoading } from "../../../stores/userAssets/notes";
+import { questionsStore, deleteQuestion, questionsStoreLoading } from "../../../stores/userAssets/questions";
 import { notify } from "../../../stores/notifications";
 import { getTimeDifference } from "../../../lib/content/dateUtils";
 import AddNote from "../actions/AddNote";
@@ -11,41 +11,41 @@ import Modal from "../../appFeedback/Modal";
 
 import type { Database } from "../../../../database.types";
 
-type Note = Database['public']['Tables']['user_notes']['Row'];
+type Question = Database['public']['Tables']['user_questions']['Row'];
 
 export default function NoteList() {
 
-    const $notes = useStore(notesStore);
-    const $notesLoading = useStore(notesStoreLoading);
+    const $questions = useStore(questionsStore);
+    const $questionsLoading = useStore(questionsStoreLoading);
 
     const [showModal, setShowModal] = createSignal(false);
-    const [notes, setNotes] = createSignal<Note[] | []>([]);
-    const [editingNote, setEditingNote] = createSignal<Note | null> (null)
+    const [questions, setQuestions] = createSignal<Question[] | []>([]);
+    const [editingQuestion, setEditingQuestion] = createSignal<Question | null> (null)
     const [loading, setLoading] = createSignal(false);
 
     createEffect(() => {
-        if ($notesLoading()) {
+        if ($questionsLoading()) {
             setLoading(true)
             return;
         } else {
-            const loadedNotes = $notes();
-            setNotes(loadedNotes)
+            const loadedQuestions = $questions();
+            setQuestions(loadedQuestions)
             setLoading(false);
         }
     })
 
-    const handleEdit = async(selectedNote: Note) =>{
-        setEditingNote(selectedNote);
+    const handleEdit = async(selectedQuestion: Question) =>{
+        setEditingQuestion(selectedQuestion);
         setShowModal(true);
 
     }
 
-    const handleDelete = async(selectedNote: Note) =>{
+    const handleDelete = async(selectedQuestion: Question) =>{
         try {
-            const {success, error} = await deleteNote(selectedNote.id);
+            const {success, error} = await deleteQuestion(selectedQuestion.id);
             if(error) throw error;
             if(success){
-                notify.success(`Note: ${selectedNote.title} deleted`, "Success");
+                notify.success(`Note: ${selectedQuestion.title} deleted`, "Success");
             }
         } catch (error) {
             console.error(error);
