@@ -30,9 +30,8 @@ const noteSchema = z.object({
 });
 
 
-const supabase = supabaseBrowserClient;
 
-export default function NoteAction(props: NoteProps) {
+export default function AddNote(props: NoteProps) {
     const [isOpen, setIsOpen] = createSignal(false);
     const [error, setError] = createSignal("");
     const [submitting, setSubmitting] = createSignal(false);

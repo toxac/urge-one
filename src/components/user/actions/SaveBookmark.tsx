@@ -19,7 +19,7 @@ interface BookmarkProps {
 
 const supabase = supabaseBrowserClient;
 
-export default function BookmarkAction(props: BookmarkProps) {
+export default function SaveBookmark(props: BookmarkProps) {
     const [showToast, setShowToast] = createSignal(false);
     const [error, setError] = createSignal("");
 

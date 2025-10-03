@@ -17,6 +17,7 @@ interface QuestionProps {
     referenceUrl: string | null;
     relatedContentId: string | null;
     userId: string;
+    onSuccess?: () => void;
 }
 
 const questionSchema = z.object({
@@ -27,7 +28,7 @@ const questionSchema = z.object({
 
 const supabase = supabaseBrowserClient;
 
-export default function QuestionAction(props: QuestionProps) {
+export default function PostQuestion(props: QuestionProps) {
     const [isOpen, setIsOpen] = createSignal(false);
     const [error, setError] = createSignal("");
     const [isSubmitting, setIsSubmitting] = createSignal(false);
