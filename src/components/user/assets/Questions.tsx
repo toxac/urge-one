@@ -24,7 +24,7 @@ interface ComponentProps {
     userId: string;
 }
 
-export default function NoteList(props: ComponentProps) {
+export default function Questions(props: ComponentProps) {
     const $questions = useStore(questionsStore);
     const $questionsLoading = useStore(questionsStoreLoading);
     const $responses = useStore(questionResponsesStore);

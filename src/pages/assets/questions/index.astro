@@ -1,0 +1,46 @@
+---
+import DashLayout from "../../../layouts/DashLayout.astro";
+import { hasAccess, accessProfiles } from "../../../lib/rbac";
+import MDContainer from "../../../components/content/MDContainer.astro";
+import Questions from "../../../components/user/assets/Questions";
+
+// CHECK AUTHENTICATION AND ACCESS
+const { userRoles, session } = Astro.locals;
+
+const isAuthenticated: boolean = session !== null;
+
+const hasPageAccess: boolean = hasAccess(
+    userRoles,
+    accessProfiles.programStart,
+);
+
+// redirect if doesnt have access
+if (!isAuthenticated || !hasPageAccess) {
+    return Astro.redirect("/program");
+}
+
+const userId = session!.user!.id;
+
+// BREADCRUMBS
+const breadcrumbs = [
+    { name: "Home", url: "/" },
+    { name: "Assets", url: "/assets" },
+    { name: "Questions", url: "/assets/questions" },
+];
+---
+
+<DashLayout
+    title="milestones | urge-start"
+    description="milestones in urge start program"
+    breadcrumbItems={breadcrumbs}
+>
+    <h1 class="mb-8">Questions</h1>
+    <MDContainer>
+        <p>
+            Questions you have asked. 
+        </p>
+    </MDContainer>
+
+    <div class="py-12">
+        <Questions userId={userId} client:load />
+    </div>
