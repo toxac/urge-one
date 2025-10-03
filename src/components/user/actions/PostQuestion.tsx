@@ -2,7 +2,7 @@ import { createSignal, Show } from "solid-js";
 import { Icon } from "@iconify-icon/solid";
 import Modal from "../../appFeedback/Modal";
 import { notify } from "../../../stores/notifications";
-import { manageQuestions } from "../../../stores/userAssets/questions";
+import { createQuestion } from "../../../stores/userAssets/questions";
 import { supabaseBrowserClient } from "../../../lib/supabase/client";
 import { createForm } from "@felte/solid";
 import { validator } from '@felte/validator-zod';
@@ -12,10 +12,10 @@ import type { Database } from "../../../../database.types";
 type QuestionInsert = Database['public']['Tables']['user_notes']['Insert'];
 
 interface QuestionProps {
-    contentType: string | null;
-    referenceTable: string | null;
-    referenceUrl: string | null;
-    relatedContentId: string | null;
+    contentType: string ;
+    referenceTable: string ;
+    referenceUrl: string ;
+    relatedContentId: string ;
     userId: string;
     onSuccess?: () => void;
 }

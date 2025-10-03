@@ -21,7 +21,7 @@ export default function SaveBookmark(props: BookmarkProps) {
     const $bookmarksLoading = useStore(bookmarksStoreLoading);
 
     const [loading, setLoading] = createSignal(false);
-    const [currentBookmarkId, setCurrentBookmarkId] = createSignal <number | null>(null);
+    const [currentBookmarkId, setCurrentBookmarkId] = createSignal<number | null>(null);
     const [submitting, setSubmitting] = createSignal(false);
 
 
@@ -30,19 +30,19 @@ export default function SaveBookmark(props: BookmarkProps) {
         const currentBookmark = $bookmarks().find(
             b => b.related_content_id === props.relatedContentId && b.user_id === props.userId
         );
-        if(currentBookmark) {
+        if (currentBookmark) {
             setCurrentBookmarkId(currentBookmark.id)
-        } 
-        
+        }
+
     };
 
-    createEffect(()=>{
-        if($bookmarksLoading()){
+    createEffect(() => {
+        if ($bookmarksLoading()) {
             setLoading(true);
         } else {
             getExistingBookmarkId();
         }
-    }) 
+    })
 
 
     const handleBookmark = async () => {
@@ -51,12 +51,12 @@ export default function SaveBookmark(props: BookmarkProps) {
         if (bookmarkId !== null) {
             // Delete existing bookmark
             try {
-                const { success, error} = await deleteBookmark(bookmarkId);
-                if(error) throw error;
-                if(success){
+                const { success, error } = await deleteBookmark(bookmarkId);
+                if (error) throw error;
+                if (success) {
                     notify.success("Bookmark removed successfully!", "Success!");
                 }
-                
+
             } catch (error) {
                 console.error("Delete failed:", error);
                 // Show error notification
@@ -77,7 +77,7 @@ export default function SaveBookmark(props: BookmarkProps) {
             try {
                 const { success, error } = await createBookmark(payload);
 
-                if(error) throw error
+                if (error) throw error
 
                 if (success) {
                     notify.success("Bookmark saved successfully!", "Success!");
