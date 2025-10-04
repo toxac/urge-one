@@ -12,7 +12,7 @@ import MDContainer from "../../../../components/content/MDContainer.astro";
 import ContentInitializer from "../../../../components/program/progress/ContentInitializer";
 import ContentNavigationButtons from "../../../../components/program/progress/ContentNavigationButtons";
 import ContentProgressStatus from "../../../../components/program/progress/ContentProgressStatus";
-import SpeechBar from "../../../../components/content/SpeechBar.astro";
+
 
 import ContentAction from "src/components/user/actions/ContentActions";
 
@@ -92,9 +92,8 @@ const breadcrumbs = [
 
   </div>
 
-  <h1>{concept.data.title}</h1>
+  <h1 class="mb-8">{concept.data.title}</h1>
 
-  <SpeechBar>Speed controls</SpeechBar>
 
   <MDContainer>
     <Content />
