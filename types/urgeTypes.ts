@@ -32,3 +32,8 @@ export type UserQuestionStatus = "pending" | "answered" | "rejected" | "archived
 "archived" — The question is no longer active but kept for record/history.
 "flagged" — The question has been reported for review (e.g., inappropriate content).
 */
+
+
+// ----- Program ------
+
+export type ProgressStatus = 'not_started' | 'in_progress' | 'completed';

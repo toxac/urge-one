@@ -10,8 +10,9 @@
 import { useStore } from "@nanostores/solid";
 import { createMemo } from "solid-js";
 import { progressStore } from "../../../stores/progress.ts";
+import type { ProgressStatus } from "../../../../types/urgeTypes.ts";
 
-type ProgressStatus = 'not_started' | 'in_progress' | 'completed';
+
 
 const statusText = {
     not_started: "Not Started",
