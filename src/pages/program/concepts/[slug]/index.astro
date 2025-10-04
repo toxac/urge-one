@@ -56,42 +56,40 @@ const breadcrumbs = [
   },
   {
     name: `Concept-${concept.data.title}`,
-    url: `/activities/${concept.slug}`,
+    url: `program/concepts/${concept.slug}`,
   },
 ];
 ---
 
 <DashLayout
-  title={`activity - ${concept.data.title} | urge`}
+  title={`Concept - ${concept.data.title} | urge`}
   description={concept.data?.description || concept.data.title}
   breadcrumbItems={breadcrumbs}
 >
-  <ContentInitializer
-        contentMetaId={concept.data.contentMetaId}
-        client:load
-      />
-  <div class="flex justify-between">
-    <div class="bg-white p-2 rounded-lg shadow-md border border-gray-200">
-      
+  <ContentInitializer contentMetaId={concept.data.contentMetaId} client:load />
+
+  <div class="w-full flex justify-between items-center mb-8">
+    <div class="p-2 h-full bg-white flex gap-1 items-center shadow-md rounded-md">
       <ContentProgressStatus
         contentId={concept.data.contentMetaId}
         client:load
       />
     </div>
-
-    {
+    <div class="flex gap-2">
+      {
       session != null && session.user.id ? (
-          <ContentAction
-            contentType={concept.collection}
-            referenceTable={"content_meta"}
-            referenceUrl={pathname}
-            relatedContentId={concept.data.contentMetaId}
-            userId={session?.user.id}
-            client:load
-          />
-          
+        <ContentAction
+          contentType={concept.collection}
+          referenceTable={"content_meta"}
+          referenceUrl={pathname}
+          relatedContentId={concept.data.contentMetaId}
+          userId={session?.user.id}
+          client:load
+        />
       ) : null
     }
+    </div>
+
   </div>
 
   <h1>{concept.data.title}</h1>
