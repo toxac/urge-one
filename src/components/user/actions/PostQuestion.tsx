@@ -1,8 +1,6 @@
-import { createSignal, Show } from "solid-js";
-import { Icon } from "@iconify-icon/solid";
+import { createSignal} from "solid-js";
 import { notify } from "../../../stores/notifications";
 import { createQuestion } from "../../../stores/userAssets/questions";
-import { supabaseBrowserClient } from "../../../lib/supabase/client";
 import { createForm } from "@felte/solid";
 import { validator } from '@felte/validator-zod';
 import { z } from 'zod';
@@ -21,12 +19,12 @@ interface QuestionProps {
 }
 
 const questionSchema = z.object({
-    question: z.string().min(1, "Question is required"),
-    content: z.string().min(1, "Content is required"),
+    question: z.string().min(3, "Question is required"),
+    content: z.string().min(10, "Content is required and should be of minimum 10 characters"),
+    is_public: z.boolean().default(false),
 });
 
 export default function PostQuestion(props: QuestionProps) {
-    const [error, setError] = createSignal("");
     const [isSubmitting, setIsSubmitting] = createSignal(false);
     
     const handleModalClose = () => {
@@ -38,12 +36,12 @@ export default function PostQuestion(props: QuestionProps) {
     const { form, errors, isValid, handleSubmit } = createForm({
         initialValues: {
             question: "",
-            content: ""
+            content: "",
+            is_public: false
         },
         extend: validator({ schema: questionSchema }),
         onSubmit: async (values) => {
             setIsSubmitting(true);
-            setError("");
 
             try {
                 const currentDate = new Date().toISOString();
@@ -56,7 +54,7 @@ export default function PostQuestion(props: QuestionProps) {
                     reference_url: props.referenceUrl,
                     related_content_id: props.relatedContentId,
                     user_id: props.userId,
-                    is_public: false,
+                    is_public: values.is_public,
                     status: "pending"
 
                 }
@@ -70,7 +68,6 @@ export default function PostQuestion(props: QuestionProps) {
             } catch (err) {
                 notify.error("Failed, question could not be posted.")
                 console.error(err);
-                setError(err instanceof Error ? err.message : "An unknown error occurred");
             } finally {
                 setIsSubmitting(false);
                 props.onSuccess?.();
@@ -86,15 +83,12 @@ export default function PostQuestion(props: QuestionProps) {
 
             <form use:form>
                 <div class="form-control">
-                    <label class="label" for="question">
-                        <span class="label-text">Your Question</span>
-                    </label>
                     <input
                         type="text"
                         id="question"
                         name="question"
-                        class="input input-bordered"
-                        disabled={isSubmitting()}
+                        class="input input-neutral w-full"
+                        placeholder="Title of the question"
                     />
                     {errors().question && (
                         <label class="label">
@@ -104,15 +98,12 @@ export default function PostQuestion(props: QuestionProps) {
                 </div>
 
                 <div class="form-control mt-4">
-                    <label class="label" for="content">
-                        <span class="label-text">Details</span>
-                    </label>
                     <textarea
                         id="content"
                         name="content"
                         rows={8}
-                        class="textarea textarea-bordered"
-                        disabled={isSubmitting()}
+                        class="textarea textarea-neutral w-full"
+                        placeholder="Describe your question in detail."
                     />
                     {errors().content && (
                         <label class="label">
@@ -120,15 +111,26 @@ export default function PostQuestion(props: QuestionProps) {
                         </label>
                     )}
                 </div>
-
-                {error() && (
-                    <div class="alert alert-error mt-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>{error()}</span>
+                {/* Public Toggle */}
+                <div class="form-control mt-4">
+                    <label class="label cursor-pointer justify-start gap-4">
+                        <span class="label-text">Make this question public?</span>
+                        <input 
+                            type="checkbox" 
+                            id="is_public"
+                            name="is_public"
+                            class="toggle toggle-primary" 
+                        />
+                    </label>
+                    <div class="text-xs text-gray-500 mt-1">
+                        {errors().is_public ? (
+                            <span class="text-error">{errors().is_public}</span>
+                        ) : (
+                            "Public questions are visible to other users and can be answered by any user, while private questions are only visible to you and administrators."
+                        )}
                     </div>
-                )}
+                </div>
+
                 <div class="flex justify-end py-8 gap-4">
                     <button class="btn btn-neutral btn-outline" onClick={handleModalClose}>Close</button>
                     <button class="btn btn-primary btn-outline" type="submit" >Post Question</button>
