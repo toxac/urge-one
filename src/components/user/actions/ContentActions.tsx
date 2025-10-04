@@ -24,12 +24,17 @@ export default function ContentAction(props: ComponentProps) {
         setShowModal(true);
     }
 
+    const handleModalClose = () => {
+        setShowModal(false);
+        setAction("none");
+    }
+
     return (
 
         <>
             <div class="w-full flex justify-end gap-4">
                 <button class="btn btn-outline" onClick={() => showAction("note")}>Note</button>
-                <button class="btn btn-outline" onClick={() => setAction("question")}>Question</button>
+                <button class="btn btn-outline" onClick={() => showAction("question")}>Question</button>
                 <SaveBookmark
                     contentType={props.contentType}
                     referenceTable={props.referenceTable}
@@ -47,6 +52,7 @@ export default function ContentAction(props: ComponentProps) {
                     referenceUrl={props.referenceUrl}
                     referenceTable={props.referenceTable}
                     onSuccess={() => setShowModal(false)}
+                    onClose={handleModalClose}
                 />
             </Modal>
             {/* Note Modal */}
@@ -58,6 +64,7 @@ export default function ContentAction(props: ComponentProps) {
                     referenceUrl={props.referenceUrl}
                     referenceTable={props.referenceTable}
                     onSuccess={() => setShowModal(false)}
+                    onClose={handleModalClose}
                 />
             </Modal>
         </>

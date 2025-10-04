@@ -22,6 +22,7 @@ interface NoteProps {
     referenceTable: string; // maps to reference_table
     note?: Note;
     onSuccess?: () => void;
+    onClose?:()=> void;
 }
 
 const noteSchema = z.object({
@@ -97,6 +98,11 @@ export default function AddNote(props: NoteProps) {
             }
         },
     });
+    const handleClose =() =>{
+        if(props.onClose){
+            props.onClose?.();
+        }
+    }
 
     return (
         <div class="w-full">
@@ -112,7 +118,7 @@ export default function AddNote(props: NoteProps) {
                         type="text"
                         id="title"
                         name="title"
-                        class="input input-bordered"
+                        class="input input-neutral w-full"
                         placeholder="Title"
                     />
                     <Show when={errors().title && touched().title}>
@@ -127,7 +133,7 @@ export default function AddNote(props: NoteProps) {
                         id="content"
                         name="content"
                         rows={8}
-                        class="textarea textarea-bordered"
+                        class="textarea textarea-neutral w-full"
                         placeholder="Write your note"
                     />
                     <Show when={errors().content && touched().content}>
@@ -145,8 +151,9 @@ export default function AddNote(props: NoteProps) {
                         <span>{error()}</span>
                     </div>
                 </Show>
-                <div class="flex justify-end py-5">
-                    <button class="btn btn-primary" type="submit" >{props.note? "Update" : "Save"}</button>
+                <div class="flex justify-end py-8 gap-4">
+                    <button class="btn btn-outline btn-neutral" onClick={handleClose}>Close</button>
+                    <button class="btn btn-primary btn-outline" type="submit" >{props.note? "Update" : "Save"}</button>
                 </div>
             </form>
         </div>

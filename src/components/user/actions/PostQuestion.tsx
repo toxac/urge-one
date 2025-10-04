@@ -17,6 +17,7 @@ interface QuestionProps {
     relatedContentId: string;
     userId: string;
     onSuccess?: () => void;
+    onClose?: ()=> void;
 }
 
 const questionSchema = z.object({
@@ -27,6 +28,12 @@ const questionSchema = z.object({
 export default function PostQuestion(props: QuestionProps) {
     const [error, setError] = createSignal("");
     const [isSubmitting, setIsSubmitting] = createSignal(false);
+    
+    const handleModalClose = () => {
+        if(props.onClose){
+            props.onClose?.();
+        }
+    }
 
     const { form, errors, isValid, handleSubmit } = createForm({
         initialValues: {
@@ -122,8 +129,9 @@ export default function PostQuestion(props: QuestionProps) {
                         <span>{error()}</span>
                     </div>
                 )}
-                <div class="flex justify-end py-5">
-                    <button class="btn btn-primary" type="submit" >Post</button>
+                <div class="flex justify-end py-8 gap-4">
+                    <button class="btn btn-neutral btn-outline" onClick={handleModalClose}>Close</button>
+                    <button class="btn btn-primary btn-outline" type="submit" >Post Question</button>
                 </div>
             </form>
 
