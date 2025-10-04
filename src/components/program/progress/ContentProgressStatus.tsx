@@ -38,19 +38,9 @@ export default function ContentProgressStatus(props: Props) {
             {isLoading() ? (
                 <div class="text-sm text-gray-400">Loading...</div>
             ) : (
-                <>
-                    <div
-                        class={`w-3 h-3 rounded-full ${progress() === 'completed' ? 'bg-green-500' :
-                            progress() === 'in_progress' ? 'bg-yellow-500' :
-                                'bg-gray-300'
-                            }`}
-                        aria-label={progress()}
-                        role="status"
-                    />
-                    <span class="text-sm font-medium">
-                        {statusText[progress()]}
-                    </span>
-                </>
+                <div class="text-sm font-medium">
+                        in proghress
+                </div>
             )}
         </div>
     );
