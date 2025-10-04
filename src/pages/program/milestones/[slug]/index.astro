@@ -25,7 +25,7 @@ const isAuthenticated: boolean = session !== null;
 
 const hasPageAccess: boolean = hasAccess(
   userRoles,
-  accessProfiles.programStart
+  accessProfiles.programStart,
 );
 
 // redirect if doesnt have access
@@ -64,10 +64,15 @@ const breadcrumbs = [
   description={milestone.data?.description || milestone.data.title}
   breadcrumbItems={breadcrumbs}
 >
-  <ContentInitializer contentMetaId={milestone.data.contentMetaId} client:load />
+  <ContentInitializer
+    contentMetaId={milestone.data.contentMetaId}
+    client:load
+  />
 
   <div class="w-full flex justify-between items-center mb-8">
-    <div class="p-2 h-full bg-white flex gap-1 items-center shadow-md rounded-md">
+    <div
+      class="p-2 h-full bg-white flex gap-1 items-center shadow-md rounded-md"
+    >
       <ContentProgressStatus
         contentId={milestone.data.contentMetaId}
         client:load
@@ -75,17 +80,17 @@ const breadcrumbs = [
     </div>
     <div class="flex gap-2">
       {
-      session != null && session.user.id ? (
-        <ContentAction
-          contentType={milestone.collection}
-          referenceTable={"content_meta"}
-          referenceUrl={pathname}
-          relatedContentId={milestone.data.contentMetaId}
-          userId={session?.user.id}
-          client:load
-        />
-      ) : null
-    }
+        session != null && session.user.id ? (
+          <ContentAction
+            contentType={milestone.collection}
+            referenceTable={"content_meta"}
+            referenceUrl={pathname}
+            relatedContentId={milestone.data.contentMetaId}
+            userId={session?.user.id}
+            client:load
+          />
+        ) : null
+      }
     </div>
   </div>
 

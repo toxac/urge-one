@@ -67,7 +67,9 @@ const breadcrumbs = [
   <ContentInitializer contentMetaId={concept.data.contentMetaId} client:load />
 
   <div class="w-full flex justify-between items-center mb-8">
-    <div class="p-2 h-full bg-white flex gap-1 items-center shadow-md rounded-md">
+    <div
+      class="p-2 h-full bg-white flex gap-1 items-center shadow-md rounded-md"
+    >
       <ContentProgressStatus
         contentId={concept.data.contentMetaId}
         client:load
@@ -75,22 +77,21 @@ const breadcrumbs = [
     </div>
     <div class="flex gap-2">
       {
-      session != null && session.user.id ? (
-        <ContentAction
-          contentType={concept.collection}
-          referenceTable={"content_meta"}
-          referenceUrl={pathname}
-          relatedContentId={concept.data.contentMetaId}
-          userId={session?.user.id}
-          client:load
-        />
-      ) : null
-    }
+        session != null && session.user.id ? (
+          <ContentAction
+            contentType={concept.collection}
+            referenceTable={"content_meta"}
+            referenceUrl={pathname}
+            relatedContentId={concept.data.contentMetaId}
+            userId={session?.user.id}
+            client:load
+          />
+        ) : null
+      }
     </div>
   </div>
 
   <h1 class="mb-8">{concept.data.title}</h1>
-
 
   <MDContainer>
     <Content />
