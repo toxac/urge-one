@@ -1,5 +1,6 @@
 import { createSignal, Show } from "solid-js";
 import Modal from "../../../components/appFeedback/Modal";
+import { Icon } from "@iconify-icon/solid";
 import AddNote from "./AddNote";
 import PostQuestion from "./PostQuestion";
 import SaveBookmark from "./SaveBookmark";
@@ -32,16 +33,26 @@ export default function ContentAction(props: ComponentProps) {
     return (
 
         <>
-            <div class="w-full flex justify-end gap-4">
-                <button class="btn btn-outline" onClick={() => showAction("note")}>Note</button>
-                <button class="btn btn-outline" onClick={() => showAction("question")}>Question</button>
-                <SaveBookmark
-                    contentType={props.contentType}
-                    referenceTable={props.referenceTable}
-                    referenceUrl={props.referenceUrl}
-                    relatedContentId={props.relatedContentId}
-                    userId={props.userId}
-                />
+            <div class="w-full flex justify-end gap-2">
+                <div class="tooltip tooltip-top" data-tip="Add a note">
+                    <button class="btn btn-square bg-white" onClick={() => showAction("note")}>
+                        <Icon icon="mdi:note-outline" width={24} height={24} />
+                    </button>
+                </div>
+                <div class="tooltip tooltip-top" data-tip="Post a question">
+                    <button class="btn btn-square bg-white" onClick={() => showAction("question")}>
+                        <Icon icon="mdi:question-mark-circle-outline" width="24" height="24" />
+                    </button>
+                </div>
+                <div class="tooltip tooltip-top" data-tip="Bookmark page">
+                    <SaveBookmark
+                        contentType={props.contentType}
+                        referenceTable={props.referenceTable}
+                        referenceUrl={props.referenceUrl}
+                        relatedContentId={props.relatedContentId}
+                        userId={props.userId}
+                    />
+                </div>
             </div>
             {/* Note Modal */}
             <Modal isOpen={action() == "note" && showModal()} size="lg" onClose={() => setShowModal(false)}>

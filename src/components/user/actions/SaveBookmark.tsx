@@ -95,11 +95,13 @@ export default function SaveBookmark(props: BookmarkProps) {
     return (
         <button
             onClick={handleBookmark}
-            class="p-2 bg-white shadow-md rounded-full flex justify-center items-center hover:bg-base-100"
+            class="btn btn-square bg-white"
             aria-label={currentBookmarkId() ? "Remove bookmark" : "Add bookmark"}
         >
             <Icon
                 icon={currentBookmarkId() ? "mdi:bookmark-check" : "mdi:bookmark"}
+                width={24}
+                height={24}
                 class={`text-xl ${currentBookmarkId() ? "text-accent" : "text-primary"}`}
             />
         </button>
