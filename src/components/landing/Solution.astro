@@ -1,5 +1,14 @@
 ---
-import { Icon } from 'astro-icon/components';
+import { Icon } from "astro-icon/components";
+import { getCollection, type CollectionEntry } from "astro:content";
+import MilestoneCard from "./MilestoneCard.astro";
+
+type Milestone = CollectionEntry<"milestones">;
+const milestones = await getCollection("milestones");
+milestones.sort((a, b) => {
+  return a.data.sequence - b.data.sequence;
+});
+
 // No more external imports needed
 export interface Props {
   segment: string;
@@ -23,48 +32,6 @@ const contentAction = {
       icon: "🗺️",
       headline: "A Simple Roadmap (Mindset to Market)",
       text: "No more guesswork or 'what's next?'. Urge provides a **structured path** through clear milestones, guiding you logically from building the essential founder **mindset** and spotting **opportunities**, to creating your **sellable** product (MSP) and finding **real customers**. Stay focused, beat overwhelm.",
-    },
-  ],
-  milestones: [
-    {
-      number: 1,
-      title: "Begin Your Adventure",
-      focus: "Mindset & Goals",
-    },
-    {
-      number: 2,
-      title: "Discover Opportunities",
-      focus: "Problem Finding",
-    },
-    {
-      number: 3,
-      title: "Evaluate & Pick",
-      focus: "Market Fit & Selection",
-    },
-    {
-      number: 4,
-      title: "Grasp Fundamentals",
-      focus: "Core Business Concepts",
-    },
-    {
-      number: 5,
-      title: "Craft Your Offer",
-      focus: "Value & Early Validation",
-    },
-    {
-      number: 6,
-      title: "Build Your Solution",
-      focus: "Creating Your MSP",
-    },
-    {
-      number: 7,
-      title: "Land First Customers",
-      focus: "Sales & Outreach Action",
-    },
-    {
-      number: 8,
-      title: "Review & Scale",
-      focus: "Growth Foundations",
     },
   ],
 };
@@ -105,14 +72,14 @@ const contentMindset = {
     <h2
       class="text-4xl md:text-5xl font-bold text-base-content mb-6 tracking-tight"
     >
-      The Urge Solution: Built for Action.
+      The Program: Built for Action.
     </h2>
 
     {/* Body Text - Improved readability */}
     <p
-      class="text-lg text-base-content/80 leading-relaxed max-w-2xl mx-auto mb-12 text-justify"
+      class="text-lg text-base-content/80 leading-relaxed max-w-3xl mx-auto mb-12 text-justify"
     >
-      Urge isn't just another course; it's a complete launch system designed to
+      Urge program isn't a course; it's a complete launch system designed to
       overcome the <strong>real blocks</strong> (like fear & inertia!). We combine
       practical, guided action with essential mindset shifts and strong community
       accountability. Explore below how each pillar works to get you moving, lean
@@ -120,43 +87,21 @@ const contentMindset = {
     </p>
   </div>
 
-  {/* Guidance and Action Section */}
-
-  <div class="py-16">
-    {/* Section Header */}
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold mb-3">
-        Your 8 Essential Milestones
-      </h2>
-      <p class="text-base-content/80 max-w-2xl mx-auto">
-        Structured progression from idea to market—no time-wasting, just
-        building.
-      </p>
-    </div>
-
     {/* Milestone Grid */}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {
-        contentAction.milestones.map((milestone) => (
-          <div class="bg-white p-5 rounded-lg border border-base-200 hover:border-primary/40 transition-colors">
-            <div class="flex items-start gap-3">
-              <div class="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mt-0.5">
-                <span class="text-sm font-medium text-primary">
-                  {milestone.number}
-                </span>
-              </div>
-              <div>
-                <h3 class="font-semibold text-base-content mb-1">
-                  {milestone.title}
-                </h3>
-                <p class="text-sm text-base-content/70">{milestone.focus}</p>
-              </div>
-            </div>
-          </div>
-        ))
+        milestones.map((milestone: Milestone) => {
+          return (
+            <MilestoneCard
+              title={milestone.data.title}
+              sequence={milestone.data.sequence}
+              subtitle={milestone.data.subtitle}
+              description={milestone.data.description}
+            />
+          );
+        })
       }
     </div>
-
     {/* CTA */}
     <div class="text-center mt-12">
       <a
@@ -178,7 +123,5 @@ const contentMindset = {
         </svg>
       </a>
     </div>
-  </div>
-
 
 </div>
