@@ -99,10 +99,10 @@ export default function SaveBookmark(props: BookmarkProps) {
             aria-label={currentBookmarkId() ? "Remove bookmark" : "Add bookmark"}
         >
             <Icon
-                icon={currentBookmarkId() ? "mdi:bookmark-check" : "mdi:bookmark"}
+                icon={currentBookmarkId() ? "mdi:bookmark-check" : "mdi:bookmark-outline"}
                 width={24}
                 height={24}
-                class={`text-xl ${currentBookmarkId() ? "text-accent" : "text-primary"}`}
+                class={`text-xl ${currentBookmarkId() ? "text-accent" : "text-neutral"}`}
             />
         </button>
 
