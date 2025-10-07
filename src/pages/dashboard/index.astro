@@ -1,15 +1,41 @@
 ---
-import Layout from "../../layouts/Layout.astro";
+import DashLayout from "../../layouts/DashLayout.astro";
+import ProgressWidget from "../../components/widgets/ProgressWidget";
+import OpportunityWidget from "../../components/widgets/OpportunityWidget";
+import { hasAccess, accessProfiles } from "../../lib/rbac";
+const { userRoles, session } = Astro.locals;
 
+// Authentication Check
+const isAuthenticated: boolean = session !== null;
+// Access Check
+const isEnrolled: boolean = hasAccess(userRoles, accessProfiles.programStart);
 
-const { session } = Astro.locals;
-
-// redirect to login if user does not exists
+// redirect if doesnt have access
 if (!session) {
-  return Astro.redirect("/auth/login");
+  return Astro.redirect("/program");
 }
+if (!isAuthenticated) {
+  return Astro.redirect("/program");
+}
+
+const userId = session.user.id;
+
+const breadcrumbs = [
+  { name: "Home", url: "/" },
+  { name: "Dashboard", url: "/dashboard" },
+];
 ---
 
-<Layout title="urge Dashboard" description="Urge dashboard">
-  <h1>Dashboard</h1>
-</Layout>
+<DashLayout
+  title="urge Dashboard"
+  description="Urge dashboard"
+  breadcrumbItems={breadcrumbs}
+>
+  <div class="max-w-4xl mx-auto">
+    <h1>Dashboard</h1>
+    <ProgressWidget client:load userId={userId} isEnrolled={isEnrolled} />
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
+    <OpportunityWidget client:load userId={userId} isEnrolled={isEnrolled} />
+    </div>
+  </div>
+</DashLayout>

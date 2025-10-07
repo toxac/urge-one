@@ -1,6 +1,6 @@
 import { createSignal, createEffect, For, Show, onMount } from "solid-js";
 import { useStore } from "@nanostores/solid";
-import { authStore } from "src/stores/auth";
+import { authStore } from "../../../stores/auth";
 import { createForm } from '@felte/solid';
 import * as z from "zod";
 import { Icon } from "@iconify-icon/solid";
