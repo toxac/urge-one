@@ -9,7 +9,7 @@
     "node_modules"
   ],
   "compilerOptions": {
-    "baseUrl": ".",
+    //"baseUrl": ".",
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
     "allowJs": true,
