@@ -38,10 +38,19 @@ const breadcrumbs = [
     <h1>Dashboard</h1>
     <ProgressWidget client:load userId={userId} isEnrolled={isEnrolled} />
     <ChallengeWidget />
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-12">
       <OpportunityWidget client:load userId={userId} isEnrolled={isEnrolled} />
       <QuestionWidget client:load userId={userId} isEnrolled={isEnrolled} />
       <JournalWidget client:load userId={userId} isEnrolled={isEnrolled} />
     </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-12">
+      <div class="bg-white flex justify-center items-center p-20 shadow-lg rounded-xl">
+        Resources
+      </div>
+      <div class="bg-white flex justify-center items-center p-20 shadow-lg rounded-xl">
+        Events
+      </div>
+    </div>
+
   </div>
 </DashLayout>
