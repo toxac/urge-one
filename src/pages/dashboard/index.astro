@@ -1,7 +1,10 @@
 ---
 import DashLayout from "../../layouts/DashLayout.astro";
 import ProgressWidget from "../../components/widgets/ProgressWidget";
+import ChallengeWidget from "../../components/widgets/ChallengeWidget";
 import OpportunityWidget from "../../components/widgets/OpportunityWidget";
+import QuestionWidget from "../../components/widgets/QuestionWidget";
+import JournalWidget from "../../components/widgets/JournalWidget";
 import { hasAccess, accessProfiles } from "../../lib/rbac";
 const { userRoles, session } = Astro.locals;
 
@@ -34,8 +37,11 @@ const breadcrumbs = [
   <div class="max-w-4xl mx-auto">
     <h1>Dashboard</h1>
     <ProgressWidget client:load userId={userId} isEnrolled={isEnrolled} />
+    <ChallengeWidget />
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
-    <OpportunityWidget client:load userId={userId} isEnrolled={isEnrolled} />
+      <OpportunityWidget client:load userId={userId} isEnrolled={isEnrolled} />
+      <QuestionWidget client:load userId={userId} isEnrolled={isEnrolled} />
+      <JournalWidget client:load userId={userId} isEnrolled={isEnrolled} />
     </div>
   </div>
 </DashLayout>
