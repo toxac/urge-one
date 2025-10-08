@@ -43,47 +43,33 @@ export default function ProgressWidgetCompact(props: Props) {
                 </Show>
 
                 <Show when={props.isEnrolled && !$progressLoading()}>
-                    {/* Row 1: Overall Progress */}
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <div class="text-lg font-bold">{progressStats().percentage}%</div>
-                            <div class="text-sm">
-                                <div class="font-semibold">Progress</div>
-                                <div class="text-gray-500 text-xs">{progressStats().completed}/{progressStats().total} completed</div>
-                            </div>
-                        </div>
-                        <progress 
-                            class="progress progress-primary w-20 h-2" 
-                            value={progressStats().percentage} 
-                            max="100"
-                        />
-                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                    {/* Row 2: Status Breakdown */}
-                    <div class="flex items-center justify-between text-xs">
-                        <div class="flex space-x-3">
+                        <div class="flex flex-col items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="radial-progress text-primary" style="--value:70;" aria-valuenow="70" role="progressbar">70%</div>
+                                <div class="text-lg font-bold">{progressStats().percentage}%</div>
+                                <div class="text-sm">
+                                    <div class="font-semibold">Progress</div>
+                                    <div class="text-gray-500 text-xs">{progressStats().completed}/{progressStats().total} completed</div>
+                                </div>
+                            </div>
+                            <div class="flex space-x-3">
                             <div class="flex items-center space-x-1">
                                 <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                                <span>{progressStats().completed}</span>
+                                <span>{progressStats().completed} completed</span>
                             </div>
                             <div class="flex items-center space-x-1">
                                 <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                                <span>{progressStats().inProgress}</span>
+                                <span>{progressStats().inProgress} in progress</span>
                             </div>
                             <div class="flex items-center space-x-1">
                                 <div class="w-2 h-2 bg-gray-400 rounded-full"></div>
-                                <span>{progressStats().notStarted}</span>
+                                <span>{progressStats().notStarted} Not Started</span>
                             </div>
                         </div>
-                        <Show when={progressStats().total > 0}>
-                            <div class="text-gray-500">
-                                {progressStats().inProgress > 0 ? `${progressStats().inProgress} active` : 'Start learning'}
-                            </div>
-                        </Show>
-                    </div>
-
-                    {/* Row 3: Current Activity */}
-                    <Show when={progressStats().currentActivity} fallback={
+                        </div>
+                        <Show when={progressStats().currentActivity} fallback={
                         <Show when={progressStats().total === 0}>
                             <div class="text-center">
                                 <a href="/content" class="link link-primary text-sm">Start your first content</a>
@@ -109,6 +95,9 @@ export default function ProgressWidgetCompact(props: Props) {
                             </Show>
                         </div>
                     </Show>
+
+                    </div>
+                    
                 </Show>
             </div>
         </div>
