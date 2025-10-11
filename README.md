@@ -67,6 +67,35 @@ Priority Matrix & Selection	is_selected (Boolean flag for the winner)	Execute (D
 commitment_justification	Communicate
 next_immediate_action	Execute
 
+# Adding all fields to existing user_opportunity table
+```ts
+type user_opportunities= {
+        // Current Fields
+        category: string | null; 
+        created_at: string;
+        description: string | null;
+        discovery_method: string;
+        goal_alignment: string | null;
+        id: string;
+        observation_type: string | null;
+        rank: number | null; // remove this
+        status: string | null;
+        title: string | null;
+        updated_at: string | null;
+        user_id: string | null;
+        //Proposed Fields
+        is_selected: boolen; // default -> fasle
+        total_score : number; // score assigned after assessment
+        assessment_scores: jsonb ; 
+        // Market and Customer Data
+        market_size: json; // {sop,sam,som with remarks}
+
+
+        
+    }
+
+```
+
 ## Tables for dashboard
 accomplishments: {
     category: string | null
