@@ -1396,43 +1396,97 @@ export type Database = {
       user_opportunities: {
         Row: {
           category: string | null
+          commitment_justification: string | null
           created_at: string
+          current_workaround: string | null
           description: string | null
           discovery_method: string
           goal_alignment: string | null
+          goal_alignment_score: number | null
           id: string
+          initial_msp_cost: number | null
+          is_selected: boolean
+          main_competitors: Json | null
+          market_size_sam: number | null
+          market_size_som: number | null
+          market_size_tam: number | null
+          market_trend: string | null
+          motivation_driver: string | null
+          next_immediate_action: string | null
           observation_type: string | null
-          rank: number | null
+          resource_availability: number | null
+          risk_comfort_score: number | null
+          skills_alignment_score: number | null
           status: string | null
+          target_persona: string | null
           title: string | null
+          top_pain_point: string | null
+          total_score: number | null
+          unique_angle: string | null
           updated_at: string | null
           user_id: string | null
         }
         Insert: {
           category?: string | null
+          commitment_justification?: string | null
           created_at?: string
+          current_workaround?: string | null
           description?: string | null
           discovery_method: string
           goal_alignment?: string | null
+          goal_alignment_score?: number | null
           id?: string
+          initial_msp_cost?: number | null
+          is_selected?: boolean
+          main_competitors?: Json | null
+          market_size_sam?: number | null
+          market_size_som?: number | null
+          market_size_tam?: number | null
+          market_trend?: string | null
+          motivation_driver?: string | null
+          next_immediate_action?: string | null
           observation_type?: string | null
-          rank?: number | null
+          resource_availability?: number | null
+          risk_comfort_score?: number | null
+          skills_alignment_score?: number | null
           status?: string | null
+          target_persona?: string | null
           title?: string | null
+          top_pain_point?: string | null
+          total_score?: number | null
+          unique_angle?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
         Update: {
           category?: string | null
+          commitment_justification?: string | null
           created_at?: string
+          current_workaround?: string | null
           description?: string | null
           discovery_method?: string
           goal_alignment?: string | null
+          goal_alignment_score?: number | null
           id?: string
+          initial_msp_cost?: number | null
+          is_selected?: boolean
+          main_competitors?: Json | null
+          market_size_sam?: number | null
+          market_size_som?: number | null
+          market_size_tam?: number | null
+          market_trend?: string | null
+          motivation_driver?: string | null
+          next_immediate_action?: string | null
           observation_type?: string | null
-          rank?: number | null
+          resource_availability?: number | null
+          risk_comfort_score?: number | null
+          skills_alignment_score?: number | null
           status?: string | null
+          target_persona?: string | null
           title?: string | null
+          top_pain_point?: string | null
+          total_score?: number | null
+          unique_angle?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
@@ -1472,113 +1526,6 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "user_opportunity_comments_opportunity_id_fkey"
-            columns: ["opportunity_id"]
-            isOneToOne: false
-            referencedRelation: "user_opportunities"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      user_opportunity_segments: {
-        Row: {
-          accessibility_score: number | null
-          age_range_end: number | null
-          age_range_start: number | null
-          budget_range: string | null
-          created_at: string
-          education_level: string[] | null
-          estimated_segment_size: number | null
-          evidence_date: string | null
-          evidence_details: string
-          evidence_type: string
-          family_status: string | null
-          gender_focus: string[] | null
-          geographic_focus: string | null
-          id: string
-          income_level: string | null
-          next_validation_steps: string | null
-          occupation_types: string[] | null
-          opportunity_id: string
-          outreach_plan: string | null
-          people_researched: number | null
-          psychographic_traits: string[] | null
-          purchase_frequency: string | null
-          segment_description: string
-          segment_name: string
-          specific_needs: string[]
-          specific_pains: string[]
-          updated_at: string | null
-          user_id: string | null
-          validation_status: string
-          willingness_to_pay: string | null
-        }
-        Insert: {
-          accessibility_score?: number | null
-          age_range_end?: number | null
-          age_range_start?: number | null
-          budget_range?: string | null
-          created_at?: string
-          education_level?: string[] | null
-          estimated_segment_size?: number | null
-          evidence_date?: string | null
-          evidence_details: string
-          evidence_type: string
-          family_status?: string | null
-          gender_focus?: string[] | null
-          geographic_focus?: string | null
-          id?: string
-          income_level?: string | null
-          next_validation_steps?: string | null
-          occupation_types?: string[] | null
-          opportunity_id: string
-          outreach_plan?: string | null
-          people_researched?: number | null
-          psychographic_traits?: string[] | null
-          purchase_frequency?: string | null
-          segment_description: string
-          segment_name: string
-          specific_needs: string[]
-          specific_pains: string[]
-          updated_at?: string | null
-          user_id?: string | null
-          validation_status?: string
-          willingness_to_pay?: string | null
-        }
-        Update: {
-          accessibility_score?: number | null
-          age_range_end?: number | null
-          age_range_start?: number | null
-          budget_range?: string | null
-          created_at?: string
-          education_level?: string[] | null
-          estimated_segment_size?: number | null
-          evidence_date?: string | null
-          evidence_details?: string
-          evidence_type?: string
-          family_status?: string | null
-          gender_focus?: string[] | null
-          geographic_focus?: string | null
-          id?: string
-          income_level?: string | null
-          next_validation_steps?: string | null
-          occupation_types?: string[] | null
-          opportunity_id?: string
-          outreach_plan?: string | null
-          people_researched?: number | null
-          psychographic_traits?: string[] | null
-          purchase_frequency?: string | null
-          segment_description?: string
-          segment_name?: string
-          specific_needs?: string[]
-          specific_pains?: string[]
-          updated_at?: string | null
-          user_id?: string | null
-          validation_status?: string
-          willingness_to_pay?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_opportunity_segments_opportunity_id_fkey"
             columns: ["opportunity_id"]
             isOneToOne: false
             referencedRelation: "user_opportunities"
