@@ -1,7 +1,7 @@
 ---
 import DashLayout from "../../../layouts/DashLayout.astro";
 import { hasAccess, accessProfiles } from "../../../lib/rbac";
-import NoteList from "src/components/user/assets/Notes";
+import NoteList from "../../../components/user/assets/Notes";
 
 // CHECK AUTHENTICATION AND ACCESS
 const { userRoles, session } = Astro.locals;

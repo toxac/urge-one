@@ -31,8 +31,10 @@ const { title, description, breadcrumbItems } = Astro.props;
         </label>
         <!-- Content Section -->
         <section class="px-4 sm:px-6 mx-auto w-full">
-          <Breadcrumbs items={breadcrumbItems} />
-          <slot />
+          <main class="max-w-4xl mx-auto">
+            <Breadcrumbs items={breadcrumbItems} />
+            <slot />
+          </main>
         </section>
       </div>
       <div class="drawer-side fixed">
