@@ -1411,6 +1411,7 @@ export type Database = {
           observation_type: string | null
           primary_pain_points: string[] | null
           resource_assessment_score: number | null
+          risk_comfort_score: number | null
           skill_assessment_score: number | null
           status: string | null
           target_buying_behaviour: Json | null
@@ -1439,6 +1440,7 @@ export type Database = {
           observation_type?: string | null
           primary_pain_points?: string[] | null
           resource_assessment_score?: number | null
+          risk_comfort_score?: number | null
           skill_assessment_score?: number | null
           status?: string | null
           target_buying_behaviour?: Json | null
@@ -1467,6 +1469,7 @@ export type Database = {
           observation_type?: string | null
           primary_pain_points?: string[] | null
           resource_assessment_score?: number | null
+          risk_comfort_score?: number | null
           skill_assessment_score?: number | null
           status?: string | null
           target_buying_behaviour?: Json | null
