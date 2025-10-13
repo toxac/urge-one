@@ -36,7 +36,7 @@ Getting the sense of market size
 
 fields:
 
-- Market Size (market_size)[json] text {TAM,SAM, SOM}
+- Market Size (market_size)[json] text {TAM :number,SAM: number, SOM:number}
 - Rational for Size(market_size_rational) text textbox
 
 ## Personal Fit
