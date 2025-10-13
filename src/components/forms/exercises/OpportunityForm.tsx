@@ -75,7 +75,6 @@ export default function OpportunityForm(props: ComponentProps) {
             category: props.opportunity?.category || "",
             description: props.opportunity?.description || "",
             discovery_method: props.opportunity?.discovery_method || props.approach || "",
-            goal_alignment: props.opportunity?.goal_alignment || "",
             observation_type: props.opportunity?.observation_type || "",
             title: props.opportunity?.title || "",
         },
@@ -91,7 +90,6 @@ export default function OpportunityForm(props: ComponentProps) {
                             category: values.category,
                             description: values.description,
                             discovery_method: values.discovery_method as UserOpportunitiesDiscoveryMethod,
-                            goal_alignment: values.goal_alignment,
                             observation_type: values.observation_type,
                             title: values.title,
                             updated_at: currentDate.toISOString(),
@@ -117,7 +115,6 @@ export default function OpportunityForm(props: ComponentProps) {
                             category: values.category,
                             description: values.description,
                             discovery_method: values.discovery_method as UserOpportunitiesDiscoveryMethod,
-                            goal_alignment: values.goal_alignment,
                             observation_type: values.observation_type,
                             title: values.title,
                             created_at: currentDate.toISOString(),
@@ -326,33 +323,6 @@ export default function OpportunityForm(props: ComponentProps) {
                         </select>
                         <Show when={errors().category && touched().category}>
                             <span class="text-sm text-red-600 mt-1">{errors().category}</span>
-                        </Show>
-                    </div>
-
-                    {/* Goal Alignment Field */}
-                    <div class="form-control">
-                        <label class="label">
-                            <span class="label-text">How aligned is this opportunity with your goals?</span>
-                        </label>
-                        <select 
-                            class="select select-neutral w-full" 
-                            name="goal_alignment" 
-                            aria-label="How aligned is this opportunity with your goals, Select relevant option"
-                        >
-                            <option disabled value="">Select level of alignment</option>
-                            <For each={alignmentWithGoalsOptions}>
-                                {alignment => (
-                                    <option 
-                                        value={alignment.value}
-                                        selected={alignment.value === props.opportunity?.goal_alignment}
-                                    >
-                                        {alignment.label}
-                                    </option>
-                                )}
-                            </For>
-                        </select>
-                        <Show when={errors().goal_alignment && touched().goal_alignment}>
-                            <span class="text-sm text-red-600 mt-1">{errors().goal_alignment}</span>
                         </Show>
                     </div>
 

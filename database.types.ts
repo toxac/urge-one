@@ -1395,98 +1395,86 @@ export type Database = {
       }
       user_opportunities: {
         Row: {
+          alignment_assessment_score: number | null
+          assessment_rationale: string | null
+          barriers_to_entry: string[] | null
+          capital_assessment_score: number | null
           category: string | null
-          commitment_justification: string | null
+          competitors: Json[] | null
           created_at: string
-          current_workaround: string | null
           description: string | null
           discovery_method: string
-          goal_alignment: string | null
-          goal_alignment_score: number | null
           id: string
-          initial_msp_cost: number | null
-          is_selected: boolean
-          main_competitors: Json | null
-          market_size_sam: number | null
-          market_size_som: number | null
-          market_size_tam: number | null
+          market_size: Json | null
+          market_size_rationale: string | null
           market_trend: string | null
-          motivation_driver: string | null
-          next_immediate_action: string | null
           observation_type: string | null
-          resource_availability: number | null
-          risk_comfort_score: number | null
-          skills_alignment_score: number | null
+          primary_pain_points: string[] | null
+          resource_assessment_score: number | null
+          skill_assessment_score: number | null
           status: string | null
-          target_persona: string | null
+          target_buying_behaviour: Json | null
+          target_demographics: Json | null
+          target_motivations: string[] | null
+          target_psychographics: Json | null
+          target_unmet_needs: string[] | null
           title: string | null
-          top_pain_point: string | null
-          total_score: number | null
-          unique_angle: string | null
           updated_at: string | null
           user_id: string | null
         }
         Insert: {
+          alignment_assessment_score?: number | null
+          assessment_rationale?: string | null
+          barriers_to_entry?: string[] | null
+          capital_assessment_score?: number | null
           category?: string | null
-          commitment_justification?: string | null
+          competitors?: Json[] | null
           created_at?: string
-          current_workaround?: string | null
           description?: string | null
           discovery_method: string
-          goal_alignment?: string | null
-          goal_alignment_score?: number | null
           id?: string
-          initial_msp_cost?: number | null
-          is_selected?: boolean
-          main_competitors?: Json | null
-          market_size_sam?: number | null
-          market_size_som?: number | null
-          market_size_tam?: number | null
+          market_size?: Json | null
+          market_size_rationale?: string | null
           market_trend?: string | null
-          motivation_driver?: string | null
-          next_immediate_action?: string | null
           observation_type?: string | null
-          resource_availability?: number | null
-          risk_comfort_score?: number | null
-          skills_alignment_score?: number | null
+          primary_pain_points?: string[] | null
+          resource_assessment_score?: number | null
+          skill_assessment_score?: number | null
           status?: string | null
-          target_persona?: string | null
+          target_buying_behaviour?: Json | null
+          target_demographics?: Json | null
+          target_motivations?: string[] | null
+          target_psychographics?: Json | null
+          target_unmet_needs?: string[] | null
           title?: string | null
-          top_pain_point?: string | null
-          total_score?: number | null
-          unique_angle?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
         Update: {
+          alignment_assessment_score?: number | null
+          assessment_rationale?: string | null
+          barriers_to_entry?: string[] | null
+          capital_assessment_score?: number | null
           category?: string | null
-          commitment_justification?: string | null
+          competitors?: Json[] | null
           created_at?: string
-          current_workaround?: string | null
           description?: string | null
           discovery_method?: string
-          goal_alignment?: string | null
-          goal_alignment_score?: number | null
           id?: string
-          initial_msp_cost?: number | null
-          is_selected?: boolean
-          main_competitors?: Json | null
-          market_size_sam?: number | null
-          market_size_som?: number | null
-          market_size_tam?: number | null
+          market_size?: Json | null
+          market_size_rationale?: string | null
           market_trend?: string | null
-          motivation_driver?: string | null
-          next_immediate_action?: string | null
           observation_type?: string | null
-          resource_availability?: number | null
-          risk_comfort_score?: number | null
-          skills_alignment_score?: number | null
+          primary_pain_points?: string[] | null
+          resource_assessment_score?: number | null
+          skill_assessment_score?: number | null
           status?: string | null
-          target_persona?: string | null
+          target_buying_behaviour?: Json | null
+          target_demographics?: Json | null
+          target_motivations?: string[] | null
+          target_psychographics?: Json | null
+          target_unmet_needs?: string[] | null
           title?: string | null
-          top_pain_point?: string | null
-          total_score?: number | null
-          unique_angle?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
