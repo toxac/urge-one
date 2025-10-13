@@ -1400,7 +1400,7 @@ export type Database = {
           barriers_to_entry: string[] | null
           capital_assessment_score: number | null
           category: string | null
-          competitors: Json[] | null
+          competitors: string[] | null
           created_at: string
           description: string | null
           discovery_method: string
@@ -1409,7 +1409,6 @@ export type Database = {
           market_size_rationale: string | null
           market_trend: string | null
           observation_type: string | null
-          primary_pain_points: string[] | null
           resource_assessment_score: number | null
           risk_comfort_score: number | null
           skill_assessment_score: number | null
@@ -1420,6 +1419,7 @@ export type Database = {
           target_psychographics: Json | null
           target_unmet_needs: string[] | null
           title: string | null
+          top_pain_point: string | null
           updated_at: string | null
           user_id: string | null
         }
@@ -1429,7 +1429,7 @@ export type Database = {
           barriers_to_entry?: string[] | null
           capital_assessment_score?: number | null
           category?: string | null
-          competitors?: Json[] | null
+          competitors?: string[] | null
           created_at?: string
           description?: string | null
           discovery_method: string
@@ -1438,7 +1438,6 @@ export type Database = {
           market_size_rationale?: string | null
           market_trend?: string | null
           observation_type?: string | null
-          primary_pain_points?: string[] | null
           resource_assessment_score?: number | null
           risk_comfort_score?: number | null
           skill_assessment_score?: number | null
@@ -1449,6 +1448,7 @@ export type Database = {
           target_psychographics?: Json | null
           target_unmet_needs?: string[] | null
           title?: string | null
+          top_pain_point?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
@@ -1458,7 +1458,7 @@ export type Database = {
           barriers_to_entry?: string[] | null
           capital_assessment_score?: number | null
           category?: string | null
-          competitors?: Json[] | null
+          competitors?: string[] | null
           created_at?: string
           description?: string | null
           discovery_method?: string
@@ -1467,7 +1467,6 @@ export type Database = {
           market_size_rationale?: string | null
           market_trend?: string | null
           observation_type?: string | null
-          primary_pain_points?: string[] | null
           resource_assessment_score?: number | null
           risk_comfort_score?: number | null
           skill_assessment_score?: number | null
@@ -1478,6 +1477,7 @@ export type Database = {
           target_psychographics?: Json | null
           target_unmet_needs?: string[] | null
           title?: string | null
+          top_pain_point?: string | null
           updated_at?: string | null
           user_id?: string | null
         }

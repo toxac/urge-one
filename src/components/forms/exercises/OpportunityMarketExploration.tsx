@@ -2,7 +2,6 @@ import { createSignal, createEffect, For, Show } from "solid-js";
 import { createForm } from '@felte/solid';
 import * as z from "zod";
 import { Icon } from "@iconify-icon/solid";
-import { supabaseBrowserClient } from '../../../lib/supabase/client';
 import { validator } from '@felte/validator-zod';
 import { notify } from '../../../stores/notifications';
 import { updateOpportunity } from "../../../stores/userAssets/opportunities";
@@ -12,17 +11,12 @@ import type { Database } from "../../../../database.types";
 type Opportunity = Database['public']['Tables']['user_opportunities']['Row'];
 type OpportunityUpdate = Database['public']['Tables']['user_opportunities']['Update'];
 
-// Schema for market exploration fields
+// Updated schema for market exploration fields
 const schema = z.object({
     market_trend: z.string().min(1, "Market trend is required"),
     top_pain_point: z.string().min(1, "Top pain point is required").max(200, "Must be less than 200 characters"),
     barriers_to_entry: z.array(z.string()).min(1, "Select at least one barrier"),
-    competitors: z.array(z.object({
-        name: z.string().min(1, "Competitor name is required"),
-        solutions: z.array(z.string()).min(1, "At least one solution is required"),
-        gaps: z.array(z.string()).min(1, "At least one gap is required"),
-        position: z.string().min(1, "Market position is required")
-    })).optional().default([])
+    competitors: z.array(z.string()).min(1, "At least one competitor is required")
 });
 
 interface ComponentProps {
@@ -34,22 +28,17 @@ interface ComponentProps {
 export default function OpportunityMarketExploration(props: ComponentProps) {
     const [loading, setLoading] = createSignal(false);
     const [success, setSuccess] = createSignal(false);
-    const [competitors, setCompetitors] = createSignal<Array<{name: string; solutions: string[]; gaps: string[]; position: string}>>(
-        props.opportunity.competitors as any || []
+    const [competitors, setCompetitors] = createSignal<string[]>(
+        props.opportunity.competitors as string[] || []
     );
-    const [newCompetitor, setNewCompetitor] = createSignal({
-        name: "",
-        solutions: [""],
-        gaps: [""],
-        position: ""
-    });
+    const [newCompetitor, setNewCompetitor] = createSignal("");
 
     const { form, errors, isSubmitting, touched, setFields } = createForm({
         initialValues: {
             market_trend: props.opportunity.market_trend || "",
-            top_pain_point: props.opportunity.primary_pain_points?.[0] || "", // Using primary_pain_points[0] as top_pain_point
+            top_pain_point: props.opportunity.top_pain_point || "",
             barriers_to_entry: props.opportunity.barriers_to_entry || [],
-            competitors: props.opportunity.competitors || []
+            competitors: props.opportunity.competitors as string[] || []
         },
         onSubmit: async (values) => {
             setLoading(true);
@@ -57,7 +46,7 @@ export default function OpportunityMarketExploration(props: ComponentProps) {
                 const currentDate = new Date();
                 const updates: OpportunityUpdate = {
                     market_trend: values.market_trend,
-                    primary_pain_points: values.top_pain_point ? [values.top_pain_point] : null,
+                    top_pain_point: values.top_pain_point,
                     barriers_to_entry: values.barriers_to_entry,
                     competitors: competitors(),
                     updated_at: currentDate.toISOString(),
@@ -85,11 +74,11 @@ export default function OpportunityMarketExploration(props: ComponentProps) {
         extend: validator({ schema })
     });
 
-    // Competitor management functions
+    // Simplified competitor management functions
     const addCompetitor = () => {
-        if (newCompetitor().name && newCompetitor().position) {
-            setCompetitors(prev => [...prev, { ...newCompetitor() }]);
-            setNewCompetitor({ name: "", solutions: [""], gaps: [""], position: "" });
+        if (newCompetitor().trim()) {
+            setCompetitors(prev => [...prev, newCompetitor().trim()]);
+            setNewCompetitor("");
         }
     };
 
@@ -97,50 +86,11 @@ export default function OpportunityMarketExploration(props: ComponentProps) {
         setCompetitors(prev => prev.filter((_, i) => i !== index));
     };
 
-    const updateNewCompetitorField = (field: string, value: any) => {
-        setNewCompetitor(prev => ({ ...prev, [field]: value }));
-    };
-
-    const addSolution = () => {
-        setNewCompetitor(prev => ({ 
-            ...prev, 
-            solutions: [...prev.solutions, ""] 
-        }));
-    };
-
-    const updateSolution = (index: number, value: string) => {
-        setNewCompetitor(prev => ({
-            ...prev,
-            solutions: prev.solutions.map((sol, i) => i === index ? value : sol)
-        }));
-    };
-
-    const removeSolution = (index: number) => {
-        setNewCompetitor(prev => ({
-            ...prev,
-            solutions: prev.solutions.filter((_, i) => i !== index)
-        }));
-    };
-
-    const addGap = () => {
-        setNewCompetitor(prev => ({ 
-            ...prev, 
-            gaps: [...prev.gaps, ""] 
-        }));
-    };
-
-    const updateGap = (index: number, value: string) => {
-        setNewCompetitor(prev => ({
-            ...prev,
-            gaps: prev.gaps.map((gap, i) => i === index ? value : sol)
-        }));
-    };
-
-    const removeGap = (index: number) => {
-        setNewCompetitor(prev => ({
-            ...prev,
-            gaps: prev.gaps.filter((_, i) => i !== index)
-        }));
+    const handleKeyPress = (e: KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addCompetitor();
+        }
     };
 
     return (
@@ -202,6 +152,7 @@ export default function OpportunityMarketExploration(props: ComponentProps) {
                             class="textarea textarea-bordered w-full h-20"
                             placeholder="What is the most significant problem customers face in this market?"
                             aria-label="Describe the top customer pain point"
+                            value={props.opportunity.top_pain_point || ""}
                         />
                         <Show when={errors().top_pain_point && touched().top_pain_point}>
                             <span class="text-sm text-red-600 mt-1">{errors().top_pain_point}</span>
@@ -235,49 +186,27 @@ export default function OpportunityMarketExploration(props: ComponentProps) {
                         </Show>
                     </div>
 
-                    {/* Competitor Analysis */}
+                    {/* Competitor Analysis - Simplified */}
                     <div class="form-control">
                         <label class="label">
-                            <span class="label-text font-semibold">Competitor Analysis</span>
+                            <span class="label-text font-semibold">Competitors</span>
+                            <span class="label-text-alt">Add competitor names</span>
                         </label>
                         
                         {/* Existing Competitors */}
                         <Show when={competitors().length > 0}>
-                            <div class="space-y-4 mb-4">
+                            <div class="space-y-2 mb-4">
                                 <For each={competitors()}>
                                     {(competitor, index) => (
-                                        <div class="border rounded-lg p-4 bg-gray-50">
-                                            <div class="flex justify-between items-start mb-2">
-                                                <h4 class="font-semibold">{competitor.name}</h4>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => removeCompetitor(index())}
-                                                    class="btn btn-xs btn-ghost text-error"
-                                                >
-                                                    <Icon icon="mdi:delete" />
-                                                </button>
-                                            </div>
-                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                                                <div>
-                                                    <strong>Solutions:</strong>
-                                                    <ul class="list-disc list-inside">
-                                                        <For each={competitor.solutions}>
-                                                            {(solution) => <li>{solution}</li>}
-                                                        </For>
-                                                    </ul>
-                                                </div>
-                                                <div>
-                                                    <strong>Gaps:</strong>
-                                                    <ul class="list-disc list-inside">
-                                                        <For each={competitor.gaps}>
-                                                            {(gap) => <li>{gap}</li>}
-                                                        </For>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="mt-2">
-                                                <strong>Position:</strong> {competitor.position}
-                                            </div>
+                                        <div class="flex items-center justify-between bg-gray-50 px-3 py-2 rounded border">
+                                            <span>{competitor}</span>
+                                            <button
+                                                type="button"
+                                                onClick={() => removeCompetitor(index())}
+                                                class="btn btn-xs btn-ghost text-error"
+                                            >
+                                                <Icon icon="mdi:delete" />
+                                            </button>
                                         </div>
                                     )}
                                 </For>
@@ -285,119 +214,27 @@ export default function OpportunityMarketExploration(props: ComponentProps) {
                         </Show>
 
                         {/* Add New Competitor */}
-                        <div class="border-2 border-dashed rounded-lg p-4">
-                            <h4 class="font-semibold mb-3">Add New Competitor</h4>
-                            
-                            {/* Competitor Name */}
-                            <div class="form-control mb-3">
-                                <label class="label">
-                                    <span class="label-text">Competitor Name</span>
-                                </label>
-                                <input
-                                    type="text"
-                                    class="input input-bordered input-sm"
-                                    placeholder="Company name"
-                                    value={newCompetitor().name}
-                                    onInput={(e) => updateNewCompetitorField('name', e.currentTarget.value)}
-                                />
-                            </div>
-
-                            {/* Solutions */}
-                            <div class="form-control mb-3">
-                                <div class="flex justify-between items-center mb-2">
-                                    <label class="label">
-                                        <span class="label-text">Solutions Offered</span>
-                                    </label>
-                                    <button type="button" onClick={addSolution} class="btn btn-xs btn-outline">
-                                        <Icon icon="mdi:plus" class="mr-1" /> Add Solution
-                                    </button>
-                                </div>
-                                <For each={newCompetitor().solutions}>
-                                    {(solution, index) => (
-                                        <div class="flex gap-2 mb-2">
-                                            <input
-                                                type="text"
-                                                class="input input-bordered input-sm flex-1"
-                                                placeholder="Solution description"
-                                                value={solution}
-                                                onInput={(e) => updateSolution(index(), e.currentTarget.value)}
-                                            />
-                                            <Show when={newCompetitor().solutions.length > 1}>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => removeSolution(index())}
-                                                    class="btn btn-xs btn-ghost text-error"
-                                                >
-                                                    <Icon icon="mdi:delete" />
-                                                </button>
-                                            </Show>
-                                        </div>
-                                    )}
-                                </For>
-                            </div>
-
-                            {/* Gaps */}
-                            <div class="form-control mb-3">
-                                <div class="flex justify-between items-center mb-2">
-                                    <label class="label">
-                                        <span class="label-text">Market Gaps</span>
-                                    </label>
-                                    <button type="button" onClick={addGap} class="btn btn-xs btn-outline">
-                                        <Icon icon="mdi:plus" class="mr-1" /> Add Gap
-                                    </button>
-                                </div>
-                                <For each={newCompetitor().gaps}>
-                                    {(gap, index) => (
-                                        <div class="flex gap-2 mb-2">
-                                            <input
-                                                type="text"
-                                                class="input input-bordered input-sm flex-1"
-                                                placeholder="Market gap or weakness"
-                                                value={gap}
-                                                onInput={(e) => updateGap(index(), e.currentTarget.value)}
-                                            />
-                                            <Show when={newCompetitor().gaps.length > 1}>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => removeGap(index())}
-                                                    class="btn btn-xs btn-ghost text-error"
-                                                >
-                                                    <Icon icon="mdi:delete" />
-                                                </button>
-                                            </Show>
-                                        </div>
-                                    )}
-                                </For>
-                            </div>
-
-                            {/* Market Position */}
-                            <div class="form-control mb-3">
-                                <label class="label">
-                                    <span class="label-text">Market Position</span>
-                                </label>
-                                <select
-                                    class="select select-bordered select-sm"
-                                    value={newCompetitor().position}
-                                    onChange={(e) => updateNewCompetitorField('position', e.currentTarget.value)}
-                                >
-                                    <option disabled value="">Select position</option>
-                                    <For each={broadMarketResearch.competitor_market_position}>
-                                        {(position) => (
-                                            <option value={position}>{position}</option>
-                                        )}
-                                    </For>
-                                </select>
-                            </div>
-
+                        <div class="flex gap-2">
+                            <input
+                                type="text"
+                                class="input input-bordered flex-1"
+                                placeholder="Enter competitor name"
+                                value={newCompetitor()}
+                                onInput={(e) => setNewCompetitor(e.currentTarget.value)}
+                                onKeyPress={handleKeyPress}
+                            />
                             <button
                                 type="button"
                                 onClick={addCompetitor}
-                                disabled={!newCompetitor().name || !newCompetitor().position}
-                                class="btn btn-sm btn-primary w-full"
+                                disabled={!newCompetitor().trim()}
+                                class="btn btn-primary"
                             >
-                                <Icon icon="mdi:plus" class="mr-1" /> Add Competitor
+                                <Icon icon="mdi:plus" />
                             </button>
                         </div>
+                        <Show when={errors().competitors && touched().competitors}>
+                            <span class="text-sm text-red-600 mt-1">{errors().competitors}</span>
+                        </Show>
                     </div>
 
                     {/* Action Buttons */}
