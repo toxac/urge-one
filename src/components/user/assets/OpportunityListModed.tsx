@@ -124,7 +124,7 @@ export default function OpportunitiesList(props: OpportunitiesListProps) {
 
             {/* Opportunities List */}
             <Show when={!loading() && savedOpportunities().length > 0}>
-                <div class="grid gap-3">
+                <div class="grid grid-cols-1 gap-3">
                     <For each={savedOpportunities()}>
                         {(opportunity) => (
                             <div class="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:shadow-sm transition-shadow">
