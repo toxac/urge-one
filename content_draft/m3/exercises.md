@@ -7,6 +7,8 @@ fields:
 - General market trend (market_trend) [text] select from options growing, growing rapidly, stagnant etc
 - Top Pain point of customers in this market (top_pain_point) [text] input
 - Competitor Overview (competitors) [json] mixed fields capture basic competitor details
+  - {name: string, solutions: string[], gaps: string[], position: string}
+
 - Barriers to Entry (barriers_to_entry) string[] checkbox select from given list
 
 ## 2: Deep Dive into customer research
@@ -16,8 +18,18 @@ from broad research we are narrowing down to target customer research
 fields:
 
 - Demography (target_demographics )[json]
+  - {age_range: string(option), income_level string(options), profession: string, location: string, education: string}
+
 - Psychography (target_psychograhics)[json]
+  - {values: string[], lifestyle: string[], pain_points: string[]}
+
 - Buying behaviour (target_buying_behaviour) [json]
+  - {
+      "research_methods": string[]
+      "purchase_triggers": string[]
+      "decision_factors": string[]
+    }
+
 - Unmet Need (target_unmet_needs)
 - Motivations (target_motivation)
 
