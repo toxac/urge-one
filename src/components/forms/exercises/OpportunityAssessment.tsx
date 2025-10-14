@@ -20,6 +20,14 @@ const riskComfortOptions = [
   "Very comfortable - High risk tolerance, seek out high-risk opportunities"
 ];
 
+type AssessmentField = 
+  | 'skill_assessment_score'
+  | 'capital_assessment_score'
+  | 'resource_assessment_score'
+  | 'alignment_assessment_score'
+  | 'risk_comfort_score'
+  | 'assessment_rationale';
+
 // Schema for assessment fields
 const schema = z.object({
   skill_assessment_score: z.number().min(1, "Skill assessment is required").max(5),
@@ -86,7 +94,7 @@ export default function OpportunityAssessmentForm(props: ComponentProps) {
   });
 
   // Helper function to render assessment select with options
-  const renderAssessmentSelect = (fieldName: string, label: string, options: string[], currentValue: number | null) => {
+  const renderAssessmentSelect = (fieldName: AssessmentField, label: string, options: string[], currentValue: number | null) => {
     const score = currentValue ? Number(currentValue) : null;
     return (
       <div class="form-control">
@@ -220,23 +228,6 @@ export default function OpportunityAssessmentForm(props: ComponentProps) {
             <Show when={errors().assessment_rationale && touched().assessment_rationale}>
               <span class="text-sm text-red-600 mt-1">{errors().assessment_rationale}</span>
             </Show>
-          </div>
-
-          {/* Scoring Guide */}
-          <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
-            <div class="flex items-start space-x-3">
-              <Icon icon="mdi:help-circle" class="text-gray-500 mt-0.5 flex-shrink-0" />
-              <div class="text-sm text-gray-600">
-                <strong class="font-semibold">Scoring Guide:</strong>
-                <ul class="list-disc list-inside mt-1 space-y-1">
-                  <li><strong>1</strong>: Major gaps/concerns - Significant barriers</li>
-                  <li><strong>2</strong>: Below average - Notable challenges</li>
-                  <li><strong>3</strong>: Average - Some strengths, some gaps</li>
-                  <li><strong>4</strong>: Above average - Good position with minor gaps</li>
-                  <li><strong>5</strong>: Excellent - Strong position, well-prepared</li>
-                </ul>
-              </div>
-            </div>
           </div>
 
           {/* Action Buttons */}

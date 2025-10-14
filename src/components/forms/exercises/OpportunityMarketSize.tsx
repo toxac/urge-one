@@ -105,11 +105,11 @@ export default function OpportunityMarketSize(props: ComponentProps) {
 
         <form use:form class="space-y-6">
           {/* Market Size Metrics */}
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="grid grid-cols-1 gap-6">
             {/* TAM - Total Addressable Market */}
             <div class="form-control">
               <label class="label">
-                <span class="label-text font-semibold">TAM (Total Addressable Market)</span>
+                <span class="label-text font-semibold">TAM (Total Addressable Market/Total market demand)</span>
               </label>
               <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -124,9 +124,6 @@ export default function OpportunityMarketSize(props: ComponentProps) {
                   step="1000000"
                 />
               </div>
-              <label class="label">
-                <span class="label-text-alt text-gray-500">Total market demand</span>
-              </label>
               <Show when={errors().tam && touched().tam}>
                 <span class="text-sm text-red-600 mt-1">{errors().tam}</span>
               </Show>
@@ -185,20 +182,6 @@ export default function OpportunityMarketSize(props: ComponentProps) {
             </div>
           </div>
 
-          {/* Market Size Explanation */}
-          <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <div class="flex items-start space-x-3">
-              <Icon icon="mdi:information" class="text-blue-500 mt-0.5 flex-shrink-0" />
-              <div class="text-sm text-blue-700">
-                <strong class="font-semibold">Understanding TAM, SAM, SOM:</strong>
-                <ul class="list-disc list-inside mt-1 space-y-1">
-                  <li><strong>TAM</strong>: Total market demand for your product/service</li>
-                  <li><strong>SAM</strong>: Segment of TAM you can realistically target</li>
-                  <li><strong>SOM</strong>: Portion of SAM you can capture in near-term</li>
-                </ul>
-              </div>
-            </div>
-          </div>
 
           {/* Rationale */}
           <div class="form-control">
@@ -212,11 +195,6 @@ export default function OpportunityMarketSize(props: ComponentProps) {
               placeholder="Explain how you calculated these numbers. Include data sources, assumptions, market research, or any other relevant information that supports your market size estimates..."
               aria-label="Market size calculation rationale"
             />
-            <label class="label">
-              <span class="label-text-alt text-gray-500">
-                Describe your methodology, data sources, and assumptions
-              </span>
-            </label>
             <Show when={errors().market_size_rationale && touched().market_size_rationale}>
               <span class="text-sm text-red-600 mt-1">{errors().market_size_rationale}</span>
             </Show>
