@@ -1,0 +1,241 @@
+---
+// src/pages/generate-sequence.astro
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+
+// Get all collections
+const allMilestones = await getCollection('milestones');
+const allConcepts = await getCollection('concepts');
+const allChallenges = await getCollection('challenges');
+const allExercises = await getCollection('exercises');
+
+// Create lookup maps for quick access
+const milestonesMap = new Map(allMilestones.map(m => [m.id, m]));
+const conceptsMap = new Map(allConcepts.map(c => [c.id, c]));
+const challengesMap = new Map(allChallenges.map(c => [c.id, c]));
+const exercisesMap = new Map(allExercises.map(e => [e.id, e]));
+
+// Function to get content by type and id
+function getContent(type, id) {
+  switch (type) {
+    case 'milestone':
+      return milestonesMap.get(id);
+    case 'concepts':
+      return conceptsMap.get(id);
+    case 'challenges':
+      return challengesMap.get(id);
+    case 'exercises':
+      return exercisesMap.get(id);
+    default:
+      return null;
+  }
+}
+
+// Function to get content display info
+function getContentInfo(content) {
+  if (!content) return null;
+  
+  return {
+    type: content.collection,
+    id: content.id,
+    title: content.data.title,
+    sequence: content.data.sequence
+  };
+}
+
+// Function to find all possible starting points (content without previous)
+function findAllStartingPoints() {
+  const startingPoints = [];
+  
+  // Check all content types for items without previous references
+  allMilestones.forEach(item => {
+    if (!item.data.previous) {
+      startingPoints.push({ type: 'milestone', id: item.id, content: item });
+    }
+  });
+  
+  allConcepts.forEach(item => {
+    if (!item.data.previous) {
+      startingPoints.push({ type: 'concepts', id: item.id, content: item });
+    }
+  });
+  
+  allChallenges.forEach(item => {
+    if (!item.data.previous) {
+      startingPoints.push({ type: 'challenges', id: item.id, content: item });
+    }
+  });
+  
+  allExercises.forEach(item => {
+    if (!item.data.previous) {
+      startingPoints.push({ type: 'exercises', id: item.id, content: item });
+    }
+  });
+  
+  return startingPoints;
+}
+
+// Function to build complete sequence from a starting point
+function buildCompleteSequence(startType, startId) {
+  const sequence = [];
+  const visited = new Set();
+  
+  let currentType = startType;
+  let currentId = startId;
+  
+  // First, go backwards to find the very beginning
+  while (currentType && currentId) {
+    const key = `${currentType}:${currentId}`;
+    if (visited.has(key)) break;
+    visited.add(key);
+    
+    const currentContent = getContent(currentType, currentId);
+    if (!currentContent) break;
+    
+    // Check if this has a previous item
+    if (currentContent.data.previous) {
+      currentType = currentContent.data.previous.type;
+      currentId = currentContent.data.previous.id;
+    } else {
+      break; // Reached the beginning
+    }
+  }
+  
+  // Now traverse forward from the actual beginning
+  visited.clear();
+  currentType = startType;
+  currentId = startId;
+  
+  // Find the actual start by going backwards until we find the true beginning
+  while (currentType && currentId) {
+    const currentContent = getContent(currentType, currentId);
+    if (!currentContent || !currentContent.data.previous) break;
+    
+    currentType = currentContent.data.previous.type;
+    currentId = currentContent.data.previous.id;
+  }
+  
+  // Now traverse forward to build the sequence
+  while (currentType && currentId) {
+    const key = `${currentType}:${currentId}`;
+    if (visited.has(key)) break;
+    visited.add(key);
+    
+    const currentContent = getContent(currentType, currentId);
+    if (!currentContent) break;
+    
+    sequence.push(getContentInfo(currentContent));
+    
+    // Move to next item
+    if (currentContent.data.next) {
+      currentType = currentContent.data.next.type;
+      currentId = currentContent.data.next.id;
+    } else {
+      break;
+    }
+  }
+  
+  return sequence;
+}
+
+// Function to group sequences by milestone
+function groupSequencesByMilestone(sequences) {
+  const grouped = {};
+  
+  sequences.forEach(sequence => {
+    // Find the milestone in this sequence
+    const milestoneItem = sequence.find(item => item.type === 'milestones');
+    const milestoneName = milestoneItem ? milestoneItem.title : 'Standalone Content';
+    
+    if (!grouped[milestoneName]) {
+      grouped[milestoneName] = [];
+    }
+    
+    grouped[milestoneName].push(sequence);
+  });
+  
+  return grouped;
+}
+
+// Main function to generate all sequences
+function generateAllSequences() {
+  const startingPoints = findAllStartingPoints();
+  console.log(`Found ${startingPoints.length} potential starting points`);
+  
+  const allSequences = [];
+  const processedSequences = new Set();
+  
+  startingPoints.forEach(start => {
+    const sequence = buildCompleteSequence(start.type, start.id);
+    
+    if (sequence.length > 0) {
+      // Create a unique identifier for this sequence to avoid duplicates
+      const sequenceId = sequence.map(item => `${item.type}:${item.id}`).join('->');
+      
+      if (!processedSequences.has(sequenceId)) {
+        processedSequences.add(sequenceId);
+        allSequences.push(sequence);
+      }
+    }
+  });
+  
+  return allSequences;
+}
+
+// Generate the sequences
+const sequences = generateAllSequences();
+const groupedSequences = groupSequencesByMilestone(sequences);
+
+// Log to console
+console.log('\n=== CONTENT SEQUENCES BY MILESTONE ===');
+Object.entries(groupedSequences).forEach(([milestoneName, milestoneSequences]) => {
+  console.log(`\n--- ${milestoneName} ---`);
+  
+  milestoneSequences.forEach((sequence, seqIndex) => {
+    console.log(`\nSequence ${seqIndex + 1}:`);
+    sequence.forEach((item, itemIndex) => {
+      console.log(`  ${itemIndex + 1}. [${item.type.toUpperCase()}] ${item.title} (ID: ${item.id})`);
+    });
+  });
+});
+
+console.log('\n=== SUMMARY ===');
+console.log(`Total milestones with sequences: ${Object.keys(groupedSequences).length}`);
+console.log(`Total sequences: ${sequences.length}`);
+Object.entries(groupedSequences).forEach(([milestoneName, milestoneSequences]) => {
+  console.log(`- ${milestoneName}: ${milestoneSequences.length} sequence(s)`);
+});
+---
+
+<Layout title='seq' description='sequence'>
+    <h1>Content Sequences</h1>
+    
+    <div id="sequences-output">
+      <h2>Found {Object.keys(groupedSequences).length} milestone(s) with {sequences.length} total sequence(s)</h2>
+      
+      {Object.entries(groupedSequences).map(([milestoneName, milestoneSequences]) => (
+        <div class="sequence">
+          <div class="milestone-header">
+            <h3>{milestoneName}</h3>
+          </div>
+          
+          {milestoneSequences.map((sequence, seqIndex) => (
+            <div style="margin-bottom: 1.5rem;">
+              <h4>Sequence {seqIndex + 1} ({sequence.length} items):</h4>
+              {sequence.map((item) => (
+                <div class="content-item">
+                  <span class="content-type">{item.type}</span>
+                  <strong>{item.title}</strong>
+                  <small>(ID: {item.id}, Sequence: {item.sequence})</small>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+
+    
+
+</Layout>
+
