@@ -289,3 +289,52 @@ user_skills(has store): {
     updated_at: string | null
     user_id: string
 }
+
+
+user_opportunities 
+```ts
+user_opportunities: {
+        Row: {
+          alignment_assessment_score: number | null
+          assessment_rationale: string | null // not to included in phone app
+          barriers_to_entry: string[] | null // not to included in phone app
+          capital_assessment_score: number | null // not to included in phone app
+          category: string | null
+          competitors: string[] | null // not to included in phone app
+          created_at: string
+          description: string | null
+          discovery_method: string
+          id: string
+          market_size: Json | null // not to included in phone app
+          market_size_rationale: string | null // not to included in phone app
+          market_trend: string | null // not to included in phone app
+          observation_type: string | null
+          resource_assessment_score: number | null // not to included in phone app
+          risk_comfort_score: number | null // not to included in phone app
+          skill_assessment_score: number | null // not to included in phone app
+          status: string | null
+          target_buying_behaviour: Json | null // not to included in phone app
+          target_demographics: Json | null // not to included in phone app
+          target_motivations: string[] | null // not to included in phone app
+          target_psychographics: Json | null // not to included in phone app
+          target_unmet_needs: string[] | null // not to included in phone app
+          title: string | null        
+          top_pain_point: string | null // not to included in phone app
+          updated_at: string | null
+          user_id: string | null
+        }},
+
+        user_opportunity_comments: {
+        Row: {
+          comment_type: string | null // "observation"| "insight" | "question" |"update";
+          content: string | null
+          created_at: string
+          id: string
+          opportunity_id: string | null
+          title: string | null
+          updated_at: string | null
+          user_id: string | null
+        }}
+
+
+```
