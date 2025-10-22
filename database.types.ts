@@ -664,6 +664,44 @@ export type Database = {
         }
         Relationships: []
       }
+      journal_responses: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          journal_id: string | null
+          metadata: Json | null
+          response_type: string | null
+          user_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          journal_id?: string | null
+          metadata?: Json | null
+          response_type?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          journal_id?: string | null
+          metadata?: Json | null
+          response_type?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "journal_responses_journal_id_fkey"
+            columns: ["journal_id"]
+            isOneToOne: false
+            referencedRelation: "user_journals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       leads: {
         Row: {
           city: string | null
@@ -837,9 +875,51 @@ export type Database = {
         }
         Relationships: []
       }
-      resource_meta: {
+      resource_comments: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: number
+          resources_id: number
+          status: string | null
+          text: string | null
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          id?: number
+          resources_id: number
+          status?: string | null
+          text?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          id?: number
+          resources_id?: number
+          status?: string | null
+          text?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resource_comments_resources_id_fkey"
+            columns: ["resources_id"]
+            isOneToOne: false
+            referencedRelation: "resources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      resources: {
         Row: {
           categories: string[] | null
+          content: string | null
           created_at: string
           created_by: string | null
           description: string | null
@@ -852,6 +932,7 @@ export type Database = {
         }
         Insert: {
           categories?: string[] | null
+          content?: string | null
           created_at?: string
           created_by?: string | null
           description?: string | null
@@ -864,6 +945,7 @@ export type Database = {
         }
         Update: {
           categories?: string[] | null
+          content?: string | null
           created_at?: string
           created_by?: string | null
           description?: string | null
@@ -875,47 +957,6 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
-      }
-      resources_comments: {
-        Row: {
-          created_at: string
-          created_by: string
-          id: number
-          resources_meta_id: number
-          status: string | null
-          text: string | null
-          title: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          created_at?: string
-          created_by: string
-          id?: number
-          resources_meta_id: number
-          status?: string | null
-          text?: string | null
-          title?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string
-          created_by?: string
-          id?: number
-          resources_meta_id?: number
-          status?: string | null
-          text?: string | null
-          title?: string | null
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "resources_comments_resources_meta_id_fkey"
-            columns: ["resources_meta_id"]
-            isOneToOne: false
-            referencedRelation: "resource_meta"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       roles: {
         Row: {
@@ -1246,45 +1287,60 @@ export type Database = {
       }
       user_journals: {
         Row: {
+          attachments: string[] | null
           category: string | null
           content: string | null
           created_at: string
+          cta_contact_method: string | null
+          cta_description: string | null
+          cta_type: string | null
           entry_data: Json | null
           id: string
           is_public: boolean | null
-          related_entity_id: string | null
-          related_entity_slug: string | null
-          related_entity_type: string | null
+          location: string | null
+          metrics: Json | null
+          mood: string | null
+          tags: string[] | null
           title: string | null
           type: string | null
           updated_at: string | null
           user_id: string | null
         }
         Insert: {
+          attachments?: string[] | null
           category?: string | null
           content?: string | null
           created_at?: string
+          cta_contact_method?: string | null
+          cta_description?: string | null
+          cta_type?: string | null
           entry_data?: Json | null
           id?: string
           is_public?: boolean | null
-          related_entity_id?: string | null
-          related_entity_slug?: string | null
-          related_entity_type?: string | null
+          location?: string | null
+          metrics?: Json | null
+          mood?: string | null
+          tags?: string[] | null
           title?: string | null
           type?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
         Update: {
+          attachments?: string[] | null
           category?: string | null
           content?: string | null
           created_at?: string
+          cta_contact_method?: string | null
+          cta_description?: string | null
+          cta_type?: string | null
           entry_data?: Json | null
           id?: string
           is_public?: boolean | null
-          related_entity_id?: string | null
-          related_entity_slug?: string | null
-          related_entity_type?: string | null
+          location?: string | null
+          metrics?: Json | null
+          mood?: string | null
+          tags?: string[] | null
           title?: string | null
           type?: string | null
           updated_at?: string | null
