@@ -40,6 +40,8 @@ export type ProgressStatus = 'not_started' | 'in_progress' | 'completed';
 
 // -- USER JOURNAL ---
 
+export type JournalCategory = "learning" | "progress" | "insights" | "build-log" | "reflection"; 
+
 export type JournalProgressEntryData = {
   progress_date: string;
   milestone: string;
