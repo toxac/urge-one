@@ -37,3 +37,59 @@ export type UserQuestionStatus = "pending" | "answered" | "rejected" | "archived
 // ----- Program ------
 
 export type ProgressStatus = 'not_started' | 'in_progress' | 'completed';
+
+// -- USER JOURNAL ---
+
+export type JournalProgressEntryData = {
+  progress_date: string;
+  milestone: string;
+  progress_percent?: number;
+  key_activities?: string[];
+  next_steps?: string[];
+};
+
+export type JournalChallengeEntryData = {
+  challenge_area: string;
+  description: string;
+  severity?: 'minor' | 'moderate' | 'major' | 'critical';
+  attempted_solutions?: string[];
+  help_needed?: string;
+};
+
+export type JournalLearningEntryData = {
+  source: string;
+  key_takeaways: string[];
+  applied_in_project?: boolean;
+  application_notes?: string;
+};
+
+export type JournalInsightEntryData = {
+  insight_origin: string;
+  theme: string;
+  impact?: string;
+  confidence_level?: 'hypothesis' | 'validated' | 'pivot';
+  potential_experiments?: string[];
+};
+
+export type JournalBuildLogEntryData = {
+  version: string;
+  environment?: 'beta' | 'staging' | 'production';
+  changes?: string[];
+  feedback_count?: number;
+  issues_reported?: number;
+  planned_hotfixes?: string[];
+};
+
+export type JournalReflectionEntryData = {
+  reflection_prompt?: string;
+  personal_insight: string;
+  gratitude_note?: string;
+};
+
+export type JournalEntryData =
+  | JournalProgressEntryData
+  | JournalChallengeEntryData
+  | JournalLearningEntryData
+  | JournalInsightEntryData
+  | JournalBuildLogEntryData
+  | JournalReflectionEntryData;
