@@ -1,7 +1,7 @@
 // src/components/forms/journal/category-forms/InsightEntryForm.tsx
 import { createSignal, createEffect, For } from "solid-js";
 import { Icon } from "@iconify-icon/solid";
-import type { JournalInsightEntryData } from "../../../../../types/journalTypes";
+import type { JournalInsightEntryData } from "../../../../../types/urgeTypes";
 
 interface InsightEntryFormProps {
   data?: JournalInsightEntryData;

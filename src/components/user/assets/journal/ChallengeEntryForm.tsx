@@ -1,7 +1,7 @@
 // src/components/forms/journal/category-forms/ChallengeEntryForm.tsx
 import { createSignal, createEffect, For } from "solid-js";
 import { Icon } from "@iconify-icon/solid";
-import type { JournalChallengeEntryData } from "../../../../../types/journalTypes";
+import type { JournalChallengeEntryData } from "../../../../../types/urgeTypes";
 
 interface ChallengeEntryFormProps {
   data?: JournalChallengeEntryData;

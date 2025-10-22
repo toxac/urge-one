@@ -1,7 +1,7 @@
 // src/components/forms/journal/category-forms/BuildLogEntryForm.tsx
 import { createSignal, createEffect, For } from "solid-js";
 import { Icon } from "@iconify-icon/solid";
-import type { JournalBuildLogEntryData } from "../../../../../types/journalTypes";
+import type { JournalBuildLogEntryData } from "../../../../../types/urgeTypes";
 
 interface BuildLogEntryFormProps {
   data?: JournalBuildLogEntryData;

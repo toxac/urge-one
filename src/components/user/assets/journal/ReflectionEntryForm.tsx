@@ -1,7 +1,7 @@
 // src/components/forms/journal/category-forms/ReflectionEntryForm.tsx
-import { createSignal, createEffect } from "solid-js";
+import { createSignal, createEffect, For } from "solid-js";
 import { Icon } from "@iconify-icon/solid";
-import type { JournalReflectionEntryData } from "../../../../../types/journalTypes";
+import type { JournalReflectionEntryData } from "../../../../../types/urgeTypes";
 
 interface ReflectionEntryFormProps {
   data?: JournalReflectionEntryData;

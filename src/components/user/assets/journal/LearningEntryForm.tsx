@@ -1,7 +1,7 @@
 // src/components/forms/journal/category-forms/LearningEntryForm.tsx
-import { createSignal, createEffect, For } from "solid-js";
+import { createSignal, createEffect, For, Show } from "solid-js";
 import { Icon } from "@iconify-icon/solid";
-import type { JournalLearningEntryData } from "../../../../../types/journalTypes";
+import type { JournalLearningEntryData } from "../../../../../types/urgeTypes";
 
 interface LearningEntryFormProps {
   data?: JournalLearningEntryData;

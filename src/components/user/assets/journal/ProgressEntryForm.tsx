@@ -1,7 +1,7 @@
 // src/components/forms/journal/category-forms/ProgressEntryForm.tsx
 import { createSignal, createEffect, For } from "solid-js";
 import { Icon } from "@iconify-icon/solid";
-import type { JournalProgressEntryData } from "../../../../../types/journalTypes";
+import type { JournalProgressEntryData } from "../../../../../types/urgeTypes";
 
 interface ProgressEntryFormProps {
   data?: JournalProgressEntryData;
