@@ -692,15 +692,7 @@ export type Database = {
           response_type?: string | null
           user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "journal_responses_journal_id_fkey"
-            columns: ["journal_id"]
-            isOneToOne: false
-            referencedRelation: "user_journals"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       leads: {
         Row: {
@@ -1287,63 +1279,72 @@ export type Database = {
       }
       user_journals: {
         Row: {
-          attachments: string[] | null
           category: string | null
           content: string | null
           created_at: string
-          cta_contact_method: string | null
+          cross_post_to_blog: boolean | null
+          cross_post_to_social: string[] | null
           cta_description: string | null
+          cta_title: string | null
           cta_type: string | null
           entry_data: Json | null
+          has_cta: boolean | null
           id: string
           is_public: boolean | null
-          location: string | null
-          metrics: Json | null
-          mood: string | null
+          program_ref: Json | null
+          response_deadline: string | null
+          should_email_followers: boolean | null
           tags: string[] | null
           title: string | null
           type: string | null
           updated_at: string | null
+          urgency: string | null
           user_id: string | null
         }
         Insert: {
-          attachments?: string[] | null
           category?: string | null
           content?: string | null
           created_at?: string
-          cta_contact_method?: string | null
+          cross_post_to_blog?: boolean | null
+          cross_post_to_social?: string[] | null
           cta_description?: string | null
+          cta_title?: string | null
           cta_type?: string | null
           entry_data?: Json | null
+          has_cta?: boolean | null
           id?: string
           is_public?: boolean | null
-          location?: string | null
-          metrics?: Json | null
-          mood?: string | null
+          program_ref?: Json | null
+          response_deadline?: string | null
+          should_email_followers?: boolean | null
           tags?: string[] | null
           title?: string | null
           type?: string | null
           updated_at?: string | null
+          urgency?: string | null
           user_id?: string | null
         }
         Update: {
-          attachments?: string[] | null
           category?: string | null
           content?: string | null
           created_at?: string
-          cta_contact_method?: string | null
+          cross_post_to_blog?: boolean | null
+          cross_post_to_social?: string[] | null
           cta_description?: string | null
+          cta_title?: string | null
           cta_type?: string | null
           entry_data?: Json | null
+          has_cta?: boolean | null
           id?: string
           is_public?: boolean | null
-          location?: string | null
-          metrics?: Json | null
-          mood?: string | null
+          program_ref?: Json | null
+          response_deadline?: string | null
+          should_email_followers?: boolean | null
           tags?: string[] | null
           title?: string | null
           type?: string | null
           updated_at?: string | null
+          urgency?: string | null
           user_id?: string | null
         }
         Relationships: []
