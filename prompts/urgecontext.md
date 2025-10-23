@@ -63,6 +63,9 @@ The Urge web application is built on a modern, decoupled architecture designed f
 | **Framework** | **Astro (Hybrid/SSR)** | Provides fast, static content delivery (SSG) for public pages and flexible Server-Side Rendering (SSR) for protected, dynamic program pages. |
 | **UI Library** | **SolidJS** | Used for building highly reactive and efficient client-side components (forms, dashboards, interactive elements). Chosen for its performance benefits. |
 | **Styling** | **Tailwind CSS (v4) & Flowbite** | Utility-first styling for speed and consistency, augmented by Flowbite's pre-built, accessible components (menus, buttons, inputs). |
+|
+| **Form Handling** | **Felte/Solidjs** | out of the box form handling and validation |
+| **Validation** | **Zod** | Simple validation library also used by astrojs by default |
 
 ---
 

@@ -173,3 +173,60 @@ export const SOCIAL_PLATFORMS: { value: SocialPlatform; label: string; icon: str
 
 ```
 
+## Category-Specific Entry Data Types user_journals.entry_data
+
+```ts
+// src/types/journal-entry-data.ts
+
+// Reflection Entry Data
+export type JournalReflectionEntryData = {
+  program_satisfaction?: number; // 1-5
+  applied_learnings?: string[];
+  confidence_change?: 'increased' | 'decreased' | 'same';
+  questions?: string[];
+};
+
+// Build Entry Data
+export type JournalBuildEntryData = {
+  build_phase?: 'ideation' | 'planning' | 'prototyping' | 'testing' | 'validation' | 'iteration';
+  is_launch?: boolean;
+  time_invested?: number; // hours
+  technical_challenges?: string[];
+  validation_results?: string;
+  launch_type?: 'mvp' | 'feature' | 'product' | 'company';
+  metrics_tracked?: string[];
+};
+
+// Market Entry Data
+export type JournalMarketEntryData = {
+  activity_type?: 'customer_research' | 'sales' | 'marketing' | 'feedback_collection' | 'partnership';
+  target_audience?: string;
+  channels_used?: string[];
+  results?: {
+    leads_generated?: number;
+    conversions?: number;
+    feedback_received?: string[];
+    insights_gained?: string[];
+    cost_per_acquisition?: number;
+  };
+};
+
+// Money Entry Data
+export type JournalMoneyEntryData = {
+  financial_activity?: 'pricing' | 'funding' | 'expenses' | 'revenue' | 'forecasting' | 'investment';
+  amount_involved?: number;
+  currency?: string;
+  financial_metrics?: {
+    runway_extension?: number;
+    revenue_change?: number;
+    cost_reduction?: number;
+    valuation_impact?: number;
+  };
+  decision_factors?: string[];
+  risk_assessment?: 'low' | 'medium' | 'high';
+};
+
+
+```
+
+
