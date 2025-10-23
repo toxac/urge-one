@@ -40,58 +40,92 @@ export type ProgressStatus = 'not_started' | 'in_progress' | 'completed';
 
 // -- USER JOURNAL ---
 
-export type JournalCategory = "learning" | "progress" | "insights" | "build-log" | "reflection"; 
+// Journal Categories
+export type JournalCategory = 'reflection' | 'build' | 'market' | 'money';
 
-export type JournalProgressEntryData = {
-  progress_date: string;
-  milestone: string;
-  progress_percent?: number;
-  key_activities?: string[];
-  next_steps?: string[];
+// Journal Types (Communication Intent)
+export type JournalType = 'rant' | 'appeal' | 'observation' | 'celebration' | 'question' | 'milestone' | 'announcement';
+
+// CTA Types
+export type CtaType = 
+  | 'help_request'
+  | 'feedback_needed'
+  | 'advice_seeking'
+  | 'resource_request'
+  | 'connection_ask'
+  | 'discussion_prompt'
+  | 'opinion_poll'
+  | 'experience_share'
+  | 'collaboration_offer'
+  | 'beta_testers'
+  | 'early_access'
+  | 'product_review'
+  | 'content_amplification';
+
+// Urgency Levels
+export type UrgencyLevel = 'low' | 'medium' | 'high' | 'urgent';
+
+// Program Reference
+export type ProgramReference = {
+  content_id: string;
+  content_type: 'module' | 'exercise' | 'resource' | 'mentor_session';
 };
 
-export type JournalChallengeEntryData = {
-  challenge_area: string;
-  description: string;
-  severity?: 'minor' | 'moderate' | 'major' | 'critical';
-  attempted_solutions?: string[];
-  help_needed?: string;
-};
+// Social Platforms for Cross-posting
+export type SocialPlatform = 'twitter' | 'linkedin' | 'indiehackers' | 'product_hunt';
 
-export type JournalLearningEntryData = {
-  source: string;
-  key_takeaways: string[];
-  applied_in_project?: boolean;
-  application_notes?: string;
-};
 
-export type JournalInsightEntryData = {
-  insight_origin: string;
-  theme: string;
-  impact?: string;
-  confidence_level?: 'hypothesis' | 'validated' | 'pivot';
-  potential_experiments?: string[];
-};
-
-export type JournalBuildLogEntryData = {
-  version: string;
-  environment?: 'beta' | 'staging' | 'production';
-  changes?: string[];
-  feedback_count?: number;
-  issues_reported?: number;
-  planned_hotfixes?: string[];
-};
-
+// Reflection Entry Data
 export type JournalReflectionEntryData = {
-  reflection_prompt?: string;
-  personal_insight: string;
-  gratitude_note?: string;
+  program_satisfaction?: number; // 1-5
+  applied_learnings?: string[];
+  confidence_change?: 'increased' | 'decreased' | 'same';
+  questions_for_mentor?: string[];
 };
 
-export type JournalEntryData =
-  | JournalProgressEntryData
-  | JournalChallengeEntryData
-  | JournalLearningEntryData
-  | JournalInsightEntryData
-  | JournalBuildLogEntryData
-  | JournalReflectionEntryData;
+// Build Entry Data
+export type JournalBuildEntryData = {
+  build_phase?: 'ideation' | 'planning' | 'prototyping' | 'testing' | 'validation' | 'iteration';
+  is_launch?: boolean;
+  time_invested?: number; // hours
+  technical_challenges?: string[];
+  validation_results?: string;
+  launch_type?: 'mvp' | 'feature' | 'product' | 'company';
+  metrics_tracked?: string[];
+};
+
+// Market Entry Data
+export type JournalMarketEntryData = {
+  activity_type?: 'customer_research' | 'sales' | 'marketing' | 'feedback_collection' | 'partnership';
+  target_audience?: string;
+  channels_used?: string[];
+  results?: {
+    leads_generated?: number;
+    conversions?: number;
+    feedback_received?: string[];
+    insights_gained?: string[];
+    cost_per_acquisition?: number;
+  };
+};
+
+// Money Entry Data
+export type JournalMoneyEntryData = {
+  financial_activity?: 'pricing' | 'funding' | 'expenses' | 'revenue' | 'forecasting' | 'investment';
+  amount_involved?: number;
+  currency?: string;
+  financial_metrics?: {
+    runway_extension?: number;
+    revenue_change?: number;
+    cost_reduction?: number;
+    valuation_impact?: number;
+  };
+  decision_factors?: string[];
+  risk_assessment?: 'low' | 'medium' | 'high';
+};
+
+// Union type for all entry data
+export type JournalEntryData = 
+  | JournalReflectionEntryData
+  | JournalBuildEntryData
+  | JournalMarketEntryData
+  | JournalMoneyEntryData;
