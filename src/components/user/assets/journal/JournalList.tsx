@@ -3,6 +3,9 @@ import { createSignal, createEffect, Show, For } from "solid-js";
 import { useStore } from "@nanostores/solid";
 import { journalsStore, journalsStoreLoading, initializeJournals, deleteJournal } from "../../../../stores/userAssets/journals";
 import JournalCard from "./JournalCard";
+import type { Database } from "../../../../../database.types";
+
+type Journal = Database['public']['Tables']['user_journals']['Row'];
 
 interface JournalListProps {
   userId: string;
@@ -16,9 +19,10 @@ export default function JournalList(props: JournalListProps) {
 
   // Initialize journals when userId changes
   createEffect(() => {
-    if (props.userId) {
-      setLoading(true);
-      initializeJournals(props.userId).finally(() => setLoading(false));
+    if($loading()){
+        return;
+    } else {
+        setLoading(false);
     }
   });
 
@@ -38,13 +42,13 @@ export default function JournalList(props: JournalListProps) {
           <span class="loading loading-spinner loading-lg text-primary"></span>
         </div>
       }>
-        <Show when={$journals.length > 0} fallback={
+        <Show when={$journals().length > 0} fallback={
           <div class="text-center py-12 text-gray-600">
             <p>No journal entries found. Start your first journal!</p>
           </div>
         }>
           <div class="grid grid-cols-1 gap-4">
-            <For each={$journals}>
+            <For each={$journals()}>
               {(journal) => (
                 <JournalCard 
                   journal={journal} 
