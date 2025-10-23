@@ -80,7 +80,7 @@ export type JournalReflectionEntryData = {
   program_satisfaction?: number; // 1-5
   applied_learnings?: string[];
   confidence_change?: 'increased' | 'decreased' | 'same';
-  questions_for_mentor?: string[];
+  questions?: string[];
 };
 
 // Build Entry Data
