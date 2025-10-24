@@ -68,7 +68,7 @@ export type UrgencyLevel = 'low' | 'medium' | 'high' | 'urgent';
 // Program Reference
 export type ProgramReference = {
   content_id: string;
-  content_type: 'module' | 'exercise' | 'resource' | 'mentor_session';
+  content_type: 'milestones' | 'exercises' | 'challenges' | 'concepts';
 };
 
 // Social Platforms for Cross-posting
