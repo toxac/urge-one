@@ -1,3 +1,8 @@
+import ReflectionForm from "./ReflectionForm";
+import BuildForm from "./BuildForm";
+import MarketForm from "./MarketForm";
+import MoneyForm from "./MoneyForm";
+
 interface EntryDataFormProps {
   category: string;
   entryData: any;
