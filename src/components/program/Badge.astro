@@ -1,0 +1,33 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props{
+    type: string;
+    icon: string;
+    description: string;
+}
+const { type, icon, description } = Astro.props;
+
+const badgeShapes: Record<string, string> = {
+  milestone: 'polygon(50% 0%, 100% 38%, 81% 100%, 19% 100%, 0% 38%)',
+  challenge: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
+  contribution: 'polygon(25% 6.7%, 75% 6.7%, 100% 50%, 75% 93.3%, 25% 93.3%, 0% 50%)',
+  activity: 'circle(50% at 50% 50%)'
+};
+
+const badgeColors: Record<string, string> = {
+  milestone: 'bg-yellow-400 text-gray-900',
+  challenge: 'bg-blue-600 text-white',
+  contribution: 'bg-green-500 text-white',
+  activity: 'bg-pink-500 text-white'
+};
+---
+
+<div class={`relative flex flex-col items-center justify-center w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 shadow-lg ${badgeColors[type]}`}
+    style={`clip-path: ${badgeShapes[type]};`}
+>
+  <Icon name={icon} class="text-3xl md:text-4xl" />
+  <span class="absolute bottom-1 left-0 w-full text-center px-2 md:px-3 font-medium">
+    {description}
+  </span>
+</div>
