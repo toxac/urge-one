@@ -2,6 +2,7 @@
 import {SendMailClient} from "zeptomail";
 import { configTransactionalEmail } from "./config";
 
+
 const url = "https://api.zeptomail.in/v1.1/email";
 const token = import.meta.env.ZEPTOMAIL_TOKEN;
 
