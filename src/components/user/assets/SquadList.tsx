@@ -2,6 +2,7 @@
 import { createSignal, createEffect, Show, For } from "solid-js";
 import { Icon } from "@iconify-icon/solid";
 import { useStore } from "@nanostores/solid";
+import { squadInitialized, squadUpdatesInitialized } from '../../../stores/userAssets/squadInitialization';
 import {
   squadStore,
   squadStoreLoading,
@@ -9,6 +10,7 @@ import {
   initializeSquad,
   deleteSquadMember,
 } from "../../../stores/userAssets/squad";
+import { initializeSquadUpdates } from '../../../stores/userAssets/squadUpdates';
 import { notify } from "../../../stores/notifications";
 import SquadDetails from "./SquadDetails";
 import SquadForm from "./SquadForm";
@@ -22,6 +24,11 @@ export default function SquadList(props: SquadListProps) {
   const $squad = useStore(squadStore);
   const $loading = useStore(squadStoreLoading);
   const $error = useStore(squadStoreError);
+  const squadInit = useStore(squadInitialized);
+    const squadUpdatesInit = useStore(squadUpdatesInitialized);
+
+    const [combinedLoading, setCombinedLoading] = createSignal(true);
+    const [combinedError, setCombinedError] = createSignal<string | null>(null);
 
   const [loading, setLoading] = createSignal(false);
   const [showModal, setShowModal] = createSignal(false);
@@ -33,11 +40,21 @@ export default function SquadList(props: SquadListProps) {
     setLoading($loading());
   });
 
-  createEffect(() => {
-    if (props.userId) {
-      initializeSquad(props.userId);
+  createEffect(async () => {
+  if (props.userId) {
+    setCombinedLoading(true);
+    setCombinedError(null);
+
+    try {
+      await initializeSquad(props.userId);
+      await initializeSquadUpdates(props.userId);
+    } catch (error) {
+      setCombinedError('Failed to load squad data');
+    } finally {
+      setCombinedLoading(false);
     }
-  });
+  }
+});
 
   const handleDelete = async (id: string, name: string | null) => {
     try {
@@ -81,14 +98,14 @@ export default function SquadList(props: SquadListProps) {
       </div>
 
       {/* Loading Spinner */}
-      <Show when={loading()}>
+      <Show when={combinedLoading()}>
         <div class="flex justify-center py-12">
           <span class="loading loading-spinner loading-lg text-primary"></span>
         </div>
       </Show>
 
       {/* Error Alert */}
-      <Show when={$error()}>
+      <Show when={combinedError()}>
         <div class="alert alert-error">Error loading squad members: {$error()?.message}</div>
       </Show>
 
