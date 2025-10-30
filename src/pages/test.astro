@@ -2,7 +2,7 @@
 import DashLayout from "../layouts/DashLayout.astro";
 import { hasAccess, accessProfiles } from "../lib/rbac";
 import OpportunitiesList from "../components/user/assets/OpportunityListModed";
-
+import Badge from "../components/program/Badge.astro";
 
 // CHECK AUTHENTICATION AND ACCESS
 const { userRoles, session } = Astro.locals;
@@ -34,6 +34,7 @@ const breadcrumbs = [
   description="milestones in urge start program"
   breadcrumbItems={breadcrumbs}
 >
+<Badge label="test" icon="mdi:plus" type="milestone" />
 
 <OpportunitiesList mode="editAssessment" client:load  />
  

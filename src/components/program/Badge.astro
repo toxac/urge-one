@@ -1,33 +1,55 @@
 ---
 import { Icon } from 'astro-icon/components';
 
-interface Props{
-    type: string;
-    icon: string;
-    description: string;
+interface Props {
+  type: string;
+  icon: string;
+  label: string;
 }
-const { type, icon, description } = Astro.props;
+const { type, icon, label } = Astro.props;
 
-const badgeShapes: Record<string, string> = {
-  milestone: 'polygon(50% 0%, 100% 38%, 81% 100%, 19% 100%, 0% 38%)',
-  challenge: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
-  contribution: 'polygon(25% 6.7%, 75% 6.7%, 100% 50%, 75% 93.3%, 25% 93.3%, 0% 50%)',
-  activity: 'circle(50% at 50% 50%)'
-};
-
-const badgeColors: Record<string, string> = {
-  milestone: 'bg-yellow-400 text-gray-900',
-  challenge: 'bg-blue-600 text-white',
-  contribution: 'bg-green-500 text-white',
-  activity: 'bg-pink-500 text-white'
+const badgeColors = {
+  milestone: 'from-yellow-400 via-yellow-300 to-yellow-500 text-yellow-900',
+  challenge: 'from-orange-400 via-orange-500 to-orange-600 text-orange-900',
+  contribution: 'from-pink-400 via-pink-500 to-pink-600 text-pink-900',
+  activity: 'from-purple-500 via-purple-600 to-purple-700 text-purple-200'
 };
 ---
 
-<div class={`relative flex flex-col items-center justify-center w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 shadow-lg ${badgeColors[type]}`}
-    style={`clip-path: ${badgeShapes[type]};`}
->
-  <Icon name={icon} class="text-3xl md:text-4xl" />
-  <span class="absolute bottom-1 left-0 w-full text-center px-2 md:px-3 font-medium">
-    {description}
-  </span>
+<style>
+.ribbon {
+  position: absolute;
+  /* Position at 2/3 of the badge height, assuming badge height ~80px */
+  top: calc(66% - 1.25rem); /* -1.25rem for adjustment */
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.1rem 1rem;
+  background: rgba(0,0,0,0.6);
+  border-radius: 0.25rem;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  color: white;
+  pointer-events: none;
+  width: max-content;
+  white-space: nowrap;
+  user-select: none;
+  z-index: 20; /* Higher Z-Index */
+}
+.badge-wrapper:hover .ribbon {
+  background: rgba(0,0,0,0.8);
+  box-shadow: 0 3px 7px rgba(0,0,0,0.4);
+}
+</style>
+
+<div class={`relative w-20 h-28 mx-4 badge-wrapper cursor-default select-none`}>
+  <div 
+    class={`mask mask-hexagon w-20 h-20 relative flex items-center justify-center bg-gradient-to-br ${badgeColors[type]} shadow-lg`}
+  >
+    <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-md">
+      <Icon name={icon} class="text-3xl text-current drop-shadow-md" />
+    </div>
+  </div>
+  <div class="ribbon">{label}</div>
 </div>
