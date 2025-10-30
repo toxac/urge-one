@@ -51,27 +51,6 @@ Clear CTAs (for the Squad): When a notification is sent, it includes a soft Call
           updated_at: string | null
           user_id: string
         }
-        Insert: {
-          created_at?: string | null
-          email: string
-          id?: string
-          name?: string | null
-          relationship?: string | null
-          status?: string | null
-          updated_at?: string | null
-          user_id: string
-        }
-        Update: {
-          created_at?: string | null
-          email?: string
-          id?: string
-          name?: string | null
-          relationship?: string | null
-          status?: string | null
-          updated_at?: string | null
-          user_id?: string
-        }
-        Relationships: []
       }
       user_cheer_squad_updates: {
         Row: {
@@ -84,35 +63,6 @@ Clear CTAs (for the Squad): When a notification is sent, it includes a soft Call
           update_text: string | null
           user_id: string
         }
-        Insert: {
-          cheer_squad_id: string
-          created_at?: string | null
-          id?: string
-          status?: string | null
-          type: string
-          update_link?: string | null
-          update_text?: string | null
-          user_id: string
-        }
-        Update: {
-          cheer_squad_id?: string
-          created_at?: string | null
-          id?: string
-          status?: string | null
-          type?: string
-          update_link?: string | null
-          update_text?: string | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_cheer_squad_updates_cheer_squad_id_fkey"
-            columns: ["cheer_squad_id"]
-            isOneToOne: false
-            referencedRelation: "user_cheer_squad"
-            referencedColumns: ["id"]
-          },
-        ]
       }
 
 ```
