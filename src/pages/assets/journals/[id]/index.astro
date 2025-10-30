@@ -1,0 +1,49 @@
+---
+import DashLayout from "../../../../layouts/DashLayout.astro";
+import { hasAccess, accessProfiles } from "../../../../lib/rbac";
+import JournalDetails from "../../../../components/user/assets/journal/JournalDetail";
+
+
+
+// CHECK AUTHENTICATION AND ACCESS
+const { userRoles, session } = Astro.locals;
+
+const isAuthenticated: boolean = session !== null;
+
+const hasPageAccess: boolean = hasAccess(
+  userRoles,
+  accessProfiles.programStart
+);
+
+// redirect if doesnt have access
+if (!isAuthenticated || !hasPageAccess) {
+  return Astro.redirect("/program");
+}
+
+const userId = session?.user.id;
+if (!userId){
+    return Astro.redirect("/auth/login")
+}
+
+// Get journal id from route params
+const {id} = Astro.params;
+
+if(!id){
+    return Astro.redirect("/assets/journals");
+}
+
+
+// BREADCRUMBS
+const breadcrumbs = [
+  { name: "Home", url: "/" },
+  { name: "Assets", url: "/assets" },
+  { name: "Journal", url: "assets/journals"},
+  { name: "Entry", url: "/assets/journals/"}
+
+];
+---
+
+<DashLayout title="Journal Entry" description="Journal Entry Details" breadcrumbItems={breadcrumbs}>
+    {id? <JournalDetails journalId={id} userId={userId} />: null}
+</DashLayout>
+
