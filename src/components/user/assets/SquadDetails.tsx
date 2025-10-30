@@ -1,15 +1,9 @@
 // SquadDetails.tsx
-import { createEffect, createSignal, Show, For } from "solid-js";
+import { createMemo, Show, For } from "solid-js";
 import { useStore } from "@nanostores/solid";
 import { Icon } from "@iconify-icon/solid";
-import {
-  squadStore,
-  squadStoreError,
-} from "../../../stores/userAssets/squad";
-import {
-  squadUpdatesStore,
-  initializeSquadUpdates,
-} from "../../../stores/userAssets/squadUpdates";
+import { squadStore, squadStoreError } from "../../../stores/userAssets/squad";
+import { squadUpdatesStore } from "../../../stores/userAssets/squadUpdates";
 
 interface SquadDetailsProps {
   memberId: string;
@@ -17,27 +11,17 @@ interface SquadDetailsProps {
 }
 
 export default function SquadDetails(props: SquadDetailsProps) {
-  const $store = useStore(squadStore);
+  const $squad = useStore(squadStore);
   const $error = useStore(squadStoreError);
-  const [loadingUpdates, setLoadingUpdates] = createSignal(true);
-  const [updates, setUpdates] = createSignal([]);
+  const $updates = useStore(squadUpdatesStore);
 
-  // Find the selected member
-  const member = () => $store().find((m) => m.id === props.memberId);
+  // Find selected member
+  const member = createMemo(() => $squad().find((m) => m.id === props.memberId));
 
-  createEffect(() => {
-    if (member()) {
-      initializeSquadUpdates(member()!.user_id).then(() => {
-        const allUpdates = squadUpdatesStore.get();
-        // Filter updates related to this particular squad member
-        const filtered = allUpdates.filter(
-          (update) => update.cheer_squad_id === props.memberId
-        );
-        setUpdates(filtered);
-        setLoadingUpdates(false);
-      });
-    }
-  });
+  // Filter updates for this member
+  const memberUpdates = createMemo(() =>
+    $updates().filter((update) => update.cheer_squad_id === props.memberId)
+  );
 
   return (
     <div class="p-4">
@@ -52,14 +36,9 @@ export default function SquadDetails(props: SquadDetailsProps) {
 
         <div class="mt-4">
           <h3 class="text-lg font-semibold mb-2">Updates</h3>
-          <Show when={loadingUpdates()}>
-            <div class="flex justify-center py-4">
-              <span class="loading loading-spinner loading-md text-primary"></span>
-            </div>
-          </Show>
-          <Show when={!loadingUpdates() && updates().length > 0}>
+          <Show when={memberUpdates().length > 0} fallback={<p class="text-gray-500 text-sm">No updates available.</p>}>
             <div class="divide-y divide-gray-200 max-h-96 overflow-y-auto">
-              <For each={updates()}>
+              <For each={memberUpdates()}>
                 {(update) => (
                   <div class="py-2">
                     <p class="text-sm text-gray-700">{update.update_text}</p>
@@ -77,9 +56,6 @@ export default function SquadDetails(props: SquadDetailsProps) {
                 )}
               </For>
             </div>
-          </Show>
-          <Show when={!loadingUpdates() && updates().length === 0}>
-            <p class="text-gray-500 text-sm">No updates available.</p>
           </Show>
         </div>
       </Show>
