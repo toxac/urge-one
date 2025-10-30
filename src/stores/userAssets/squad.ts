@@ -1,63 +1,131 @@
 import { atom } from 'nanostores';
 import { supabaseBrowserClient } from '../../lib/supabase/client.ts';
-import { type Database } from "../../../database.types.ts";
+import { type Database } from '../../../database.types.ts';
 import { type SupabaseCustomError } from '../../../types/urgeTypes.ts';
 
 const supabase = supabaseBrowserClient;
-type CheerSquad = Database['public']['Tables']['user_cheer_squad']['Row'];
+type SquadMember = Database['public']['Tables']['user_cheer_squad']['Row'];
+type SquadMemberInsert = Database['public']['Tables']['user_cheer_squad']['Insert'];
+type SquadMemberUpdate = Database['public']['Tables']['user_cheer_squad']['Update'];
 
-export const squadStore = atom<CheerSquad[]>([]);
+export const squadStore = atom<SquadMember[]>([]);
 export const squadStoreLoading = atom(false);
 export const squadStoreError = atom<SupabaseCustomError | null>(null);
-
-export function manageSquad(
-  op: 'create' | 'update' | 'delete',
-  data: CheerSquad
-) {
-  const current = squadStore.get();
-  
-  switch (op) {
-    case 'create':
-      squadStore.set([...current, data as CheerSquad]);
-      break;
-    case 'update':
-      squadStore.set(current.map(item => 
-        item.id === data.id ? { ...item, ...data } : item
-      ));
-      break;
-    case 'delete':
-      squadStore.set(current.filter(item => item.id !== data.id));
-      break;
-  }
-}
 
 export async function initializeSquad(userId: string) {
   try {
     squadStoreLoading.set(true);
-    const { data: squad, error } = await supabase
+    squadStoreError.set(null);
+
+    const { data: squadMembers, error } = await supabase
       .from('user_cheer_squad')
       .select('*')
-      .eq('user_id', userId);
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
 
-    if (error) {
-      squadStoreError.set({
-        name: error.name,
-        message: error.message,
-        details: error.details
-      });
-      throw new Error(error.message);
-    }
+    if (error) throw error;
 
-    if (squad) {
-      squadStore.set(squad);
-      squadStoreError.set(null);
-    }
+    squadStore.set(squadMembers || []);
+    return { success: true, error: null };
+  } catch (error) {
+    const supabaseError = error as SupabaseCustomError;
+    squadStoreError.set({
+      name: supabaseError.name,
+      message: supabaseError.message,
+      details: supabaseError.details,
+    });
+    return { success: false, error: supabaseError };
+  } finally {
+    squadStoreLoading.set(false);
+  }
+}
+
+export async function createSquadMember(memberData: SquadMemberInsert) {
+  try {
+    squadStoreLoading.set(true);
+    squadStoreError.set(null);
+
+    const { data: member, error } = await supabase
+      .from('user_cheer_squad')
+      .insert(memberData)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    const current = squadStore.get();
+    squadStore.set([member, ...current]);
+
+    return { success: true, data: member, error: null };
+  } catch (error) {
+    const supabaseError = error as SupabaseCustomError;
+    squadStoreError.set({
+      name: supabaseError.name,
+      message: supabaseError.message,
+      details: supabaseError.details,
+    });
+    return { success: false, data: null, error: supabaseError };
+  } finally {
+    squadStoreLoading.set(false);
+  }
+}
+
+export async function updateSquadMember(id: string, updates: SquadMemberUpdate) {
+  try {
+    squadStoreLoading.set(true);
+    squadStoreError.set(null);
+
+    const { data: member, error } = await supabase
+      .from('user_cheer_squad')
+      .update({
+        ...updates,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    const current = squadStore.get();
+    squadStore.set(current.map(item => (item.id === id ? member : item)));
+
+    return { success: true, data: member, error: null };
+  } catch (error) {
+    const supabaseError = error as SupabaseCustomError;
+    squadStoreError.set({
+      name: supabaseError.name,
+      message: supabaseError.message,
+      details: supabaseError.details,
+    });
+    return { success: false, data: null, error: supabaseError };
+  } finally {
+    squadStoreLoading.set(false);
+  }
+}
+
+export async function deleteSquadMember(id: string) {
+  try {
+    squadStoreLoading.set(true);
+    squadStoreError.set(null);
+
+    const { error } = await supabase.from('user_cheer_squad').delete().eq('id', id);
+
+    if (error) throw error;
+
+    const current = squadStore.get();
+    squadStore.set(current.filter(item => item.id !== id));
 
     return { success: true, error: null };
   } catch (error) {
-    return { success: false, error: squadStoreError.get() };
+    const supabaseError = error as SupabaseCustomError;
+    squadStoreError.set({
+      name: supabaseError.name,
+      message: supabaseError.message,
+      details: supabaseError.details,
+    });
+    return { success: false, error: supabaseError };
   } finally {
-    squadStoreError.set(null);
     squadStoreLoading.set(false);
   }
 }
