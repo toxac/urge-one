@@ -2,9 +2,17 @@
 import { createSignal, createEffect, Show, For } from "solid-js";
 import { Icon } from "@iconify-icon/solid";
 import { useStore } from "@nanostores/solid";
-import { squadStore, squadStoreLoading, squadStoreError, initializeSquad, deleteSquadMember } from "../../../stores/userAssets/squad";
+import {
+  squadStore,
+  squadStoreLoading,
+  squadStoreError,
+  initializeSquad,
+  deleteSquadMember,
+} from "../../../stores/userAssets/squad";
 import { notify } from "../../../stores/notifications";
 import SquadDetails from "./SquadDetails";
+import SquadForm from "./SquadForm";
+import Modal from "../../appFeedback/Modal";
 
 interface SquadListProps {
   userId: string;
@@ -16,7 +24,9 @@ export default function SquadList(props: SquadListProps) {
   const $error = useStore(squadStoreError);
 
   const [loading, setLoading] = createSignal(false);
-  const [showDetailsModal, setShowDetailsModal] = createSignal(false);
+  const [showModal, setShowModal] = createSignal(false);
+  // Mode can be 'list' (default), 'form' (add), 'details' (view member)
+  const [mode, setMode] = createSignal<"list" | "form" | "details">("list");
   const [selectedMemberId, setSelectedMemberId] = createSignal<string | null>(null);
 
   createEffect(() => {
@@ -42,30 +52,47 @@ export default function SquadList(props: SquadListProps) {
     }
   };
 
-  const handleShowDetails = (id: string) => {
+  const openDetailsModal = (id: string) => {
     setSelectedMemberId(id);
-    setShowDetailsModal(true);
+    setMode("details");
+    setShowModal(true);
   };
 
-  const handleCloseModal = () => {
+  const openAddMemberModal = () => {
     setSelectedMemberId(null);
-    setShowDetailsModal(false);
+    setMode("form");
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setSelectedMemberId(null);
+    setShowModal(false);
+    setMode("list");
   };
 
   return (
     <div class="w-full mx-auto px-4 py-8">
+      {/* Add Squad Member Button */}
+      <div class="flex justify-end mb-4">
+        <button class="btn btn-primary" onClick={openAddMemberModal}>
+          <Icon icon="mdi:account-plus" class="mr-2" />
+          Add Squad Member
+        </button>
+      </div>
+
+      {/* Loading Spinner */}
       <Show when={loading()}>
         <div class="flex justify-center py-12">
           <span class="loading loading-spinner loading-lg text-primary"></span>
         </div>
       </Show>
 
+      {/* Error Alert */}
       <Show when={$error()}>
-        <div class="alert alert-error">
-          Error loading squad members: {$error()?.message}
-        </div>
+        <div class="alert alert-error">Error loading squad members: {$error()?.message}</div>
       </Show>
 
+      {/* No squad members message */}
       <Show when={$squad().length === 0 && !loading()}>
         <div class="text-center py-12">
           <div class="text-gray-400 mb-4">
@@ -78,6 +105,7 @@ export default function SquadList(props: SquadListProps) {
         </div>
       </Show>
 
+      {/* Squad Members List */}
       <Show when={$squad().length > 0 && !loading()}>
         <div class="grid grid-cols-1 gap-4">
           <For each={$squad()}>
@@ -88,7 +116,11 @@ export default function SquadList(props: SquadListProps) {
                     <p class="text-lg font-semibold">{member.name || member.email}</p>
                     <p class="text-sm text-gray-600">{member.relationship || "Relationship not specified"}</p>
                     <div>
-                      <span class={`badge badge-sm ${member.status === "request accepted" ? "badge-success" : "badge-warning"}`}>
+                      <span
+                        class={`badge badge-sm ${
+                          member.status === "request accepted" ? "badge-success" : "badge-warning"
+                        }`}
+                      >
                         {member.status || "Unknown Status"}
                       </span>
                     </div>
@@ -96,7 +128,7 @@ export default function SquadList(props: SquadListProps) {
                   <div class="flex gap-3">
                     <button
                       class="btn btn-ghost btn-circle"
-                      onClick={() => handleShowDetails(member.id)}
+                      onClick={() => openDetailsModal(member.id)}
                       aria-label="View details"
                       title="View details"
                     >
@@ -118,11 +150,23 @@ export default function SquadList(props: SquadListProps) {
         </div>
       </Show>
 
-      <Show when={showDetailsModal() && selectedMemberId()}>
-        <SquadDetails
-          memberId={selectedMemberId()!}
-          onClose={handleCloseModal}
-        />
+      {/* Modal for Details or Add Form */}
+      <Show when={showModal()}>
+        <Modal isOpen={showModal()} onClose={closeModal} size="xl">
+          <Show when={mode() === "form"}>
+            <SquadForm
+              userId={props.userId}
+              onSuccess={() => {
+                closeModal();
+                initializeSquad(props.userId); // reload squad after adding new member
+              }}
+            />
+          </Show>
+
+          <Show when={mode() === "details" && selectedMemberId()}>
+            <SquadDetails memberId={selectedMemberId()!} onClose={closeModal} />
+          </Show>
+        </Modal>
       </Show>
     </div>
   );

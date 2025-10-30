@@ -1,3 +1,43 @@
 ---
-// main squad page
+import DashLayout from "../../../layouts/DashLayout.astro";
+import { hasAccess, accessProfiles } from "../../../lib/rbac";
+import SquadList from "../../../components/user/assets/SquadList";
+
+
+// CHECK AUTHENTICATION AND ACCESS
+const { userRoles, session } = Astro.locals;
+
+const isAuthenticated: boolean = session !== null;
+
+const hasPageAccess: boolean = hasAccess(
+  userRoles,
+  accessProfiles.programStart
+);
+
+// redirect if doesnt have access
+if (!isAuthenticated || !hasPageAccess) {
+  return Astro.redirect("/program");
+}
+
+const userId = session?.user.id;
+if (!userId){
+    return Astro.redirect("/auth/login")
+}
+
+
+
+// BREADCRUMBS
+const breadcrumbs = [
+  { name: "Home", url: "/" },
+  { name: "Assets", url: "/assets" },
+  { name: "Squad", url: "assets/squad"}
+
+];
 ---
+
+<DashLayout title="Journal" description="Main Journal page" breadcrumbItems={breadcrumbs}>
+
+    {/* todo: Add block to create new journal entry */}
+    <SquadList userId={userId} client:load />
+
+</DashLayout>
