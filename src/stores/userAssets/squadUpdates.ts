@@ -1,6 +1,7 @@
 import { atom } from 'nanostores';
 import { supabaseBrowserClient } from '../../lib/supabase/client.ts';
 import { type Database } from '../../../database.types.ts';
+import { squadUpdatesInitialized } from './squadInitialization';
 import { type SupabaseCustomError } from '../../../types/urgeTypes.ts';
 
 const supabase = supabaseBrowserClient;
@@ -12,6 +13,10 @@ export const squadUpdatesStoreError = atom<SupabaseCustomError | null>(null);
 
 export async function initializeSquadUpdates(userId: string) {
   try {
+    if (squadUpdatesInitialized.get()) {
+      return { success: true, error: null };
+    }
+
     squadUpdatesStoreLoading.set(true);
     squadUpdatesStoreError.set(null);
 
@@ -24,6 +29,7 @@ export async function initializeSquadUpdates(userId: string) {
     if (error) throw error;
 
     squadUpdatesStore.set(updates || []);
+    squadUpdatesInitialized.set(true);
     return { success: true, error: null };
   } catch (error) {
     const supabaseError = error as SupabaseCustomError;
