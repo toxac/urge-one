@@ -8,7 +8,7 @@ interface Props {
 }
 const { type, icon, label } = Astro.props;
 
-const badgeColors = {
+const badgeColors: Record<string, string> = {
   milestone: 'from-yellow-400 via-yellow-300 to-yellow-500 text-yellow-900',
   challenge: 'from-orange-400 via-orange-500 to-orange-600 text-orange-900',
   contribution: 'from-pink-400 via-pink-500 to-pink-600 text-pink-900',
