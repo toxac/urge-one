@@ -16,9 +16,9 @@ type JournalStep = "base" | "entry" | "cta";
 
 interface Props {
   userId: string;
-  programRef?: ProgramReference;
-  journalId?: string;
-  category?: string;
+  programRef: ProgramReference | null;
+  journalId: string | null;
+  category: string | null;
 }
 
 export default function JournalForm(props: Props) {

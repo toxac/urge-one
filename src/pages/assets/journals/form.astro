@@ -1,0 +1,67 @@
+---
+import DashLayout from "../../../layouts/DashLayout.astro";
+import { hasAccess, accessProfiles } from "../../../lib/rbac";
+import JournalForm from "../../../components/user/assets/journal/JournalForm";
+import type{ ProgramReference, JournalCategory} from "../../../../types/urgeTypes"
+
+
+
+// CHECK AUTHENTICATION AND ACCESS
+const { userRoles, session } = Astro.locals;
+
+const isAuthenticated: boolean = session !== null;
+
+const hasPageAccess: boolean = hasAccess(
+  userRoles,
+  accessProfiles.programStart
+);
+
+// redirect if doesnt have access
+if (!isAuthenticated || !hasPageAccess) {
+  return Astro.redirect("/program");
+}
+
+const userId = session?.user.id;
+if (!userId){
+    return Astro.redirect("/auth/login")
+}
+
+interface PageParams {
+  content_type: ProgramReference['content_type'] | null;
+  content_id: string | null;
+  category: JournalCategory | null;
+  journal_id: string | null;
+}
+
+const searchParams = Astro.url.searchParams;
+// Parse and validate parameters directly
+const content_type = (searchParams.get('content_type') as ProgramReference["content_type"]) || null;
+const content_id = searchParams.get('content_id');
+const category = (searchParams.get('category') as JournalCategory) || null;
+const journal_id = searchParams.get('journal_id');
+
+let programRef: ProgramReference | null= null
+
+if(content_id && content_type){
+    programRef = {content_id: content_id, content_type:content_type}
+}
+
+
+// BREADCRUMBS
+const breadcrumbs = [
+  { name: "Home", url: "/" },
+  { name: "Assets", url: "/assets" },
+  { name: "Journal", url: "assets/journals"},
+  { name: "Entry", url: "/assets/journals/"}
+
+];
+---
+
+<DashLayout title="Journal Entry" description="Journal Entry Details" breadcrumbItems={breadcrumbs}>
+    <JournalForm 
+        userId={userId}
+        programRef={programRef}
+        journalId={journal_id}
+        category={category}
+        client:load />
+</DashLayout>

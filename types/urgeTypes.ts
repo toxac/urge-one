@@ -71,6 +71,9 @@ export type ProgramReference = {
   content_type: 'milestones' | 'exercises' | 'challenges' | 'concepts';
 };
 
+
+
+
 // Social Platforms for Cross-posting
 export type SocialPlatform = 'twitter' | 'linkedin' | 'indiehackers' | 'product_hunt';
 
