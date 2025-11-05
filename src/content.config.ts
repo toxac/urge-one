@@ -88,8 +88,6 @@ const summaries = defineCollection({
         programId: z.string(),
         programName: z.string().optional(),
         title: z.string(),
-        description: z.string().optional(),
-        theme: z.string().optional(),
         // Program references
         milestone: reference("milestones"), // use id string instead of reference
         // Progression
