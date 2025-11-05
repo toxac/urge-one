@@ -112,7 +112,6 @@ const challenges = defineCollection({
         isOpen: z.boolean().optional(),
         type: z.enum(['think', 'research', 'create', 'communicate', 'execute']),
         sequence: z.number(), // sequence for challenges
-        theme: z.string().optional(),
         // Progression (flexible reference)
         previous: z.object({
             type: z.string(),
@@ -122,16 +121,6 @@ const challenges = defineCollection({
             type: z.string(),
             id: z.string(),
         }).optional(),
-
-        // cover image
-        coverImage: z.object({
-            alt: z.string(),
-            src: z.string().or(z.string().url()),
-            caption: z.string().optional(),
-            credits: z.string().optional(),
-            originalSrc:z.string().optional(),
-        }).optional(),
-        summary: z.string().optional(),
         language: z.enum(["en", "bn", "hi", "kn", "ne", "ps", "si","ta", "te" ]).default('en'),
         version: z.number().optional(),
         archived: z.boolean().optional().default(false),
@@ -155,8 +144,6 @@ const exercises = defineCollection({
         hasForm: z.boolean().default(false),
         type: z.enum(['think','research', 'create', 'communicate', 'execute']),
         sequence: z.number(), // sequence for exercises
-        theme: z.string().optional(),
-
         // Progression (flexible reference)
         previous: z.object({
             type: z.string(),
@@ -167,16 +154,6 @@ const exercises = defineCollection({
             type: z.string(),
             id: z.string(),
         }).optional(),
-                
-        // cover image
-        coverImage: z.object({
-            alt: z.string(),
-            src: z.string().or(z.string().url()),
-            caption: z.string().optional(),
-            credits: z.string().optional(),
-            originalSrc:z.string().optional(),
-        }).optional(),
-        summary: z.string().optional(),
 
         language: z.enum(["en", "bn", "hi", "kn", "ne", "ps", "si","ta", "te" ]).default('en'),
         version: z.number().optional(),
