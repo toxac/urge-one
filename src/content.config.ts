@@ -53,8 +53,6 @@ const concepts = defineCollection({
         sequence: z.number(), // sequence for concepts
         // Program references
         milestone: reference("milestones"), // use id string instead of reference
-        // Reference related challenges
-        resources: z.array(reference('resources')).optional(),
         // Progression
         previous: z.object({
             type: z.string(),
