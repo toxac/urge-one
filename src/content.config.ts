@@ -81,6 +81,31 @@ const concepts = defineCollection({
     }),
 });
 
+const summaries = defineCollection({
+    schema: z.object({
+        id: z.string(),
+        contentMetaId: z.string(), 
+        programId: z.string(),
+        programName: z.string().optional(),
+        title: z.string(),
+        description: z.string().optional(),
+        theme: z.string().optional(),
+        // Program references
+        milestone: reference("milestones"), // use id string instead of reference
+        // Progression
+        previous: z.object({
+            type: z.string(),
+            id: z.string(),
+        }).optional(),
+        next: z.object({
+            type: z.string(),
+            id: z.string(),
+        }).optional(),
+        // Cover image
+        language: z.enum(["en", "bn", "hi", "kn", "ne", "ps", "si","ta", "te" ]).default('en'),
+    }),
+});
+
 
 const challenges = defineCollection({
     schema: z.object({
@@ -216,4 +241,4 @@ const resources = defineCollection({
     }),
 });
 
-export const collections = {concepts, milestones, challenges, exercises, resources }
+export const collections = {concepts, milestones, challenges, exercises, resources, summaries }
