@@ -51,7 +51,6 @@ const concepts = defineCollection({
         updatedDate: z.coerce.date().optional(),
         description: z.string().optional(),
         sequence: z.number(), // sequence for concepts
-        theme: z.string().optional(),
         // Program references
         milestone: reference("milestones"), // use id string instead of reference
         // Reference related challenges
@@ -65,16 +64,6 @@ const concepts = defineCollection({
             type: z.string(),
             id: z.string(),
         }).optional(),
-        // Cover image
-        coverImage: z.object({
-            alt: z.string(),
-            src: z.string().or(z.string().url()),
-            caption: z.string().optional(),
-            credits: z.string().optional(),
-            originalSrc:z.string().optional(),
-        }).optional(),
-        summary: z.string().optional(),
-        isFinalContentInMilestone: z.boolean(),
         language: z.enum(["en", "bn", "hi", "kn", "ne", "ps", "si","ta", "te" ]).default('en'),
         version: z.number().optional(),
         archived: z.boolean().optional().default(false),
