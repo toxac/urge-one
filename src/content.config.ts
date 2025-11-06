@@ -68,6 +68,7 @@ const concepts = defineCollection({
     }),
 });
 
+// Summary does not have a content_meta_id and is not saved the content_meta table
 const summaries = defineCollection({
     schema: z.object({
         id: z.string(),

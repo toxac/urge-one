@@ -1,0 +1,82 @@
+---
+/**
+ * @description milestone summary page
+ * @param slug
+ * @path /program/summaries/[slug]
+ * @author amit chanchal
+ */
+
+import DashLayout from "../../../../layouts/DashLayout.astro";
+import { render, getEntry, type CollectionEntry } from "astro:content";
+import MDContainer from "../../../../components/content/MDContainer.astro";
+import ContentNavigationButtons from "../../../../components/program/progress/ContentNavigationButtons";
+
+
+
+import { hasAccess, accessProfiles } from "../../../../lib/rbac";
+const { userRoles, session } = Astro.locals;
+const pathname = Astro.url.pathname;
+
+// CHECK AUTHENTICATION AND ACCESS
+
+const isAuthenticated: boolean = session !== null;
+
+const hasPageAccess: boolean = hasAccess(
+  userRoles,
+  accessProfiles.programStart,
+);
+
+// redirect if doesnt have access
+if (!isAuthenticated || !hasPageAccess) {
+  return Astro.redirect("/program");
+}
+
+// Fetch Content
+const { slug } = Astro.params;
+if (slug === undefined) {
+  return Astro.redirect("/404");
+}
+
+const summary = await getEntry("summaries", slug);
+
+if (summary === undefined) {
+  return Astro.redirect("/404");
+}
+
+const { Content } = await render(summary);
+// breadcrumb items
+
+const breadcrumbs = [
+  { name: "Home", url: "/" },
+  { name: "Program", url: "/program" },
+  { name: "Milestone", url: "/program/milestones" },
+  {
+    name: `${summary.slug}`,
+    url: `/program/summaries/${slug}`,
+  },
+];
+---
+
+<DashLayout
+  title={`milestone - ${summary.data.title} | urge`}
+  description={summary.data?.title}
+  breadcrumbItems={breadcrumbs}
+>
+  
+  </div>
+
+  <h1 class="mb-8">{summary.data.title}</h1>
+
+  <MDContainer>
+    <Content />
+  </MDContainer>
+  <ContentNavigationButtons
+    contentMetaId={summary.data.contentMetaId}
+    contentType={summary.collection}
+    nextContentId={summary.data.next?.id}
+    nextContentType={summary.data.next?.type}
+    previousContentId={summary.data.previous?.id}
+    previousContentType={summary.data.previous?.type}
+    client:load
+  />
+</DashLayout>
