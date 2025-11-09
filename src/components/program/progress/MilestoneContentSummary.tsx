@@ -82,5 +82,11 @@ export default function MilestoneSummary (props: Props){
     createEffect(()=>{
 
     })
+    return (
+        <div class="w-full">
+            <h2>Activities</h2>
+            
+        </div>
+    )
 
 }

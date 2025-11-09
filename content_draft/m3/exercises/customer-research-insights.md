@@ -1,0 +1,59 @@
+---
+id: customer-research-insights
+contentMetaId: null
+programId: b594dc90-3af0-4d62-9f5e-4b5dccba3fe9
+programName: start
+title: Customer Research Insights
+subtitle: Documenting Pains and Motivations
+pubDate: 2025-11-09
+updatedDate: 2025-11-09
+description: Execute the documentation of specific customer pain points, motivations, and competitor weaknesses for your top opportunities.
+summary: >-
+  You've learned how to spot pains and motivations. This exercise is about **executing** the documentation of those vital insights for your top **opportunities**. You'll formally record the customer's top pain, their motivation to buy, and the market's biggest flaw, ensuring your **MSP** build is based on solid **data**.
+milestone: milestone-3-evaluating-opportunities
+sequence: 4
+type: analyze
+previous:
+  type: concepts
+  id: deep-dive-into-customer-needs
+next:
+  type: concepts
+  id: sizing-up-your-opportunity
+hasForm: true
+coverImage:
+  alt: "Illustration of a magnifying glass highlighting specific text on a document, symbolizing deep analysis and documentation."
+  src: ""
+language: en
+version: 1
+archived: false
+---
+
+# Exercise: Customer Research Insights
+
+Alright, time to turn listening into data! You know how to spot pains and motivations. This **exercise** is about **executing** the documentation of those vital insights for your top **opportunities**.
+
+This is how you ensure your understanding is rock solid before you commit to **building** the final **MSP**.
+
+---
+
+## Your Mission: Document the Customer's World
+
+For each of your top **opportunities**, use the form below to document the critical human elements you’ve uncovered.
+
+| Field                         | Purpose                                                      | Task Type   | Data Focus                    |
+| :---------------------------- | :----------------------------------------------------------- | :---------- | :---------------------------- |
+| **Opportunity Name**          | [Dropdown Pre-populated] The opportunity being analyzed.     | **Explore** | Context                       |
+| **Top Pain Point (Specific)** | The exact, granular problem (e.g., "Software takes 15 minutes to generate the monthly report"). | **Analyze** | High-pain area                |
+| **Motivation Driver**         | The core emotional or functional reason the customer wants this solved (e.g., "To feel secure about finances," "To save 5 hours per week"). | **Think**   | The "Why" behind the purchase |
+| **Current Workaround**        | How do they currently solve this problem (even badly)?       | **Analyze** | Reveals existing friction     |
+| **Unmet Need Summary**        | Describe the gap that currently exists in the market that your **MSP** will fill. | **Create**  | Focus of the solution         |
+
+---
+
+## Your Action: Save Your Insights!
+
+* **Goal:** Have the core pain, motivation, and unmet need documented for your top **opportunities**.
+* **Tool:** The interactive form component below.
+* **Reminder:** Accuracy here is key. You're replacing assumptions with **data**.
+
+Ready to solidify your understanding of your customer? Let's get it done.

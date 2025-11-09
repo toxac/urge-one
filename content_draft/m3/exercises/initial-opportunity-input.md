@@ -1,0 +1,63 @@
+---
+id: initial-opportunity-input
+contentMetaId: null
+programId: b594dc90-3af0-4d62-9f5e-4b5dccba3fe9
+programName: start
+title: Initial Opportunity Input
+subtitle: Documenting Your Top Three Ventures
+pubDate: 2025-11-09
+updatedDate: 2025-11-09
+description: Formalize the basic details for your top three opportunities, defining the customer, the pain, and the initial angle.
+summary: >-
+  You've learned how to define your Ideal Customer. This exercise is about
+  **executing** the first official data compilation for your top three
+  potential **opportunities**. Get the core details right for all subsequent
+  analysis.
+milestone: milestone-3-evaluating-opportunities
+sequence: 2
+concept: exploring-your-market
+hasForm: true
+type: execute
+previous:
+  type: concepts
+  id: exploring-your-market
+next:
+  type: concepts
+  id: deep-dive-into-customer-needs
+coverImage:
+  alt: "Illustration of a hand holding a clipboard with data points, symbolizing initial data compilation and organization."
+  src: ""
+language: en
+version: 1
+archived: false
+---
+
+# Exercise: Initial Opportunity Input
+
+Alright, let's get tactical! You've learned how to define your Ideal Customer and the types of market research that matter. This **exercise** is about **executing** the first official data compilation for your top three potential **opportunities**.
+
+This is the foundation for all subsequent analysis. Get the core details right!
+
+---
+
+## Your Mission: Document Your Top Three
+
+Use the form below to input the initial details for your best 3 **opportunities** discovered in Milestone 2. Focus on clarity and accuracy.
+
+| Field                      | Purpose                                                      | Task Type   | Data Focus                  |
+| :------------------------- | :----------------------------------------------------------- | :---------- | :-------------------------- |
+| **Opportunity Name**       | Your short title for the venture.                            | **Think**   | Clarity & Memorability      |
+| **Target Audience**        | Who exactly are you trying to serve?                         | **Think**   | Demographics/Psychographics |
+| **Top Pain Point**         | The single biggest headache or frustration you are solving.  | **Analyze** | Problem identified          |
+| **Current Workaround**     | How does the customer solve this problem *today* (even badly)? | **Explore** | Market reality              |
+| **Unique Angle (Initial)** | Your brief, initial idea of how you will differentiate your **MSP**. | **Create**  | Differentiation             |
+
+---
+
+## Your Action: Input Your Data!
+
+* **Goal:** Have 3 distinct **Opportunity** entries saved in the system, ready for detailed analysis.
+* **Tool:** The interactive form component below.
+* **Reminder:** You may need to revisit your notes from the previous Milestones to pull the best information.
+
+Ready to turn your observations into formal data points? Let's get it done.

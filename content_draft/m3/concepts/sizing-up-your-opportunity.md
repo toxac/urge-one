@@ -1,0 +1,83 @@
+---
+id: sizing-up-your-opportunity
+contentMetaId: null
+programId: b594dc90-3af0-4d62-9f5e-4b5dccba3fe9
+programName: start
+title: Sizing Up Your Opportunity
+subtitle: Is This Market Big Enough?
+pubDate: 2025-11-09
+updatedDate: 2025-11-09
+description: Learn how to assess the market size, competition, and potential barriers to entry for your business opportunities.
+summary: >-
+  You've grasped what customers need – awesome! Now, this concept teaches you how to assess if an **opportunity** is truly big enough for *your* business. You’ll learn to evaluate market size (TAM/SAM/SOM), understand the competition, and spot barriers to entry, replacing hopeful guesses with **data**. It’s about ensuring your **MSP** has enough room to grow and capture **real sales**.
+milestone: milestone-3-evaluating-opportunities
+sequence: 5
+previous:
+  type: exercises
+  id: customer-research-insights
+next:
+  type: exercises
+  id: market-size-and-competition-input
+resources:
+  - estimating-market-size-guide
+  - competitor-analysis-template
+  - barriers-to-entry-checklist
+coverImage:
+  alt: "Illustration of a person with a tape measure measuring a large, complex market, symbolizing market sizing and evaluation."
+  src: ""
+language: en
+version: 1
+archived: false
+---
+
+# Concept: Sizing Up Your Opportunity – Is This Market Big Enough?
+
+Alright, you've become a master at understanding what makes your customers tick! But here's the next crucial **concept** in evaluating your **opportunities**: **is this market big enough for you to build a successful business that generates real sales?**
+
+I've seen founders with brilliant **MSPs** (Minimal Sell-able Products) fail because they chose a market that was just too tiny to sustain their dream, or so crowded they couldn't break through. This **concept** is about using **data**, not guesswork, to assess the true potential of your **opportunity** and how you can actually win. Let's get out the measuring tape!
+
+---
+
+## Why Sizing Up Your Opportunity is Non-Negotiable
+
+Ignoring market size and competition is a direct path to frustration and wasted effort. You don't want to spend months **building** something only to find out there's no room to grow. By rigorously sizing up your **opportunity**, you can:
+
+* **Make Smart Bets:** Choose **opportunities** that genuinely have the potential for significant **sales and revenue**.
+* **Avoid Chasing Ghost Markets:** Don't invest precious time and resources into ideas that are unlikely to be profitable or sustainable.
+* **Craft Your Winning Strategy:** Understand the competitive landscape. This insight helps you develop unique strategies to stand out and capture your slice of the market.
+* **Reduce Risk:** Knowledge is power. The more **data** you have about the market, the less uncertainty you face.
+
+*My take? Don't just love your opportunity; quantify its potential. Data often reveals where the real treasures (and hidden dragons!) lie.*
+
+---
+
+## Your Urge Toolkit: Measuring the Market
+
+"Market size" isn't a vague term. It refers to the actual demand for a product or service. Getting a handle on this helps you see the potential revenue and profitability of your future **MSP**.
+
+We simplify it with a common framework:
+
+* **TAM (Total Addressable Market):** The total revenue opportunity if literally *everyone* who *could* use your product bought it. It's the ultimate ceiling.
+* **SAM (Serviceable Available Market):** The portion of the TAM that you can realistically serve with your **MSP** given your resources and reach. This is your realistic target market.
+* **SOM (Share of Market):** The percentage of the SAM that you can realistically capture in the short term. This is your immediate, actionable slice of the pie.
+
+*Your Action:* Use these terms to frame your thinking. It's about breaking down a huge number into what's actually actionable for *your* **MSP**. (Check out our resource: **Estimating Market Size Guide**.)
+
+---
+
+## The Battleground: Competition and Saturation
+
+A strong **opportunity** isn't just about big demand; it's also about understanding who else is already playing in your space. **Market saturation** means too many players are already offering similar things, making it tough for new entrants.
+
+**Your Action: Become a Competitor Detective!**
+
+* **Analyze Your Rivals:** Who are your main competitors? What are their strengths? Their weaknesses? What are customers complaining about with their offerings? This is your chance to spot their blind spots – your **opportunity**! (Use our **Competitor Analysis Template**.)
+* **Barriers to Entry:** What are the invisible walls (regulatory hurdles, high startup costs) that could stop you—or stop future competitors from copying you? Identifying these is key to your **long-term sustainability**!
+
+---
+
+## Your Action: Get Ready to Quantify!
+
+Ready to prove your **opportunity**'s potential?
+
+**Your Task:** Move on to the **Exercise: Market Size & Competition Input**. You will calculate your market size, analyze your competitors, and finalize the "head" of your evaluation. Your next step awaits.
