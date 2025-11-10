@@ -1,9 +1,13 @@
+// lib/sentry/server.ts
 import * as Sentry from "@sentry/node";
 
+let sentryInitialized = false;
 
-Sentry.init({
-  dsn: import.meta.env.SENTRY_SERVER_KEY,
-  // Setting this option to true will send default PII data to Sentry.
-  // For example, automatic IP address collection on events
-  sendDefaultPii: true,
-});
+export function initializeMonitoringOnServer() {
+  if (sentryInitialized) return;
+  Sentry.init({
+    dsn: import.meta.env.SENTRY_SERVER_KEY,
+    sendDefaultPii: true,
+  });
+  sentryInitialized = true;
+}

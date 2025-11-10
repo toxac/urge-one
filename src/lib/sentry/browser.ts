@@ -1,6 +1,6 @@
 import * as Sentry from "@sentry/solid";
 
-export function initializeMonitoring(){
+export function initializeMonitoringOnBrowser(){
     Sentry.init({
         dsn: import.meta.env.SENTRY_BROWSER_KEY,
         // Setting this option to true will send default PII data to Sentry.

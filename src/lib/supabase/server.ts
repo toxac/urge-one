@@ -1,9 +1,14 @@
+// lib/supabase/server.ts
+
 import { createServerClient, parseCookieHeader } from "@supabase/ssr";
 import type { AstroCookies } from "astro";
+import { initializeMonitoringOnServer } from "../sentry/server";
 
 export function createSupabaseServerClient({request,cookies }: {request: Request;
   cookies: AstroCookies;
 }) {
+  // initialize server monitoring
+  initializeMonitoringOnServer();
   return createServerClient(
     import.meta.env.PUBLIC_SUPABASE_URL,
     import.meta.env.PUBLIC_SUPABASE_ANON_KEY,
@@ -16,7 +21,6 @@ export function createSupabaseServerClient({request,cookies }: {request: Request
             name: cookie.name,
             value: cookie.value ?? "",
           }));
-          
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value, options }) => {
@@ -26,5 +30,4 @@ export function createSupabaseServerClient({request,cookies }: {request: Request
       }
     }
   )
-  
 }
