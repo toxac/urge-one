@@ -1,14 +1,12 @@
 import { onMount } from "solid-js";
 import { initializeMonitoring } from "../../lib/sentry/browser";
 
-interface Props {
-    browserKey: string;
-}
 
-export default function Monitoring(props:Props){
+
+export default function Monitoring(){
 
     onMount(()=>{
-        initializeMonitoring(props.browserKey);
+        initializeMonitoring();
     })
 
     return null;

@@ -6,7 +6,6 @@ import InitializeStoreLog from "../components/dev/InitializeStoreLogs";
 import Monitoring from "../components/monitoring/Sentry";
 
 const { userRoles } = Astro.locals;
-const sentryBrowserKey = import.meta.env.SENTRY_BROWSER_KEY;
 
 console.log(userRoles);
 
@@ -66,7 +65,7 @@ const { title, description } = Astro.props;
   </head>
   <body>
     <AuthListener roles={userRoles} client:load />
-    <Monitoring browserKey={sentryBrowserKey} client:load />
+    <Monitoring client:load />
     <InitializeStoreLog client:load />
     <slot />
     <NotificationToast client:load />
