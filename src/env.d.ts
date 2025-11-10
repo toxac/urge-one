@@ -11,6 +11,10 @@ type UserRole = Database['public']['Tables']['user_roles']['Row']
 interface ImportMetaEnv {
   readonly PUBLIC_SUPABASE_URL: string;
   readonly PUBLIC_SUPABASE_ANON_KEY: string;
+  readonly SUPABASE_ACCESS_TOKEN: string;
+  readonly SENTRY_BROWSER_KEY: string;
+  readonly SENTRY_SERVER_KEY: string;
+  readonly ZEPTOMAIL_TOKEN: string;
   // more env variables...
 }
 
