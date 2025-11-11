@@ -477,7 +477,7 @@ export const contentSequence: ContentMetaData[] = [
   },
   {
     slug: "exploring-your-market",
-    contentMetaId: "8a5b568c-88b7-497a-ab19-19c6a900e85a",
+    contentMetaId: "",
     programId: "b594dc90-3af0-4d62-9f5e-4b5dccba3fe9",
     title: "Exploring Your Market",
     subtitle: "Understanding Your Target Audience",
@@ -489,16 +489,16 @@ export const contentSequence: ContentMetaData[] = [
     milestone: "milestone-3-evaluating-opportunities"
   },
   {
-    slug: "deep-dive-into-customer-needs",
-    contentMetaId: "b7a1906d-044b-4cb2-8047-05f4f2745d13",
+    slug: "research-your-opportunity",
+    contentMetaId: "",
     programId: "b594dc90-3af0-4d62-9f5e-4b5dccba3fe9",
-    title: "Understanding Customer Needs",
-    subtitle: "Uncovering Problems and Motivations",
+    title: "Understanding your opportunities",
+    subtitle: "Research for your 3 chosen opportunities",
     pubDate: "2024-11-06",
     updatedDate: "2025-07-25",
     description: "Learn how to identify customer pain points, unmet needs, and motivations to create solutions that truly resonate with your target audience.",
     sequence: 23,
-    contentType: "concepts",
+    contentType: "exercises",
     milestone: "milestone-3-evaluating-opportunities"
   }
 ];
