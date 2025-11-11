@@ -3,13 +3,13 @@
 export type ContentMetaData = {
   slug: string;
   contentMetaId: string | null;
-  programId: string;
+  programId?: string;
   title: string;
-  subtitle: string;
-  pubDate: string;
-  updatedDate: string;
+  subtitle?: string;
+  pubDate?: string;
+  updatedDate?: string;
   description: string;
-  sequence: number;
+  sequence?: number;
   contentType: string;
   milestone: string; // milestone slug
 };
@@ -500,5 +500,27 @@ export const contentSequence: ContentMetaData[] = [
     sequence: 23,
     contentType: "exercises",
     milestone: "milestone-3-evaluating-opportunities"
+  },
+  {
+    slug: "deep-dive-into-customer-needs",
+    contentMetaId: "",
+    programId: "b594dc90-3af0-4d62-9f5e-4b5dccba3fe9",
+    title: "Deep Dive into Customer Needs",
+    subtitle: "Uncovering Pains, Gains, and Motivations",
+    description: "Learn how to identify customer pain points, unmet needs, and motivations to create solutions that truly resonate with your target audience.",
+    pubDate: "2024-11-06",
+    updatedDate: "2025-07-25",
+    sequence: 23,
+    contentType: "concepts",
+    milestone: "milestone-3-evaluating-opportunities"
+  },
+  {
+    slug: "sizing-up-your-opportunity",
+    contentMetaId: "",
+    programId: "b594dc90-3af0-4d62-9f5e-4b5dccba3fe9",
+    title: "Sizing Up Your Opportunity",
+    description: "Learn how to assess the market size, competition, and potential barriers to entry for your business opportunities.",
+    milestone: "milestone-3-evaluating-opportunities",
+    contentType: "concepts",
   }
 ];
