@@ -1,0 +1,149 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import fs from 'fs/promises';
+import path from 'path';
+
+// Type for the output
+type ContentArray = {
+  slug: string;
+  contentMetaId: string | null;
+  contentType: string; // concepts, challenges, exercises, milestones, summaries
+  previous: { id: string; type: string } | null;
+  next: { id: string; type: string } | null;
+  hasForm: boolean | null;
+  milestone: string | null;
+};
+
+const COLLECTIONS = [
+  'milestones',
+  'concepts',
+  'exercises',
+  'challenges',
+  'summaries',
+  'resources',
+];
+
+// Gather content from each collection and return ContentArray[]
+async function gatherContent(): Promise<ContentArray[]> {
+  const allRecords: ContentArray[] = [];
+
+  for (const collection of COLLECTIONS) {
+    const entries = (await getCollection(collection as any)) as any[];
+    for (const e of entries) {
+      const data: any = (e as any).data as any;
+      const record: ContentArray = {
+        slug: String((e as any).slug),
+        contentMetaId: data.contentMetaId ?? null,
+        contentType: collection,
+        previous: data.previous ? { id: String(data.previous.id), type: String(data.previous.type) } : null,
+        next: data.next ? { id: String(data.next.id), type: String(data.next.type) } : null,
+        hasForm: data.hasForm ?? null,
+        milestone: data.milestone ? String(data.milestone) : (collection === 'milestones' ? String(data.id ?? e.slug) : null),
+      };
+      allRecords.push(record);
+    }
+  }
+
+  return allRecords;
+}
+
+// Arrange records by following `next` starting from milestone-1
+async function arrangeSequence(records: ContentArray[]): Promise<ContentArray[]> {
+  const result: ContentArray[] = [];
+
+  // Build lookup map by collection + id (use slug and, when possible, frontmatter id)
+  const lookup = new Map<string, ContentArray>();
+  for (const r of records) {
+    const key1 = `${r.contentType}:${r.slug}`;
+    lookup.set(key1, r);
+    // Also set by id if milestone or if milestone field equals some id
+    if (r.milestone && r.contentType === 'milestones') {
+      lookup.set(`milestones:${r.milestone}`, r);
+    }
+    // sometimes next/previous reference uses the frontmatter id which is the same as slug
+    lookup.set(`${r.contentType}:${r.milestone}`, r);
+  }
+
+  // Find starting milestone record
+  const startKeyCandidates = [
+    'milestones:milestone-1-begin-your-thrilling-new-adventure',
+    'milestones:milestone-1-begin-your-thrilling-new-adventure.mdx',
+  ];
+
+  let current: ContentArray | undefined;
+  for (const k of startKeyCandidates) {
+    if (lookup.has(k)) {
+      current = lookup.get(k)!;
+      break;
+    }
+  }
+
+  // fallback: find milestone by slug directly
+  if (!current) {
+    current = records.find(r => r.contentType === 'milestones' && r.slug === 'milestone-1-begin-your-thrilling-new-adventure');
+  }
+
+  if (!current) {
+    // nothing to arrange
+    return [];
+  }
+
+  const seen = new Set<string>();
+  while (current) {
+    const idKey = `${current.contentType}:${current.slug}`;
+    if (seen.has(idKey)) break; // prevent infinite loops
+    seen.add(idKey);
+    result.push(current);
+
+    const nextRef: { id: string; type: string } | null = current.next;
+    if (!nextRef) break;
+
+    // try to find next by contentType + id
+    const lookupKey = `${nextRef.type}:${nextRef.id}`;
+    let nextRecord = lookup.get(lookupKey);
+
+    // fallback: try to find by slug in records
+    if (!nextRecord) {
+      nextRecord = records.find(r => r.contentType === nextRef.type && (r.slug === nextRef.id || r.milestone === nextRef.id));
+    }
+
+    if (!nextRecord) break;
+    current = nextRecord;
+  }
+
+  return result;
+}
+
+// Write JSON file to disk
+async function writeJsonFile(arr: ContentArray[]) {
+  const outPath = path.join(process.cwd(), 'src', 'content', 'contentSequence.json');
+  await fs.mkdir(path.dirname(outPath), { recursive: true });
+  await fs.writeFile(outPath, JSON.stringify(arr, null, 2), 'utf8');
+  return outPath;
+}
+
+// Run the process at build time
+const contentArray = await gatherContent();
+const ordered = await arrangeSequence(contentArray);
+let writtenPath: string | null = null;
+if (ordered.length > 0) {
+  writtenPath = await writeJsonFile(ordered);
+}
+---
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Content Sequence Export</title>
+  </head>
+  <body>
+    <h1>Content Sequence Export</h1>
+    <p>Found <strong>{contentArray.length}</strong> records across collections.</p>
+    <p>Ordered sequence length: <strong>{ordered.length}</strong></p>
+    {writtenPath ? (
+      <p>Written JSON to: <code>{writtenPath}</code></p>
+    ) : (
+      <p>No ordered sequence found starting from milestone-1.</p>
+    )}
+  </body>
+</html>
