@@ -33,7 +33,6 @@ const milestones = defineCollection({
             credits: z.string().optional(),
             originalSrc:z.string().optional(),
         }).optional(),
-        summary: z.string().optional(),
         language: z.enum(["en", "bn", "hi", "kn", "ne", "ps", "si","ta", "te" ]).default('en'),
         version: z.number().optional(),
         archived: z.boolean().optional().default(false),
