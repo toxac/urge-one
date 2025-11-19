@@ -139,9 +139,7 @@ const exercises = defineCollection({
         updatedDate: z.coerce.date().optional(),
         description: z.string().optional(),
         milestone: reference('milestones'), 
-        concept: reference('concepts'), // id of concept
         hasForm: z.boolean().default(false),
-        type: z.enum(['think','research', 'create', 'communicate', 'execute']),
         sequence: z.number(), // sequence for exercises
         // Progression (flexible reference)
         previous: z.object({
