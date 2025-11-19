@@ -107,7 +107,6 @@ const challenges = defineCollection({
         updatedDate: z.coerce.date().optional(),
         description: z.string().optional(),
         milestone: reference('milestones'), // id of milestone
-        hasForm: z.boolean().default(false),
         isOpen: z.boolean().optional(),
         sequence: z.number(), // sequence for challenges
         // Progression (flexible reference)
