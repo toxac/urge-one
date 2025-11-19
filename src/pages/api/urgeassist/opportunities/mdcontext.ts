@@ -1,10 +1,17 @@
 // app/api/export/opportunity/[id]/markdown/route.ts
 import { generateOpportunityMarkdown } from '@/lib/export/opportunity-markdown';
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+// todo: implementation missing, might need to try something on the browser end taking load off server
+import { APIContext, APIRoute } from 'astro';
+import { createSupabaseServerClient } from '../../../../lib/supabase/server';
+
+export const GET: APIRoute = async (context, { params }: { params: { id: string } }) =>{
+  const supabase = createSupabaseServerClient({request: context.request, cookies:context.cookies});
+
+
+}
 
 export async function GET(
-  request: NextRequest,
+  request,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -13,7 +20,7 @@ export async function GET(
     const includeResearch = searchParams.get('research') !== 'false';
     const format = searchParams.get('format') || 'full';
 
-    const supabase = createClient();
+    const supabase = createSupabaseServerClient();
     
     // Get opportunity data
     const { data: opportunity, error } = await supabase
