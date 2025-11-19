@@ -5,6 +5,7 @@ import { squadInitialized } from './squadInitialization';
 import { type SupabaseCustomError } from '../../../types/urgeTypes.ts';
 
 const supabase = supabaseBrowserClient;
+
 type SquadMember = Database['public']['Tables']['user_cheer_squad']['Row'];
 type SquadMemberInsert = Database['public']['Tables']['user_cheer_squad']['Insert'];
 type SquadMemberUpdate = Database['public']['Tables']['user_cheer_squad']['Update'];

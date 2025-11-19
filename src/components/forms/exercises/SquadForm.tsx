@@ -3,7 +3,7 @@ import { createForm } from '@felte/solid';
 import { supabaseBrowserClient } from '../../../lib/supabase/client';
 import { validator } from '@felte/validator-zod';
 import { notify } from '../../../stores/notifications';
-import { manageSquad } from '../../../stores/userAssets/squad';
+import { createSquadMember,updateSquadMember} from '../../../stores/userAssets/squad';
 import { saveFormAndMarkCompleted } from '../../../stores/progress';
 import { useStore } from '@nanostores/solid';
 import { authStore } from '../../../stores/auth';
@@ -38,19 +38,18 @@ const schema = z.object({
 interface SquadFormProps {
     member?: CheerSquad | null;
     contentMetaId: string;
+    userId: string;
 }
 
 export default function SquadForm(props: SquadFormProps) {
     const $session = useStore(authStore);
-    const [userId, setUserId] = createSignal<string | null>(null);
     const [loading, setLoading] = createSignal(false);
     const [success, setSuccess] = createSignal(false);
     const [markedCompleted, setMarkedCompleted] = createSignal(false);
     const [error, setError] = createSignal("");
 
     createEffect(() => {
-        if ($session().loading) return;
-        setUserId($session().user?.id || null);
+        //
     });
 
     const { form, errors, setFields } = createForm({
@@ -60,13 +59,13 @@ export default function SquadForm(props: SquadFormProps) {
             name: props.member?.name ?? '',
             relationship: props.member?.relationship ?? '',
             status: props.member?.status ?? 'added',
-            user_id: userId() || ''
+            user_id: props.userId || ''
         },
         onSubmit: async (values) => {
             console.log("submitting", values);
 
             // Check if user_id is available
-            if (!userId()) {
+            if (!props.userId) {
                 setError("User authentication required");
                 return;
             }
@@ -75,14 +74,14 @@ export default function SquadForm(props: SquadFormProps) {
             setError("");
 
             try {
-                if (values.id) {
+                if (values.id && props.userId) {
                     // Update existing record
                     const updatePayload: CheerSquadUpdate = {
                         email: values.email,
                         name: values.name,
                         relationship: values.relationship,
                         status: values.status,
-                        user_id: userId()!
+                        user_id: props.userId
                     };
 
                     const { data, error } = await supabase
@@ -94,8 +93,13 @@ export default function SquadForm(props: SquadFormProps) {
 
                     if (error) throw error;
                     if (data) {
-                        manageSquad('update', data);
-                        notify.success(`Information for ${data.name} has been updated.`, "Success!");
+                        const {success, error} = await updateSquadMember(props.userId, data);
+
+                        if(success){
+                            notify.success(`Information for ${data.name} has been updated.`, "Success!");
+                        } else {
+                            console.error(`Squad store could not be updated - ${error}`)
+                        }
                         setSuccess(true);
                     }
                 } else {
@@ -105,7 +109,7 @@ export default function SquadForm(props: SquadFormProps) {
                         name: values.name,
                         relationship: values.relationship,
                         status: "invited",
-                        user_id: userId()!
+                        user_id: props.userId
                     };
 
                     const { data, error } = await supabase
@@ -116,7 +120,13 @@ export default function SquadForm(props: SquadFormProps) {
 
                     if (error) throw error;
                     if (data) {
-                        manageSquad('create', data);
+                        const {success, error} = await createSquadMember(insertPayload);
+
+                        if (success){
+                            notify.success(`${data.name} has been addedd to your squad.`, "Success!");
+
+                        }
+                        
                         if (!markedCompleted()) {
                             await saveFormAndMarkCompleted(props.contentMetaId);
                         }
@@ -137,12 +147,6 @@ export default function SquadForm(props: SquadFormProps) {
         extend: validator({ schema }),
     });
 
-    // Update form fields when userId becomes available
-    createEffect(() => {
-        if (userId()) {
-            setFields('user_id', userId()!);
-        }
-    });
 
     return (
         <section class="w-full bg-white border-1 border-primary rounded-lg p-8">
@@ -218,7 +222,7 @@ export default function SquadForm(props: SquadFormProps) {
                         <button
                             type="submit"
                             class="btn btn-primary btn-outline"
-                            disabled={loading() || !userId()}
+                            disabled={loading() || !props.userId}
                         >
                             {loading() ? (
                                 <span class="loading loading-spinner loading-xs mr-2"></span>

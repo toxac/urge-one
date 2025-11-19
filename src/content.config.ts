@@ -1,5 +1,6 @@
 import { defineCollection , z, reference } from "astro:content";
 
+// milestone schema
 const milestones = defineCollection({
     schema: z.object({
         id: z.string(),
@@ -106,10 +107,8 @@ const challenges = defineCollection({
         updatedDate: z.coerce.date().optional(),
         description: z.string().optional(),
         milestone: reference('milestones'), // id of milestone
-        concept: reference('concepts'), // id of concept
         hasForm: z.boolean().default(false),
         isOpen: z.boolean().optional(),
-        type: z.enum(['think', 'research', 'create', 'communicate', 'execute']),
         sequence: z.number(), // sequence for challenges
         // Progression (flexible reference)
         previous: z.object({
