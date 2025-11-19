@@ -11,6 +11,7 @@
     "dbtypes": "npx supabase gen types typescript --project-id xqxzcpocbwqhuoqymhbr --schema public > database.types.ts"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.5",
     "@astrojs/mdx": "^4.3.5",
     "@astrojs/sitemap": "^3.5.1",
     "@astrojs/solid-js": "^5.1.1",
@@ -45,6 +46,6 @@
     "eslint-plugin-unused-imports": "^4.2.0",
     "prettier": "^3.6.2",
     "supabase": "^2.47.2",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   }
 }
