@@ -2,62 +2,138 @@
 // src/pages/generate-sequence.astro
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import { generateSequences } from '../lib/content/contentSequencer';
 
-type Milestone = CollectionEntry<"milestones">;
-type Concept = CollectionEntry<"concepts">;
-type Challenge = CollectionEntry<"challenges">;
-type Exercise = CollectionEntry<"exercises">;
-type Summary = CollectionEntry<"summaries">;
-
-type Content = {
-  title: string;
-  slug: string;
-  contentMetaId: string;
-  next?: {
-    id: string;
-    type: string;
-  };
-  previous?: {
-    id: string;
-    type: string;
-  };
-  data?: any;
-}
-
-let allContentData: Content[] | null = [];
-
-// Get all collections
-const allMilestones = await getCollection('milestones');
-const allConcepts = await getCollection('concepts');
-const allChallenges = await getCollection('challenges');
-const allExercises = await getCollection('exercises');
-const allSummaries = await getCollection('summaries');
-
-//formatting data for content master list
-function mapContentToList (data: Milestone|Concept|Exercise|Challenge|Summary) {
-  const contentData: Content = {
-    title: data.data.title,
-    slug: data.slug,
-    contentMetaId: data.data.contentMetaId,
-    next: data.data.next,
-    previous: data.data.previous,
-    data: data.data
-  }
-  allContentData?.push(contentData);
-}
-
-allMilestones.map((data)=> mapContentToList(data));
-allConcepts.map((data)=> mapContentToList(data));
-allChallenges.map((data)=> mapContentToList(data)); 
-allExercises.map((data)=> mapContentToList(data));
-allSummaries.map((data)=> mapContentToList(data));
-
-console.log(allContentData.length)
+// Generate sequences when this page is built
+const sequenceResult = await generateSequences();
 ---
 
-<Layout title='seq' description='sequence'>
+<Layout title='Content Sequences' description='Generated content sequences based on next/previous relationships'>
     <h1>Content Sequences</h1>
-  
-    </div>
-</Layout>
+    
+    <div class="container">
+        <div class="summary">
+            <h2>Summary</h2>
+            <p>Generated at: {new Date(sequenceResult.generatedAt).toLocaleString()}</p>
+            <p>Total Sequences: {sequenceResult.totalSequences}</p>
+            <p>Total Nodes: {sequenceResult.totalNodes}</p>
+        </div>
 
+        {sequenceResult.sequences.map(sequence => (
+            <div class="sequence-card">
+                <h3>{sequence.name}</h3>
+                <p><strong>Sequence ID:</strong> {sequence.id}</p>
+                <p><strong>Length:</strong> {sequence.length} nodes</p>
+                <p><strong>Start:</strong> {sequence.startNode.title} ({sequence.startNode.type})</p>
+                <p><strong>End:</strong> {sequence.endNode.title} ({sequence.endNode.type})</p>
+                
+                <div class="sequence-nodes">
+                    <h4>Sequence Flow:</h4>
+                    <ol>
+                        {sequence.nodes.map((node, index) => (
+                            <li class="node-item">
+                                <div class="node-header">
+                                    <span class="node-type {node.type}">{node.type}</span>
+                                    <span class="node-sequence">#{node.sequence || index + 1}</span>
+                                </div>
+                                <div class="node-title">{node.title}</div>
+                                <div class="node-meta">
+                                    <span>ID: {node.id}</span>
+                                    <span>Program: {node.programName || node.programId}</span>
+                                    <span>Language: {node.language}</span>
+                                </div>
+                                {node.next && (
+                                    <div class="node-next">
+                                        → Next: {node.next.type} - {node.next.id}
+                                    </div>
+                                )}
+                            </li>
+                        ))}
+                    </ol>
+                </div>
+            </div>
+        ))}
+    </div>
+
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .summary {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .sequence-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            background: white;
+        }
+        
+        .sequence-nodes {
+            margin-top: 20px;
+        }
+        
+        .node-item {
+            border: 1px solid #eee;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #fafafa;
+        }
+        
+        .node-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .node-type {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .node-type.milestones { background: #e3f2fd; color: #1976d2; }
+        .node-type.concepts { background: #f3e5f5; color: #7b1fa2; }
+        .node-type.challenges { background: #e8f5e8; color: #388e3c; }
+        .node-type.exercises { background: #fff3e0; color: #f57c00; }
+        .node-type.summaries { background: #fce4ec; color: #c2185b; }
+        
+        .node-sequence {
+            font-weight: bold;
+            color: #666;
+        }
+        
+        .node-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .node-meta {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .node-meta span {
+            margin-right: 15px;
+        }
+        
+        .node-next {
+            font-size: 0.9em;
+            color: #2196f3;
+            font-style: italic;
+        }
+    </style>
+</Layout>
