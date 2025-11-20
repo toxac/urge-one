@@ -2,57 +2,147 @@
 // src/pages/generate-sequence.astro
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import { generateSequences } from '../lib/content/contentSequencer';
+import { exportContentData } from '../lib/content/conten-data';
 
-// Generate sequences when this page is built
-const sequenceResult = await generateSequences();
+// Export all content data when this page is built
+const contentData = await exportContentData();
 ---
 
-<Layout title='Content Sequences' description='Generated content sequences based on next/previous relationships'>
-    <h1>Content Sequences</h1>
+<Layout title='Content Data Export' description='All content data exported to JSON'>
+    <h1>Content Data Export</h1>
     
     <div class="container">
         <div class="summary">
-            <h2>Summary</h2>
-            <p>Generated at: {new Date(sequenceResult.generatedAt).toLocaleString()}</p>
-            <p>Total Sequences: {sequenceResult.totalSequences}</p>
-            <p>Total Nodes: {sequenceResult.totalNodes}</p>
-        </div>
-
-        {sequenceResult.sequences.map(sequence => (
-            <div class="sequence-card">
-                <h3>{sequence.name}</h3>
-                <p><strong>Sequence ID:</strong> {sequence.id}</p>
-                <p><strong>Length:</strong> {sequence.length} nodes</p>
-                <p><strong>Start:</strong> {sequence.startNode.title} ({sequence.startNode.type})</p>
-                <p><strong>End:</strong> {sequence.endNode.title} ({sequence.endNode.type})</p>
-                
-                <div class="sequence-nodes">
-                    <h4>Sequence Flow:</h4>
-                    <ol>
-                        {sequence.nodes.map((node, index) => (
-                            <li class="node-item">
-                                <div class="node-header">
-                                    <span class="node-type {node.type}">{node.type}</span>
-                                    <span class="node-sequence">#{node.sequence || index + 1}</span>
-                                </div>
-                                <div class="node-title">{node.title}</div>
-                                <div class="node-meta">
-                                    <span>ID: {node.id}</span>
-                                    <span>Program: {node.programName || node.programId}</span>
-                                    <span>Language: {node.language}</span>
-                                </div>
-                                {node.next && (
-                                    <div class="node-next">
-                                        → Next: {node.next.type} - {node.next.id}
-                                    </div>
-                                )}
-                            </li>
-                        ))}
-                    </ol>
+            <h2>Export Summary</h2>
+            <p>Generated at: {new Date(contentData.generatedAt).toLocaleString()}</p>
+            <p>Total Items: {contentData.statistics.totalItems}</p>
+            <div class="collection-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Milestones:</span>
+                    <span class="stat-value">{contentData.statistics.milestones}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Concepts:</span>
+                    <span class="stat-value">{contentData.statistics.concepts}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Challenges:</span>
+                    <span class="stat-value">{contentData.statistics.challenges}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Exercises:</span>
+                    <span class="stat-value">{contentData.statistics.exercises}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Summaries:</span>
+                    <span class="stat-value">{contentData.statistics.summaries}</span>
                 </div>
             </div>
-        ))}
+        </div>
+
+        <div class="download-section">
+            <h3>Download JSON File</h3>
+            <p>The complete content data has been saved to:</p>
+            <code class="file-path">/public/content-data.json</code>
+            <p>
+                <a href="/content-data.json" download class="download-button">
+                    📥 Download content-data.json
+                </a>
+            </p>
+        </div>
+
+        <div class="collections-preview">
+            <h3>Collections Preview</h3>
+            
+            <div class="collection-preview">
+                <h4>Milestones ({contentData.collections.milestones.length})</h4>
+                <div class="items-list">
+                    {contentData.collections.milestones.slice(0, 5).map(item => (
+                        <div class="item-preview">
+                            <strong>{item.title}</strong>
+                            <div class="item-meta">
+                                ID: {item.id} | Sequence: {item.sequence} | 
+                                {item.next ? ` → ${item.next.type}:${item.next.id}` : ' (end)'}
+                            </div>
+                        </div>
+                    ))}
+                    {contentData.collections.milestones.length > 5 && 
+                        <p>... and {contentData.collections.milestones.length - 5} more</p>
+                    }
+                </div>
+            </div>
+
+            <div class="collection-preview">
+                <h4>Concepts ({contentData.collections.concepts.length})</h4>
+                <div class="items-list">
+                    {contentData.collections.concepts.slice(0, 5).map(item => (
+                        <div class="item-preview">
+                            <strong>{item.title}</strong>
+                            <div class="item-meta">
+                                ID: {item.id} | Sequence: {item.sequence} | 
+                                Milestone: {item.milestone}
+                            </div>
+                        </div>
+                    ))}
+                    {contentData.collections.concepts.length > 5 && 
+                        <p>... and {contentData.collections.concepts.length - 5} more</p>
+                    }
+                </div>
+            </div>
+
+            <div class="collection-preview">
+                <h4>Challenges ({contentData.collections.challenges.length})</h4>
+                <div class="items-list">
+                    {contentData.collections.challenges.slice(0, 5).map(item => (
+                        <div class="item-preview">
+                            <strong>{item.title}</strong>
+                            <div class="item-meta">
+                                ID: {item.id} | Sequence: {item.sequence} | 
+                                Open: {item.isOpen ? 'Yes' : 'No'}
+                            </div>
+                        </div>
+                    ))}
+                    {contentData.collections.challenges.length > 5 && 
+                        <p>... and {contentData.collections.challenges.length - 5} more</p>
+                    }
+                </div>
+            </div>
+
+            <div class="collection-preview">
+                <h4>Exercises ({contentData.collections.exercises.length})</h4>
+                <div class="items-list">
+                    {contentData.collections.exercises.slice(0, 5).map(item => (
+                        <div class="item-preview">
+                            <strong>{item.title}</strong>
+                            <div class="item-meta">
+                                ID: {item.id} | Sequence: {item.sequence} | 
+                                Form: {item.hasForm ? 'Yes' : 'No'}
+                            </div>
+                        </div>
+                    ))}
+                    {contentData.collections.exercises.length > 5 && 
+                        <p>... and {contentData.collections.exercises.length - 5} more</p>
+                    }
+                </div>
+            </div>
+
+            <div class="collection-preview">
+                <h4>Summaries ({contentData.collections.summaries.length})</h4>
+                <div class="items-list">
+                    {contentData.collections.summaries.slice(0, 5).map(item => (
+                        <div class="item-preview">
+                            <strong>{item.title}</strong>
+                            <div class="item-meta">
+                                ID: {item.id} | Milestone: {item.milestone}
+                            </div>
+                        </div>
+                    ))}
+                    {contentData.collections.summaries.length > 5 && 
+                        <p>... and {contentData.collections.summaries.length - 5} more</p>
+                    }
+                </div>
+            </div>
+        </div>
     </div>
 
     <style>
@@ -69,71 +159,94 @@ const sequenceResult = await generateSequences();
             margin-bottom: 30px;
         }
         
-        .sequence-card {
+        .collection-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .stat-item {
+            background: white;
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .stat-label {
+            display: block;
+            font-weight: bold;
+            color: #666;
+        }
+        
+        .stat-value {
+            display: block;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2196f3;
+        }
+        
+        .download-section {
+            background: #e8f5e8;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .file-path {
+            background: #333;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: monospace;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        
+        .download-button {
+            display: inline-block;
+            background: #2196f3;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .download-button:hover {
+            background: #1976d2;
+        }
+        
+        .collections-preview {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .collection-preview {
             border: 1px solid #ddd;
             border-radius: 8px;
             padding: 20px;
-            margin-bottom: 30px;
             background: white;
         }
         
-        .sequence-nodes {
-            margin-top: 20px;
+        .items-list {
+            margin-top: 15px;
         }
         
-        .node-item {
+        .item-preview {
             border: 1px solid #eee;
             border-radius: 6px;
-            padding: 15px;
+            padding: 12px;
             margin-bottom: 10px;
             background: #fafafa;
         }
         
-        .node-header {
-            display: flex;
-            justify-content: between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-        
-        .node-type {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.8em;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        
-        .node-type.milestones { background: #e3f2fd; color: #1976d2; }
-        .node-type.concepts { background: #f3e5f5; color: #7b1fa2; }
-        .node-type.challenges { background: #e8f5e8; color: #388e3c; }
-        .node-type.exercises { background: #fff3e0; color: #f57c00; }
-        .node-type.summaries { background: #fce4ec; color: #c2185b; }
-        
-        .node-sequence {
-            font-weight: bold;
-            color: #666;
-        }
-        
-        .node-title {
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-        
-        .node-meta {
+        .item-meta {
             font-size: 0.9em;
             color: #666;
-            margin-bottom: 8px;
-        }
-        
-        .node-meta span {
-            margin-right: 15px;
-        }
-        
-        .node-next {
-            font-size: 0.9em;
-            color: #2196f3;
-            font-style: italic;
+            margin-top: 5px;
         }
     </style>
 </Layout>
