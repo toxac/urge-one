@@ -12,8 +12,6 @@ export async function exportContentData() {
 
   // Format all content data
   const contentData = {
-    generatedAt: new Date().toISOString(),
-    collections: {
       milestones: allMilestones.map(item => ({
         id: item.data.id,
         type: 'milestones' as const,
@@ -118,16 +116,7 @@ export async function exportContentData() {
         next: item.data.next,
         language: item.data.language,
         fullData: item.data
-      }))
-    },
-    statistics: {
-      totalItems: allMilestones.length + allConcepts.length + allChallenges.length + allExercises.length + allSummaries.length,
-      milestones: allMilestones.length,
-      concepts: allConcepts.length,
-      challenges: allChallenges.length,
-      exercises: allExercises.length,
-      summaries: allSummaries.length
-    }
+      })),
   };
 
   // Save to JSON file
@@ -135,12 +124,7 @@ export async function exportContentData() {
   await fs.writeFile(outputPath, JSON.stringify(contentData, null, 2));
   
   console.log('Content data exported successfully!');
-  console.log(`Total items: ${contentData.statistics.totalItems}`);
-  console.log(`Milestones: ${contentData.statistics.milestones}`);
-  console.log(`Concepts: ${contentData.statistics.concepts}`);
-  console.log(`Challenges: ${contentData.statistics.challenges}`);
-  console.log(`Exercises: ${contentData.statistics.exercises}`);
-  console.log(`Summaries: ${contentData.statistics.summaries}`);
+
   console.log(`Saved to: ${outputPath}`);
 
   return contentData;
