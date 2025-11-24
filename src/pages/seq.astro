@@ -12,34 +12,7 @@ const contentData = await exportContentData();
     <h1>Content Data Export</h1>
     
     <div class="container">
-        <div class="summary">
-            <h2>Export Summary</h2>
-            <p>Generated at: {new Date(contentData.generatedAt).toLocaleString()}</p>
-            <p>Total Items: {contentData.statistics.totalItems}</p>
-            <div class="collection-stats">
-                <div class="stat-item">
-                    <span class="stat-label">Milestones:</span>
-                    <span class="stat-value">{contentData.statistics.milestones}</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Concepts:</span>
-                    <span class="stat-value">{contentData.statistics.concepts}</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Challenges:</span>
-                    <span class="stat-value">{contentData.statistics.challenges}</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Exercises:</span>
-                    <span class="stat-value">{contentData.statistics.exercises}</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Summaries:</span>
-                    <span class="stat-value">{contentData.statistics.summaries}</span>
-                </div>
-            </div>
-        </div>
-
+        
         <div class="download-section">
             <h3>Download JSON File</h3>
             <p>The complete content data has been saved to:</p>
@@ -51,98 +24,7 @@ const contentData = await exportContentData();
             </p>
         </div>
 
-        <div class="collections-preview">
-            <h3>Collections Preview</h3>
-            
-            <div class="collection-preview">
-                <h4>Milestones ({contentData.collections.milestones.length})</h4>
-                <div class="items-list">
-                    {contentData.collections.milestones.slice(0, 5).map(item => (
-                        <div class="item-preview">
-                            <strong>{item.title}</strong>
-                            <div class="item-meta">
-                                ID: {item.id} | Sequence: {item.sequence} | 
-                                {item.next ? ` → ${item.next.type}:${item.next.id}` : ' (end)'}
-                            </div>
-                        </div>
-                    ))}
-                    {contentData.collections.milestones.length > 5 && 
-                        <p>... and {contentData.collections.milestones.length - 5} more</p>
-                    }
-                </div>
-            </div>
-
-            <div class="collection-preview">
-                <h4>Concepts ({contentData.collections.concepts.length})</h4>
-                <div class="items-list">
-                    {contentData.collections.concepts.slice(0, 5).map(item => (
-                        <div class="item-preview">
-                            <strong>{item.title}</strong>
-                            <div class="item-meta">
-                                ID: {item.id} | Sequence: {item.sequence} | 
-                                Milestone: {item.milestone}
-                            </div>
-                        </div>
-                    ))}
-                    {contentData.collections.concepts.length > 5 && 
-                        <p>... and {contentData.collections.concepts.length - 5} more</p>
-                    }
-                </div>
-            </div>
-
-            <div class="collection-preview">
-                <h4>Challenges ({contentData.collections.challenges.length})</h4>
-                <div class="items-list">
-                    {contentData.collections.challenges.slice(0, 5).map(item => (
-                        <div class="item-preview">
-                            <strong>{item.title}</strong>
-                            <div class="item-meta">
-                                ID: {item.id} | Sequence: {item.sequence} | 
-                                Open: {item.isOpen ? 'Yes' : 'No'}
-                            </div>
-                        </div>
-                    ))}
-                    {contentData.collections.challenges.length > 5 && 
-                        <p>... and {contentData.collections.challenges.length - 5} more</p>
-                    }
-                </div>
-            </div>
-
-            <div class="collection-preview">
-                <h4>Exercises ({contentData.collections.exercises.length})</h4>
-                <div class="items-list">
-                    {contentData.collections.exercises.slice(0, 5).map(item => (
-                        <div class="item-preview">
-                            <strong>{item.title}</strong>
-                            <div class="item-meta">
-                                ID: {item.id} | Sequence: {item.sequence} | 
-                                Form: {item.hasForm ? 'Yes' : 'No'}
-                            </div>
-                        </div>
-                    ))}
-                    {contentData.collections.exercises.length > 5 && 
-                        <p>... and {contentData.collections.exercises.length - 5} more</p>
-                    }
-                </div>
-            </div>
-
-            <div class="collection-preview">
-                <h4>Summaries ({contentData.collections.summaries.length})</h4>
-                <div class="items-list">
-                    {contentData.collections.summaries.slice(0, 5).map(item => (
-                        <div class="item-preview">
-                            <strong>{item.title}</strong>
-                            <div class="item-meta">
-                                ID: {item.id} | Milestone: {item.milestone}
-                            </div>
-                        </div>
-                    ))}
-                    {contentData.collections.summaries.length > 5 && 
-                        <p>... and {contentData.collections.summaries.length - 5} more</p>
-                    }
-                </div>
-            </div>
-        </div>
+        
     </div>
 
     <style>

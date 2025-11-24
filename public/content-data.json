@@ -3189,6 +3189,14 @@
         "id": "milestone-1-begin-your-thrilling-new-adventure",
         "collection": "milestones"
       },
+      "previous": {
+        "type": "exercises",
+        "id": "entrepreneurial-self-assessment"
+      },
+      "next": {
+        "type": "exercises",
+        "id": "skill-assessment"
+      },
       "language": "en",
       "version": 1,
       "archived": false,
@@ -3206,6 +3214,14 @@
         "milestone": {
           "id": "milestone-1-begin-your-thrilling-new-adventure",
           "collection": "milestones"
+        },
+        "previous": {
+          "type": "exercises",
+          "id": "entrepreneurial-self-assessment"
+        },
+        "next": {
+          "type": "exercises",
+          "id": "skill-assessment"
         },
         "language": "en",
         "version": 1,
@@ -3581,8 +3597,8 @@
       },
       "isOpen": false,
       "previous": {
-        "type": "challenges",
-        "id": "talk-to-potential-customers"
+        "type": "cconcepts",
+        "id": "evaluate-and-validate-early"
       },
       "next": {
         "type": "exercises",
@@ -3609,8 +3625,8 @@
         "isOpen": false,
         "sequence": 9,
         "previous": {
-          "type": "challenges",
-          "id": "talk-to-potential-customers"
+          "type": "cconcepts",
+          "id": "evaluate-and-validate-early"
         },
         "next": {
           "type": "exercises",
