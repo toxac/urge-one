@@ -35,9 +35,8 @@ type Schema = {
 
 ```
 ## Instruction
-1. What do you think of this approach
-2. I will give you content one at a time in mdx format from urge content. you have to evaluate it based on approach i have described above. 
-3. After assessment you have to give me result in json format based on the described schema.
+1. Go over markdown files in src/content/concepts. you have to evaluate it based on approach i have described above. 
+2. After assessment you have to write results to *contentAssessment* array in *logs/actionAssessment.ts*  based on the described schema.
 
-Ask me if you have any clarification before i start sharing content one by one in sequence.
+Ask me if you have any clarification 
 
