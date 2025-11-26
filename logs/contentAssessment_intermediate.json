@@ -2110,6 +2110,28 @@
   "recommendationMotivation": "Highlight stories of entrepreneurs achieving early customer success to strengthen hope and social motivation. Emphasize the emotional rewards of proving the business model. Add vivid contrast between succeeding and missing growth opportunities.",
   "recommendationAbility": "Suggest breaking marketing tasks into smaller, manageable experiments to reduce effort and cognitive load. Clarify time and cost commitments for acquisition activities. Link marketing steps to existing routines or business rhythms for ease.",
   "recommendationPrompt": "Increase CTA clarity by explicitly stating next immediate actions. Use repeated and visually distinct CTAs at key motivational points. Provide examples or templates for soft launch and tracking setup to support user execution."
+},
+{
+  "seq": 97,
+  "file": "src/content/concepts/soft-launch.mdx",
+  "hasForm": false,
+  "motivation_painPleasure": 8,
+  "motivation_hopeFear": 8,
+  "motivation_social": 7,
+  "ability_time": 7,
+  "ability_money": 8,
+  "ability_physicalEffort": 7,
+  "ability_brainCycle": 6,
+  "ability_socialDeviance": 9,
+  "ability_routine": 7,
+  "promptCTAClarity": 8,
+  "promptTiming": 9,
+  "promptCueStrength": 8,
+  "promptSupport": 7,
+  "totalScore": 7.5,
+  "recommendationMotivation": "Highlight the emotional reward of gaining trust and early advocates. Use social proof emphasizing the power of delighted early adopters. Emphasize the peace of mind that comes from flawless first deliveries.",
+  "recommendationAbility": "Offer checklists or simple logs to ease capturing fulfillment steps and friction points. Clarify the process's manageable effort and low risk, emphasizing manual is acceptable. Suggest integrating logging into regular workflows for routine.",
+  "recommendationPrompt": "Make the CTA for executing the plan highly visible and concrete. Repeat and visually emphasize the call to action. Provide micro-guides or templates for managing customer communication and logging."
 }
 
 
