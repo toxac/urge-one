@@ -122,3 +122,4 @@ Behavior:
 - Do not add extra fields.
 - Base all scores only on what is present or strongly implied in the content.
 - When in doubt, use mid-range scores (4–6) and mention improvements in the recommendations.
+- "seq" will start at 
