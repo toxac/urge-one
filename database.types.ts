@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "12.2.3 (519615d)"
+    PostgrestVersion: "13.0.5"
   }
   public: {
     Tables: {
@@ -59,83 +59,6 @@ export type Database = {
         }
         Relationships: []
       }
-      auth_group: {
-        Row: {
-          id: number
-          name: string
-        }
-        Insert: {
-          id?: number
-          name: string
-        }
-        Update: {
-          id?: number
-          name?: string
-        }
-        Relationships: []
-      }
-      auth_group_permissions: {
-        Row: {
-          group_id: number
-          id: number
-          permission_id: number
-        }
-        Insert: {
-          group_id: number
-          id?: number
-          permission_id: number
-        }
-        Update: {
-          group_id?: number
-          id?: number
-          permission_id?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "auth_group_permissio_permission_id_84c5c92e_fk_auth_perm"
-            columns: ["permission_id"]
-            isOneToOne: false
-            referencedRelation: "auth_permission"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "auth_group_permissions_group_id_b120cbf9_fk_auth_group_id"
-            columns: ["group_id"]
-            isOneToOne: false
-            referencedRelation: "auth_group"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      auth_permission: {
-        Row: {
-          codename: string
-          content_type_id: number
-          id: number
-          name: string
-        }
-        Insert: {
-          codename: string
-          content_type_id: number
-          id?: number
-          name: string
-        }
-        Update: {
-          codename?: string
-          content_type_id?: number
-          id?: number
-          name?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "auth_permission_content_type_id_2f476e4b_fk_django_co"
-            columns: ["content_type_id"]
-            isOneToOne: false
-            referencedRelation: "django_content_type"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       auth_user: {
         Row: {
           date_joined: string
@@ -177,204 +100,6 @@ export type Database = {
           username?: string
         }
         Relationships: []
-      }
-      auth_user_groups: {
-        Row: {
-          group_id: number
-          id: number
-          user_id: number
-        }
-        Insert: {
-          group_id: number
-          id?: number
-          user_id: number
-        }
-        Update: {
-          group_id?: number
-          id?: number
-          user_id?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "auth_user_groups_group_id_97559544_fk_auth_group_id"
-            columns: ["group_id"]
-            isOneToOne: false
-            referencedRelation: "auth_group"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "auth_user_groups_user_id_6a12ed8b_fk_auth_user_id"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "auth_user"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      auth_user_user_permissions: {
-        Row: {
-          id: number
-          permission_id: number
-          user_id: number
-        }
-        Insert: {
-          id?: number
-          permission_id: number
-          user_id: number
-        }
-        Update: {
-          id?: number
-          permission_id?: number
-          user_id?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm"
-            columns: ["permission_id"]
-            isOneToOne: false
-            referencedRelation: "auth_permission"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "auth_user"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      challenge_steps: {
-        Row: {
-          challenge_id: string | null
-          created_at: string
-          id: number
-          instructions: string | null
-          reflection_questions: string[] | null
-          sequence: number | null
-          title: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          challenge_id?: string | null
-          created_at?: string
-          id?: number
-          instructions?: string | null
-          reflection_questions?: string[] | null
-          sequence?: number | null
-          title?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          challenge_id?: string | null
-          created_at?: string
-          id?: number
-          instructions?: string | null
-          reflection_questions?: string[] | null
-          sequence?: number | null
-          title?: string | null
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "challenge_steps_challenge_id_fkey"
-            columns: ["challenge_id"]
-            isOneToOne: false
-            referencedRelation: "challenges"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      challenges: {
-        Row: {
-          archived: boolean | null
-          badges: Json | null
-          content_meta_id: string | null
-          cover_image: Json | null
-          created_at: string | null
-          description: string | null
-          difficulty: string | null
-          id: string
-          is_open: boolean | null
-          language: string
-          milestone_id: string | null
-          program_id: string | null
-          pub_date: string
-          sequence: number | null
-          subtitle: string | null
-          tags: string[] | null
-          title: string
-          updated_at: string | null
-          updated_date: string | null
-          version: number | null
-        }
-        Insert: {
-          archived?: boolean | null
-          badges?: Json | null
-          content_meta_id?: string | null
-          cover_image?: Json | null
-          created_at?: string | null
-          description?: string | null
-          difficulty?: string | null
-          id?: string
-          is_open?: boolean | null
-          language?: string
-          milestone_id?: string | null
-          program_id?: string | null
-          pub_date: string
-          sequence?: number | null
-          subtitle?: string | null
-          tags?: string[] | null
-          title: string
-          updated_at?: string | null
-          updated_date?: string | null
-          version?: number | null
-        }
-        Update: {
-          archived?: boolean | null
-          badges?: Json | null
-          content_meta_id?: string | null
-          cover_image?: Json | null
-          created_at?: string | null
-          description?: string | null
-          difficulty?: string | null
-          id?: string
-          is_open?: boolean | null
-          language?: string
-          milestone_id?: string | null
-          program_id?: string | null
-          pub_date?: string
-          sequence?: number | null
-          subtitle?: string | null
-          tags?: string[] | null
-          title?: string
-          updated_at?: string | null
-          updated_date?: string | null
-          version?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "challenges_content_meta_id_fkey"
-            columns: ["content_meta_id"]
-            isOneToOne: false
-            referencedRelation: "content_meta"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "challenges_milestone_id_fkey"
-            columns: ["milestone_id"]
-            isOneToOne: false
-            referencedRelation: "content_meta"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "challenges_program_id_fkey"
-            columns: ["program_id"]
-            isOneToOne: false
-            referencedRelation: "programs"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       content_meta: {
         Row: {
@@ -490,111 +215,6 @@ export type Database = {
         }
         Relationships: []
       }
-      django_admin_log: {
-        Row: {
-          action_flag: number
-          action_time: string
-          change_message: string
-          content_type_id: number | null
-          id: number
-          object_id: string | null
-          object_repr: string
-          user_id: number
-        }
-        Insert: {
-          action_flag: number
-          action_time: string
-          change_message: string
-          content_type_id?: number | null
-          id?: number
-          object_id?: string | null
-          object_repr: string
-          user_id: number
-        }
-        Update: {
-          action_flag?: number
-          action_time?: string
-          change_message?: string
-          content_type_id?: number | null
-          id?: number
-          object_id?: string | null
-          object_repr?: string
-          user_id?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "django_admin_log_content_type_id_c4bce8eb_fk_django_co"
-            columns: ["content_type_id"]
-            isOneToOne: false
-            referencedRelation: "django_content_type"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "django_admin_log_user_id_c564eba6_fk_auth_user_id"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "auth_user"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      django_content_type: {
-        Row: {
-          app_label: string
-          id: number
-          model: string
-        }
-        Insert: {
-          app_label: string
-          id?: number
-          model: string
-        }
-        Update: {
-          app_label?: string
-          id?: number
-          model?: string
-        }
-        Relationships: []
-      }
-      django_migrations: {
-        Row: {
-          app: string
-          applied: string
-          id: number
-          name: string
-        }
-        Insert: {
-          app: string
-          applied: string
-          id?: number
-          name: string
-        }
-        Update: {
-          app?: string
-          applied?: string
-          id?: number
-          name?: string
-        }
-        Relationships: []
-      }
-      django_session: {
-        Row: {
-          expire_date: string
-          session_data: string
-          session_key: string
-        }
-        Insert: {
-          expire_date: string
-          session_data: string
-          session_key: string
-        }
-        Update: {
-          expire_date?: string
-          session_data?: string
-          session_key?: string
-        }
-        Relationships: []
-      }
       events: {
         Row: {
           capacity: number | null
@@ -664,106 +284,132 @@ export type Database = {
         }
         Relationships: []
       }
-      journal_responses: {
+      lead_activity_logs: {
         Row: {
-          content: string
+          additional_data: Json | null
           created_at: string
+          event_type: string | null
           id: string
-          journal_id: string | null
-          metadata: Json | null
-          response_type: string | null
-          user_id: string | null
+          lead_id: string | null
+          notes: string | null
         }
         Insert: {
-          content: string
+          additional_data?: Json | null
           created_at?: string
+          event_type?: string | null
           id?: string
-          journal_id?: string | null
-          metadata?: Json | null
-          response_type?: string | null
-          user_id?: string | null
+          lead_id?: string | null
+          notes?: string | null
         }
         Update: {
-          content?: string
+          additional_data?: Json | null
           created_at?: string
+          event_type?: string | null
           id?: string
-          journal_id?: string | null
-          metadata?: Json | null
-          response_type?: string | null
-          user_id?: string | null
+          lead_id?: string | null
+          notes?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_activity_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lead_magnets: {
+        Row: {
+          created_at: string
+          created_by: string
+          description: string
+          id: string
+          is_active: boolean | null
+          title: string
+          type: string
+          updated_at: string | null
+          url: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          description: string
+          id?: string
+          is_active?: boolean | null
+          title: string
+          type: string
+          updated_at?: string | null
+          url?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          description?: string
+          id?: string
+          is_active?: boolean | null
+          title?: string
+          type?: string
+          updated_at?: string | null
+          url?: string | null
         }
         Relationships: []
       }
       leads: {
         Row: {
-          city: string | null
-          communications: Json | null
-          country: string | null
+          additional_data: Json | null
+          company: string | null
           created_at: string
           email: string | null
           first_name: string | null
-          gender: string | null
-          id: number
+          id: string
           last_name: string | null
-          notes: string | null
-          opt_newsletter: boolean | null
-          opt_updates: boolean | null
-          other_details: Json | null
+          lead_magnet_id: string | null
+          lead_source: string | null
+          lead_source_url: string | null
+          owner_id: string | null
           phone: string | null
-          program_id: string | null
-          segment: string | null
-          source: string | null
-          source_details: Json | null
+          score: number | null
           status: string | null
         }
         Insert: {
-          city?: string | null
-          communications?: Json | null
-          country?: string | null
+          additional_data?: Json | null
+          company?: string | null
           created_at?: string
           email?: string | null
           first_name?: string | null
-          gender?: string | null
-          id?: number
+          id?: string
           last_name?: string | null
-          notes?: string | null
-          opt_newsletter?: boolean | null
-          opt_updates?: boolean | null
-          other_details?: Json | null
+          lead_magnet_id?: string | null
+          lead_source?: string | null
+          lead_source_url?: string | null
+          owner_id?: string | null
           phone?: string | null
-          program_id?: string | null
-          segment?: string | null
-          source?: string | null
-          source_details?: Json | null
+          score?: number | null
           status?: string | null
         }
         Update: {
-          city?: string | null
-          communications?: Json | null
-          country?: string | null
+          additional_data?: Json | null
+          company?: string | null
           created_at?: string
           email?: string | null
           first_name?: string | null
-          gender?: string | null
-          id?: number
+          id?: string
           last_name?: string | null
-          notes?: string | null
-          opt_newsletter?: boolean | null
-          opt_updates?: boolean | null
-          other_details?: Json | null
+          lead_magnet_id?: string | null
+          lead_source?: string | null
+          lead_source_url?: string | null
+          owner_id?: string | null
           phone?: string | null
-          program_id?: string | null
-          segment?: string | null
-          source?: string | null
-          source_details?: Json | null
+          score?: number | null
           status?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "leads_program_id_fkey"
-            columns: ["program_id"]
+            foreignKeyName: "leads_lead_magnet_id_fkey"
+            columns: ["lead_magnet_id"]
             isOneToOne: false
-            referencedRelation: "programs"
+            referencedRelation: "lead_magnets"
             referencedColumns: ["id"]
           },
         ]
@@ -1042,59 +688,6 @@ export type Database = {
         }
         Relationships: []
       }
-      user_challenge_progress: {
-        Row: {
-          challenge_id: string
-          completed_at: string | null
-          created_at: string
-          email: string | null
-          feedback_rating: number | null
-          feedback_text: string | null
-          id: number
-          last_step_completed: number | null
-          notification_sent: Json | null
-          reflections: Json[] | null
-          updated_at: string | null
-          user_id: string | null
-        }
-        Insert: {
-          challenge_id: string
-          completed_at?: string | null
-          created_at?: string
-          email?: string | null
-          feedback_rating?: number | null
-          feedback_text?: string | null
-          id?: number
-          last_step_completed?: number | null
-          notification_sent?: Json | null
-          reflections?: Json[] | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          challenge_id?: string
-          completed_at?: string | null
-          created_at?: string
-          email?: string | null
-          feedback_rating?: number | null
-          feedback_text?: string | null
-          id?: number
-          last_step_completed?: number | null
-          notification_sent?: Json | null
-          reflections?: Json[] | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_challenge_progress_challenge_id_fkey"
-            columns: ["challenge_id"]
-            isOneToOne: false
-            referencedRelation: "challenges"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       user_cheer_squad: {
         Row: {
           created_at: string | null
@@ -1165,6 +758,105 @@ export type Database = {
             columns: ["cheer_squad_id"]
             isOneToOne: false
             referencedRelation: "user_cheer_squad"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_content: {
+        Row: {
+          additional_data: Json | null
+          category: string | null
+          content: string
+          created_at: string
+          cta_link: string | null
+          cta_text: string | null
+          cta_type: string | null
+          id: string
+          is_public: boolean | null
+          tags: string[] | null
+          title: string
+          type: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          additional_data?: Json | null
+          category?: string | null
+          content: string
+          created_at?: string
+          cta_link?: string | null
+          cta_text?: string | null
+          cta_type?: string | null
+          id?: string
+          is_public?: boolean | null
+          tags?: string[] | null
+          title: string
+          type?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          additional_data?: Json | null
+          category?: string | null
+          content?: string
+          created_at?: string
+          cta_link?: string | null
+          cta_text?: string | null
+          cta_type?: string | null
+          id?: string
+          is_public?: boolean | null
+          tags?: string[] | null
+          title?: string
+          type?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_content_feedback: {
+        Row: {
+          created_at: string
+          feedback_text: string | null
+          feedback_type: string
+          id: string
+          parent_feedback_id: string | null
+          updated_at: string | null
+          user_content_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          feedback_text?: string | null
+          feedback_type: string
+          id?: string
+          parent_feedback_id?: string | null
+          updated_at?: string | null
+          user_content_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          feedback_text?: string | null
+          feedback_type?: string
+          id?: string
+          parent_feedback_id?: string | null
+          updated_at?: string | null
+          user_content_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_content_feedback_parent_feedback_id_fkey"
+            columns: ["parent_feedback_id"]
+            isOneToOne: false
+            referencedRelation: "user_content_feedback"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_content_feedback_user_content_id_fkey"
+            columns: ["user_content_id"]
+            isOneToOne: false
+            referencedRelation: "user_content"
             referencedColumns: ["id"]
           },
         ]
@@ -1279,75 +971,59 @@ export type Database = {
       }
       user_journals: {
         Row: {
-          category: string | null
-          content: string | null
+          additional_data: Json | null
+          category: string
+          content: string
+          content_id: string | null
           created_at: string
-          cross_post_to_blog: boolean | null
-          cross_post_to_social: string[] | null
-          cta_description: string | null
-          cta_title: string | null
-          cta_type: string | null
-          entry_data: Json | null
-          has_cta: boolean | null
           id: string
           is_public: boolean | null
-          program_ref: Json | null
-          response_deadline: string | null
-          should_email_followers: boolean | null
+          mood: string | null
           tags: string[] | null
-          title: string | null
-          type: string | null
+          title: string
           updated_at: string | null
           urgency: string | null
-          user_id: string | null
+          user_id: string
         }
         Insert: {
-          category?: string | null
-          content?: string | null
+          additional_data?: Json | null
+          category: string
+          content: string
+          content_id?: string | null
           created_at?: string
-          cross_post_to_blog?: boolean | null
-          cross_post_to_social?: string[] | null
-          cta_description?: string | null
-          cta_title?: string | null
-          cta_type?: string | null
-          entry_data?: Json | null
-          has_cta?: boolean | null
           id?: string
           is_public?: boolean | null
-          program_ref?: Json | null
-          response_deadline?: string | null
-          should_email_followers?: boolean | null
+          mood?: string | null
           tags?: string[] | null
-          title?: string | null
-          type?: string | null
+          title: string
           updated_at?: string | null
           urgency?: string | null
-          user_id?: string | null
+          user_id?: string
         }
         Update: {
-          category?: string | null
-          content?: string | null
+          additional_data?: Json | null
+          category?: string
+          content?: string
+          content_id?: string | null
           created_at?: string
-          cross_post_to_blog?: boolean | null
-          cross_post_to_social?: string[] | null
-          cta_description?: string | null
-          cta_title?: string | null
-          cta_type?: string | null
-          entry_data?: Json | null
-          has_cta?: boolean | null
           id?: string
           is_public?: boolean | null
-          program_ref?: Json | null
-          response_deadline?: string | null
-          should_email_followers?: boolean | null
+          mood?: string | null
           tags?: string[] | null
-          title?: string | null
-          type?: string | null
+          title?: string
           updated_at?: string | null
           urgency?: string | null
-          user_id?: string | null
+          user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "user_journals_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "content_meta"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_memberships: {
         Row: {
