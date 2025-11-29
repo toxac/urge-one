@@ -25,7 +25,7 @@ type JournalUpdate = Database['public']['Tables']['user_journals']['Update'];
 const schema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters").max(100, "Title must be less than 100 characters"),
   content: z.string().min(20, "Journal entry needs more detail").max(5000, "Content too long"),
-  category: z.enum(['mindset', 'progress', 'setback', 'opportunity', 'msp', 'sales', 'cheer', 'other']),
+  category: z.enum(['daily', 'business', 'product', 'customers', 'marketing', 'sales', 'finance', 'team', 'mindset', 'program', 'other']),
   mood: z.enum(['energised', 'neutral', 'stuck', 'anxious', 'breakthrough']).optional(),
   urgency: z.enum(['low', 'medium', 'high', 'critical']).optional(),
   tags: z.string().optional(),

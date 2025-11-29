@@ -19,12 +19,14 @@ export const URGENCIES = [
 ] as const;
 
 export const CATEGORIES = [
-  { value: 'mindset', label: 'Mindset' },
-  { value: 'progress', label: 'Progress' },
-  { value: 'setback', label: 'Setback' },
-  { value: 'opportunity', label: 'Opportunity' },
-  { value: 'msp', label: 'MSP' },
+  { value: 'daily', label: 'Daily Reflection' },
+  { value: 'business', label: 'Business' },
+  { value: 'product', label: 'Product' },
+  { value: 'customers', label: 'Customers' },
+  { value: 'marketing', label: 'Marketing' },
   { value: 'sales', label: 'Sales' },
-  { value: 'cheer', label: 'Cheer Squad' },
-  { value: 'other', label: 'Other' }
+  { value: 'finance', label: 'Finance' },
+  { value: 'team', label: 'Team' },
+  { value: 'mindset', label: 'Mindset' },
+  { value: 'program', label: 'Program' },  // Urge-specific
 ] as const;
