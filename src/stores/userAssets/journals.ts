@@ -151,10 +151,6 @@ export function getJournalById(id: string): Journal | undefined {
   return journalsStore.get().find(journal => journal.id === id);
 }
 
-// Get journals by type or other criteria
-export function getJournalsByType(type: string): Journal[] {
-  return journalsStore.get().filter(journal => journal.type === type);
-}
 
 // Get journals by date range
 export function getJournalsByDateRange(startDate: string, endDate: string): Journal[] {

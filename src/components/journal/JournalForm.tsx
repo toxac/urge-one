@@ -9,7 +9,10 @@ type JournalUpdate = Database['public']['Tables']['user_journals']['Update'];
 
 interface Props {
     userId: string;
-    journal: Journal | null;
+    currentJournal: Journal | null;
+    currrentContentId: string | null;
+    onSuccess?: (journal: Journal) => void;
+
 }
 
 export default function JournalForm (props: Props){
