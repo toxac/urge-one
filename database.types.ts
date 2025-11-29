@@ -972,6 +972,7 @@ export type Database = {
       user_journals: {
         Row: {
           additional_data: Json | null
+          audio_note: string | null
           category: string
           content: string
           content_id: string | null
@@ -987,6 +988,7 @@ export type Database = {
         }
         Insert: {
           additional_data?: Json | null
+          audio_note?: string | null
           category: string
           content: string
           content_id?: string | null
@@ -1002,6 +1004,7 @@ export type Database = {
         }
         Update: {
           additional_data?: Json | null
+          audio_note?: string | null
           category?: string
           content?: string
           content_id?: string | null
