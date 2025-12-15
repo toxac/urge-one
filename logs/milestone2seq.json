@@ -1,0 +1,123 @@
+[
+    {
+  "seq": 25,
+  "file": "src/content/milestones/milestone-2-discovering-opportunities.mdx",
+  "remarks": "This is fine, But i think we will have reframe content"
+},
+{
+  "seq": 26,
+  "file": "src/content/concepts/understanding-value.mdx",
+  "remarks": "maybe change it to essence of business and cover value inside of it"
+},
+{
+  "seq": 27,
+  "file": "src/content/concepts/problems-are-opportunities.mdx",
+  "remarks": "This is good, content might need rework"
+},
+{
+  "seq": 28,
+  "file": "src/content/concepts/practical-approaches-to-discovering-opportunities.mdx",
+  "remarks": "this is good, maybe add examples for personal experiences"
+},
+{
+  "seq": 29,
+  "file": "src/content/concepts/your-problems.mdx",
+  "remarks": "flow is good, content rework"
+},
+{
+  "seq": 30,
+  "file": "src/content/exercises/identifying-your-problems-and-frustrations.mdx",
+    "remarks": "flow is good, content rework"
+},
+{
+  "seq": 31,
+  "file": "src/content/concepts/observing-people-around-you.mdx",
+    "remarks": "flow is good, content rework"
+},
+{
+  "seq": 32,
+  "file": "src/content/exercises/observing-people-around-you.mdx",
+      "remarks": "flow is good, content rework"
+},
+{
+  "seq": 33,
+  "file": "src/content/concepts/putting-your-skills-to-use.mdx",
+      "remarks": "flow is good, content rework"
+},
+{
+  "seq": 34,
+  "file": "src/content/exercises/turning-skills-into-opportunities.mdx",
+      "remarks": "flow is good, content rework"
+}, 
+{
+  "seq": 35,
+  "file": "src/content/concepts/casting-a-wider-net.mdx",
+      "remarks": "flow is good, content rework to include everything under it. And have resources for those who want to dig further. This is basically only interesting if people haven't found anything around them , Which i highly doubt"
+},
+{
+  "seq": 36,
+  "file": "src/content/exercises/spotting-trends-on-marketplaces.mdx",
+  "remarks": "Folded in to src/content/concepts/casting-a-wider-net.mdx "
+},
+{
+  "seq": 37,
+  "file": "src/content/exercises/finding-insights-with-google-trends.mdx",
+    "remarks": "Folded in to src/content/concepts/casting-a-wider-net.mdx "
+},
+{
+  "seq": 38,
+  "file": "src/content/exercises/social-media-trendspotting.mdx",
+    "remarks": "Folded in to src/content/concepts/casting-a-wider-net.mdx "
+},
+{
+  "seq": 39,
+  "file": "src/content/exercises/exploring-niche-communities.mdx",
+  "remarks": "This i want to cover but a bit differently, Don;t want to include this in casting-a-wider-net.mdx as communities can be both online and real world"
+},
+{
+  "seq": 40,
+  "file": "src/content/concepts/doing-things-differently.mdx",
+  "remarks": "Give the, concept of business plan and different angle to understand improving problem and also prompt them to think about solutions"
+},
+{
+  "seq": 41,
+  "file": "src/content/exercises/look-at-your-ideas-differently.mdx",
+  "remarks": "This is good"
+},
+{
+  "seq": 42,
+  "file": "src/content/challenges/disruption-challenge.mdx",
+  "remarks": "remove this "
+},
+{
+  "seq": 43,
+  "file": "src/content/concepts/capitalizing-on-trends-and-hypes.mdx",
+      "remarks": "This will not be same as before but it will be more of note on ways to think about trending and hyped opportunities "
+
+},
+{
+  "seq": 44,
+  "file": "src/content/exercises/discover-hypes-and-trends-early.mdx",
+      "remarks": "remove this and add something about thinking about solutions and customers"
+},
+{
+  "seq": 45,
+  "file": "src/content/concepts/evaluate-and-validate-early.mdx",
+  "remarks": " Flow is ok, content will need rework"
+},
+{
+  "seq": 46,
+  "file": "src/content/challenges/talk-to-potential-customers.mdx",
+    "remarks": " Flow is ok, content will need rework"
+},
+{
+  "seq": 47,
+  "file": "src/content/exercises/rank-your-opportunities.mdx",
+    "remarks": " Flow is ok, content will need rework"
+},
+{
+  "seq": 48,
+  "file": "src/content/summaries/milestone-2.mdx",
+    "remarks": " Flow is ok, content will need rework"
+}
+]
